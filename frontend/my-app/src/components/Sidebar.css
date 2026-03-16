@@ -1,0 +1,198 @@
+/* Sidebar.css - Clean minimal left sidebar for portfolio */
+/* Notes:
+   - Fonts: Lilita One (Google Fonts, link added to index.html)
+            Winky Rough (@font-face - User: download .ttf, place in src/assets/fonts/WinkyRough.ttf)
+   - Responsive prep: Add 'sidebar-open' class or toggle transform for mobile.
+   - Integration: Main content needs margin-left: 250px; or use grid/flex.
+   - Dark mode compatible via CSS vars where possible.
+*/
+
+/* Font imports - Winky Rough @font-face */
+@font-face {
+  font-family: 'Winky Rough';
+  src: url('../assets/fonts/WinkyRough.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.parchment-wrapper{
+  display:flex;
+  justify-content:center;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+
+/* Sidebar Container */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 250px;
+  height: 100vh;
+  background: linear-gradient(180deg, #f8f9fa 0%, #f4f6f9 50%, #e9ecef 100%);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  overflow: hidden;
+  font-smooth: always;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Mobile prep: collapsed by default on small screens, toggle with class */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Typography */
+.sidebar h1 {
+  font-family: 'Lilita One', cursive;
+  font-size: 28px;
+  font-weight: 400;
+  color: #2c3e50;
+  margin: 0;
+  letter-spacing: -0.5px;
+  text-align: center;
+  padding: 24px 20px 20px;
+}
+
+/* Remove unused .text */
+
+/* Raised/Embossed text effect */
+.raised-text {
+  text-shadow: 
+    0.5px 0.5px 1px rgba(255, 255, 255, 0.8),  /* Top-left highlight */
+    -0.5px -0.5px 1px rgba(0, 0, 0, 0.1),     /* Bottom-right shadow */
+    0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Top Section */
+.top-section {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+
+/* Decorative Content - Visual panels and shapes */
+.decorative-content {
+  flex: 1;
+  padding: 30px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.deco-panel {
+  position: absolute;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.deco-panel:hover {
+  transform: scale(1.05);
+}
+
+.panel-1 {
+  width: 60px;
+  height: 60px;
+  top: 20%;
+  right: 10%;
+}
+
+.panel-2 {
+  width: 80px;
+  height: 30px;
+  top: 50%;
+  left: 15%;
+  border-radius: 15px;
+}
+
+.panel-3 {
+  width: 40px;
+  height: 100px;
+  bottom: 30%;
+  right: 20%;
+  border-radius: 25px 25px 5px 5px;
+}
+
+.abstract-shapes {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 100px;
+  height: 100px;
+}
+
+.shape {
+  position: absolute;
+  background: radial-gradient(circle, rgba(84,160,255,0.2), transparent);
+  border-radius: 50%;
+}
+
+.shape1 {
+  width: 40px;
+  height: 40px;
+  top: 0;
+  left: 20px;
+}
+
+.shape2 {
+  width: 60px;
+  height: 60px;
+  bottom: 0;
+  right: 0;
+  background: radial-gradient(circle, rgba(255,107,107,0.15), transparent);
+}
+
+.accent-line {
+  position: absolute;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.5), transparent);
+  border: none;
+}
+
+.accent-line.vertical {
+  width: 1px;
+  height: 60%;
+  top: 15%;
+  right: 5%;
+}
+
+/* Bottom Footer */
+.bottom-section {
+  padding: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: #7f8c8d;
+  opacity: 0.8;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
