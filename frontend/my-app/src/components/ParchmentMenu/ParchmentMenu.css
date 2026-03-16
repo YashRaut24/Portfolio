@@ -1,0 +1,418 @@
+/* ── Container ────────────────────────────────────────── */
+.parchment-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+/* ── Scroll outer wrapper ─────────────────────────────── */
+.scroll-outer {
+    width: 190px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Canvas host ──────────────────────────────────────── */
+.canvas-host {
+    width: 190px;
+    line-height: 0;
+    position: relative;
+    z-index: 1;
+    /* Let canvas height grow naturally */
+}
+
+.canvas-host canvas {
+    display: block;
+    width: 190px;
+    /* height is set by JS each frame */
+}
+
+/* ── Ribbon stage ─────────────────────────────────────── */
+/*
+  Positioned absolute over the canvas so it sits
+  right on the cylinder. top=0 means the band crosses
+  the vertical midpoint of the cylinder (ROLL_R px from top).
+  JS sets ROLL_R=28 so cylinder height = 56px.
+  Band center should be at ~28px from top of canvas.
+*/
+.ribbon-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    z-index: 10;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+/* ── Untying animation ───────────────────────────────── */
+.ribbon-stage.untying .ribbon-band {
+    animation: bandSlide 0.5s ease-in forwards;
+}
+
+.ribbon-stage.untying .bow-loop--L {
+    animation: loopSlideL 0.45s ease-in forwards;
+}
+
+.ribbon-stage.untying .bow-loop--R {
+    animation: loopSlideR 0.45s ease-in forwards;
+}
+
+.ribbon-stage.untying .bow-knot {
+    animation: knotPop 0.35s ease-in 0.1s forwards;
+}
+
+.ribbon-stage.untying .bow-tail--L {
+    animation: tailDropL 0.5s ease-in forwards;
+}
+
+.ribbon-stage.untying .bow-tail--R {
+    animation: tailDropR 0.5s ease-in forwards;
+}
+
+@keyframes bandSlide {
+    0% {
+        transform: translateY(-50%) scaleX(1);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translateY(-50%) scaleX(1.08);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: translateY(-50%) scaleX(0);
+        opacity: 0;
+    }
+}
+
+@keyframes loopSlideL {
+    0% {
+        transform: rotate(25deg) translateX(0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(35deg) translateX(-40px) scale(0.3);
+        opacity: 0;
+    }
+}
+
+@keyframes loopSlideR {
+    0% {
+        transform: rotate(-25deg) translateX(0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(-35deg) translateX(40px) scale(0.3);
+        opacity: 0;
+    }
+}
+
+@keyframes knotPop {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+
+    40% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes tailDropL {
+    0% {
+        transform: rotate(-18deg) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(-35deg) translateY(30px);
+        opacity: 0;
+    }
+}
+
+@keyframes tailDropR {
+    0% {
+        transform: rotate(18deg) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(35deg) translateY(30px);
+        opacity: 0;
+    }
+}
+
+/* ── Horizontal band across full cylinder width ────────── */
+.ribbon-band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 15px;
+
+    background: linear-gradient(to bottom,
+            #4a0606 0%,
+            #6e0e0e 15%,
+            #921a1a 35%,
+            #a02020 50%,
+            #8a1818 68%,
+            #6a0c0c 84%,
+            #480606 100%);
+
+    box-shadow:
+        0 3px 7px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 80, 80, 0.12),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Silk highlight sheen on the band */
+.ribbon-sheen {
+    position: absolute;
+    top: 2px;
+    left: 12%;
+    right: 12%;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right,
+            transparent 0%,
+            rgba(255, 200, 200, 0.18) 20%,
+            rgba(255, 220, 220, 0.42) 45%,
+            rgba(255, 220, 220, 0.45) 55%,
+            rgba(255, 200, 200, 0.18) 80%,
+            transparent 100%);
+}
+
+/* ── Bow center wrapper ───────────────────────────────── */
+/*
+  Sits centered horizontally over the band.
+  Uses CSS shapes to create a realistic 3D bow.
+*/
+.bow-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 40px;
+    /* overflow visible so tails can hang below */
+}
+
+/* ── Bow loops (left and right) ──────────────────────── */
+/*
+  Each loop is an oval tilted inward to simulate
+  the two puffed-up loops of a tied bow.
+  Reference image shows two rounded filled loops
+  meeting at the knot in the center.
+*/
+.bow-loop {
+    position: absolute;
+    top: 4px;
+    width: 24px;
+    height: 20px;
+    background: linear-gradient(135deg,
+            #7a1010 0%,
+            #b02020 30%,
+            #c82828 55%,
+            #961818 78%,
+            #6a0c0c 100%);
+    box-shadow:
+        inset 1px 1px 3px rgba(255, 120, 120, 0.18),
+        inset -1px -1px 3px rgba(0, 0, 0, 0.35),
+        0 2px 6px rgba(0, 0, 0, 0.45);
+    /* Organic teardrop / loop shape */
+    border-radius: 50% 50% 40% 40% / 55% 55% 45% 45%;
+}
+
+/* Left loop: tilts rightward toward knot */
+.bow-loop--L {
+    left: 0;
+    transform: rotate(25deg);
+    transform-origin: right center;
+    border-radius: 55% 45% 40% 60% / 60% 40% 60% 40%;
+}
+
+/* Right loop: tilts leftward toward knot */
+.bow-loop--R {
+    right: 0;
+    transform: rotate(-25deg);
+    transform-origin: left center;
+    border-radius: 45% 55% 60% 40% / 40% 60% 40% 60%;
+}
+
+/* ── Bow knot ─────────────────────────────────────────── */
+/*
+  Round tight center where the ribbon crosses.
+  Reference: a small round bulge in the middle.
+*/
+.bow-knot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    z-index: 3;
+
+    background: radial-gradient(circle at 38% 32%,
+            #c02828 0%,
+            #8a1414 45%,
+            #5a0a0a 100%);
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.6),
+        inset 0 1px 3px rgba(255, 120, 120, 0.22),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Specular glint on the knot */
+.bow-knot-glint {
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    width: 7px;
+    height: 5px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center,
+            rgba(255, 180, 180, 0.55),
+            transparent 70%);
+}
+
+/* ── Bow tails ────────────────────────────────────────── */
+/*
+  Two ribbon tails hanging down from the knot.
+  Reference: tails angle outward and slightly downward,
+  cut at an angle at the bottom (chevron cut).
+*/
+.bow-tail {
+    position: absolute;
+    bottom: -8px;
+    width: 10px;
+    height: 20px;
+    z-index: 2;
+
+    background: linear-gradient(to bottom,
+            #8a1414 0%,
+            #6e0e0e 55%,
+            #4a0808 100%);
+
+    /* Chevron / V-notch bottom — like a real ribbon tail */
+    clip-path: polygon(0% 0%,
+            100% 0%,
+            100% 75%,
+            50% 100%,
+            0% 75%);
+}
+
+.bow-tail--L {
+    left: calc(50% - 13px);
+    transform: rotate(-18deg);
+    transform-origin: top center;
+}
+
+.bow-tail--R {
+    right: calc(50% - 13px);
+    transform: rotate(18deg);
+    transform-origin: top center;
+}
+
+/* ── Menu overlay (appears on the unrolled paper) ────── */
+.menu-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    padding: 10px 0 8px;
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+}
+
+/* ── Individual nav item ──────────────────────────────── */
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 6px 12px 6px 30px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.menu-item:hover {
+    background: rgba(110, 55, 10, 0.12);
+    transform: translateX(3px);
+}
+
+/* Small round bullet */
+.m-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #7a3810;
+    opacity: 0.65;
+    flex-shrink: 0;
+}
+
+/* Item text */
+.m-label {
+    font-family: "Winky Rough", Georgia, serif;
+    font-size: 13px;
+    color: #3a1c06;
+    letter-spacing: 0.2px;
+    /* Ink-pressed-into-paper effect */
+    text-shadow:
+        0px 0px 1px rgba(255, 220, 140, 0.4),
+        0.3px 0.3px 0 rgba(255, 210, 120, 0.3);
+}
+
+/* ── Divider ──────────────────────────────────────────── */
+.m-rule {
+    height: 1px;
+    margin: 5px 14px 3px;
+    background: linear-gradient(to right,
+            transparent,
+            rgba(120, 60, 15, 0.35) 30%,
+            rgba(120, 60, 15, 0.35) 70%,
+            transparent);
+}
+
+/* ── Roll-up button ───────────────────────────────────── */
+.roll-up-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0 2px;
+    width: 100%;
+    transition: opacity 0.15s;
+}
+
+.roll-up-btn:hover {
+    opacity: 0.65;
+}
+
+.roll-up-btn span {
+    font-family: "Winky Rough", Georgia, serif;
+    font-size: 9px;
+    color: #6a3808;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
