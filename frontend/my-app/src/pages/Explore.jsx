@@ -1,9 +1,10 @@
+import CircularHub from '../components/CircularHub/CircularHub';
 import './Explore.css';
 
 function Explore() {
   return (
     <div className="explore-page">
-      <h1>Circular Hub goes here</h1>
+      <CircularHub />
     </div>
   );
 }
