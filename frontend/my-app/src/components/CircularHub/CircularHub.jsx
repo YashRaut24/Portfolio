@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Node from './Node';
 import ContentPanel from './ContentPanel';
 import { hubNodesData } from '../../data/hubNodes';
@@ -13,7 +14,12 @@ function CircularHub() {
   const activeNode = hubNodesData.find((node) => node.id === activeNodeId);
 
   return (
-    <div className="hub-container">
+    <motion.div
+      className="hub-container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="hub-circle-wrapper">
         <div className="hub-circle">
           {hubNodesData.map((node, index) => {
@@ -31,8 +37,18 @@ function CircularHub() {
           })}
         </div>
       </div>
-      <ContentPanel activeNode={activeNode} />
-    </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeNodeId}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.3 }}
+        >
+          <ContentPanel activeNode={activeNode} />
+        </motion.div>
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
