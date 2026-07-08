@@ -1,0 +1,27 @@
+:root {
+    --font-book: 'Kalam', cursive;
+    --font-hub: 'Comfortaa', sans-serif;
+}
+:root {
+    --color-bg: #FAFAFA;
+    --color-bg-secondary: #FFFFFF;
+    --color-text: #1A1A1A;
+    --color-text-secondary: #555555;
+    --color-primary: #2563EB;
+    --color-accent: #F59E0B;
+    --color-border: #E5E5E5;
+    --color-card-bg: #FFFFFF;
+    --color-shadow: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] {
+    --color-bg: #121212;
+    --color-bg-secondary: #1E1E1E;
+    --color-text: #F5F5F5;
+    --color-text-secondary: #AAAAAA;
+    --color-primary: #3B82F6;
+    --color-accent: #FBBF24;
+    --color-border: #2E2E2E;
+    --color-card-bg: #1E1E1E;
+    --color-shadow: rgba(0, 0, 0, 0.4);
+}
