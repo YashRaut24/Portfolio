@@ -1,0 +1,32 @@
+.content-panel {
+    flex: 1;
+    padding: 2rem;
+    background-color: var(--color-bg-secondary);
+    border-radius: 8px;
+    min-height: 300px;
+}
+
+.content-panel-title {
+    font-family: var(--font-hub);
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+.content-panel-placeholder {
+    font-family: var(--font-hub);
+    font-weight: 400;
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+    .content-panel {
+        padding: 1.2rem;
+    }
+
+    .content-panel-title {
+        font-size: 1.4rem;
+    }
+}
