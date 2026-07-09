@@ -1,0 +1,17 @@
+.contact-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.contact-socials {
+    display: flex;
+    gap: 1.2rem;
+}
+
+.contact-social-link {
+    font-family: var(--font-hub);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--color-primary);
+}
