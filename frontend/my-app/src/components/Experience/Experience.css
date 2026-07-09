@@ -1,0 +1,26 @@
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.experience-date {
+    font-family: var(--font-hub);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--color-accent);
+}
+
+.experience-title {
+    font-family: var(--font-hub);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-text);
+}
+
+.experience-desc {
+    font-family: var(--font-hub);
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
