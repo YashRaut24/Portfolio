@@ -4,6 +4,7 @@ import Projects from '../Projects/Projects';
 import Achievements from '../Achievements/Achievements';
 import Experience from '../Experience/Experience';
 import './ContentPanel.css';
+import Contact from '../Contact/Contact';
 
 function ContentPanel({ activeNode }) {
   const renderContent = () => {
@@ -18,6 +19,9 @@ function ContentPanel({ activeNode }) {
         return <Achievements />;
       case 'experience':
         return <Experience />;
+      case 'contact':
+        return <Contact />;
+        
       default:
         return (
           <p className="content-panel-placeholder">
