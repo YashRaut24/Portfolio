@@ -1,4 +1,8 @@
 import About from '../About/About';
+import Skills from '../Skills/Skills';
+import Projects from '../Projects/Projects';
+import Achievements from '../Achievements/Achievements';
+import Experience from '../Experience/Experience';
 import './ContentPanel.css';
 
 function ContentPanel({ activeNode }) {
@@ -6,6 +10,14 @@ function ContentPanel({ activeNode }) {
     switch (activeNode.id) {
       case 'about':
         return <About />;
+      case 'skills':
+        return <Skills />;
+      case 'projects':
+        return <Projects />;
+      case 'achievements':
+        return <Achievements />;
+      case 'experience':
+        return <Experience />;
       default:
         return (
           <p className="content-panel-placeholder">
