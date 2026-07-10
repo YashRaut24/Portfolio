@@ -5,6 +5,7 @@ import Achievements from '../Achievements/Achievements';
 import Experience from '../Experience/Experience';
 import './ContentPanel.css';
 import Contact from '../Contact/Contact';
+import Stats from '../Stats/Stats';
 
 function ContentPanel({ activeNode }) {
   const renderContent = () => {
@@ -21,6 +22,8 @@ function ContentPanel({ activeNode }) {
         return <Experience />;
       case 'contact':
         return <Contact />;
+      case 'stats':
+        return <Stats />;
         
       default:
         return (

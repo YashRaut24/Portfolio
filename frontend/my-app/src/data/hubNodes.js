@@ -5,4 +5,5 @@ export const hubNodesData = [
   { id: 'achievements', label: 'Achievements' },
   { id: 'experience', label: 'Experience' },
   { id: 'contact', label: 'Contact' },
+  { id: 'stats', label: 'GitHub' },
 ];

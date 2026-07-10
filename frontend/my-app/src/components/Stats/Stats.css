@@ -1,0 +1,11 @@
+.stats-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stats-image {
+    width: 100%;
+    max-width: 450px;
+    border-radius: 8px;
+}
