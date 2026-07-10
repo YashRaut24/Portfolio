@@ -57,3 +57,17 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.form-success-msg {
+    color: #16A34A;
+    font-family: var(--font-hub);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+
+.form-error-msg {
+    color: #DC2626;
+    font-family: var(--font-hub);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}

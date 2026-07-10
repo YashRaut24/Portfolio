@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { submitContactForm } from '../../services/api';
 import './ContactForm.css';
 
 function ContactForm() {
@@ -8,16 +9,25 @@ function ContactForm() {
     message: '',
   });
   const [status, setStatus] = useState('idle');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('submitting');
-    // API call will go here later
-    console.log(formData);
+    setErrorMsg('');
+
+    try {
+      await submitContactForm(formData);
+      setStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+    } catch (error) {
+      setStatus('error');
+      setErrorMsg(error.message);
+    }
   };
 
   return (
@@ -58,6 +68,9 @@ function ContactForm() {
       <button type="submit" className="form-submit-btn" disabled={status === 'submitting'}>
         {status === 'submitting' ? 'Sending...' : 'Send Message'}
       </button>
+
+      {status === 'success' && <p className="form-success-msg">Message sent successfully!</p>}
+      {status === 'error' && <p className="form-error-msg">{errorMsg}</p>}
     </form>
   );
 }
