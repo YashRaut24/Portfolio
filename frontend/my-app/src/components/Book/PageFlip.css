@@ -1,0 +1,24 @@
+.page-leaf {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.page-leaf-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+}
+
+.page-leaf-front {
+    background-color: var(--color-bg-secondary);
+}
+
+.page-leaf-back {
+    background-color: var(--color-bg-secondary);
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.06), transparent 40%);
+    transform: rotateY(180deg);
+}
