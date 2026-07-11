@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
 import NotFound from './components/NotFound/NotFound';
-import './App.css';
 
 function App() {
   return (
