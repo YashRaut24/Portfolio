@@ -7,10 +7,7 @@
     align-items: flex-start;
     justify-content: center;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 5px 20px var(--color-shadow);
 }
-
 .page-year {
     font-family: var(--font-book);
     font-weight: 700;
@@ -60,6 +57,50 @@
 
 .explore-btn:hover {
     background-color: var(--color-accent);
+}
+
+
+.page-quote {
+    font-family: var(--font-book);
+    font-weight: 700;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+.page-description {
+    font-family: var(--font-book);
+    font-weight: 400;
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+.page-subtitle {
+    font-family: var(--font-book);
+    font-weight: 400;
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.8rem;
+}
+
+.page-cta {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.page-cta-text {
+    font-family: var(--font-book);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+.page-blank {
+    background-color: var(--color-primary);
 }
 
 @media (max-width: 768px) {
