@@ -1,8 +1,16 @@
 import './Page.css';
 
 function Page({ content, onExplore }) {
-  if (!content || content.type === 'blank') {
+  if (!content) {
     return <div className="page page-blank" />;
+  }
+
+  if (content.type === 'blank') {
+    return <div className="page page-blank" />;
+  }
+
+  if (content.type === 'inside-cover') {
+    return <div className="page page-inside-cover" />;
   }
 
   if (content.type === 'intro') {

@@ -2,12 +2,66 @@
     width: 100%;
     height: 100%;
     background-color: var(--color-bg-secondary);
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    padding: 2rem;
+    padding: 2rem 2.5rem;
 }
+
+.page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 1.25rem;
+    right: 1.25rem;
+    background-image: repeating-linear-gradient(to bottom,
+            transparent,
+            transparent 33px,
+            var(--color-border) 33px,
+            var(--color-border) 34px);
+    background-position: 0 6px;
+    pointer-events: none;
+}
+.page-year {
+    line-height: 34px;
+    margin-bottom: 0;
+}
+
+.page-title {
+    line-height: 34px;
+    margin-bottom: 0;
+}
+
+.page-keywords {
+    margin-top: 34px;
+}
+
+.page-keyword {
+    line-height: 20px;
+}
+
+.page-quote {
+    line-height: 34px;
+    margin-bottom: 0;
+}
+
+.page-description {
+    line-height: 34px;
+    margin-top: 0;
+}
+
+.page-inside-cover::before {
+    display: none;
+}
+
+.page>* {
+    position: relative;
+    z-index: 1;
+}
+
 .page-year {
     font-family: var(--font-book);
     font-weight: 700;
@@ -39,6 +93,11 @@
     padding: 0.4rem 0.9rem;
     border-radius: 20px;
     border: 1px solid var(--color-border);
+}
+
+.page-inside-cover {
+    background-color: var(--color-primary);
+    background-image: none;
 }
 
 .explore-btn {
@@ -100,7 +159,7 @@
 }
 
 .page-blank {
-    background-color: var(--color-primary);
+    background-color: var(--color-bg-secondary);
 }
 
 @media (max-width: 768px) {
