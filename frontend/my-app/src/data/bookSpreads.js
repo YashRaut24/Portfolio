@@ -1,7 +1,7 @@
 export const bookSpreads = [
   {
     id: 1,
-    left: { type: 'blank' },
+    left: { type: 'inside-cover' },
     right: {
       type: 'intro',
       quote: 'Building scalable solutions, one line at a time.',
