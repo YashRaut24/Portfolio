@@ -18,7 +18,5 @@
 }
 
 .page-leaf-back {
-    background-color: var(--color-bg-secondary);
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.06), transparent 40%);
     transform: rotateY(180deg);
 }

@@ -1,23 +1,34 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Page from './Page';
 import './PageFlip.css';
 
-function PageFlip({ side, frontContent, onComplete, disabled, triggerCount, onExplore }) {
+function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel, onComplete, disabled, triggerCount, onExplore }) {
   const isRight = side === 'right';
   const dragX = useMotionValue(0);
   const rotateY = useTransform(dragX, isRight ? [-300, 0] : [0, 300], isRight ? [-180, 0] : [0, 180]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const previewedRef = useRef(false);
+
+  const frontRef = useRef(frontContent);
+  const backRef = useRef(backContent);
+  if (!isAnimating && !previewedRef.current) {
+    frontRef.current = frontContent;
+    backRef.current = backContent;
+  }
 
   const finishFlip = () => {
     onComplete();
     dragX.set(0);
     setIsAnimating(false);
+    previewedRef.current = false;
   };
 
   useEffect(() => {
     if (triggerCount > 0 && !isAnimating) {
       setIsAnimating(true);
+      previewedRef.current = true;
+      onPreview && onPreview();
       const target = isRight ? -300 : 300;
       animate(dragX, target, { duration: 0.45, ease: 'easeInOut', onComplete: finishFlip });
     }
@@ -26,6 +37,10 @@ function PageFlip({ side, frontContent, onComplete, disabled, triggerCount, onEx
 
   const handleDrag = (event, info) => {
     if (isAnimating || disabled) return;
+    if (!previewedRef.current) {
+      previewedRef.current = true;
+      onPreview && onPreview();
+    }
     const clamped = isRight
       ? Math.min(0, Math.max(-300, info.offset.x))
       : Math.max(0, Math.min(300, info.offset.x));
@@ -41,6 +56,10 @@ function PageFlip({ side, frontContent, onComplete, disabled, triggerCount, onEx
       animate(dragX, target, { duration: 0.35, ease: 'easeInOut', onComplete: finishFlip });
     } else {
       animate(dragX, 0, { duration: 0.25, ease: 'easeOut' });
+      if (previewedRef.current) {
+        onPreviewCancel && onPreviewCancel();
+        previewedRef.current = false;
+      }
     }
   };
 
@@ -56,9 +75,11 @@ function PageFlip({ side, frontContent, onComplete, disabled, triggerCount, onEx
       onDragEnd={handleDragEnd}
     >
       <div className="page-leaf-face page-leaf-front">
-        <Page content={frontContent} onExplore={onExplore} />
+        <Page content={frontRef.current} onExplore={onExplore} />
       </div>
-      <div className="page-leaf-face page-leaf-back" />
+      <div className="page-leaf-face page-leaf-back">
+        <Page content={backRef.current} onExplore={onExplore} />
+      </div>
     </motion.div>
   );
 }

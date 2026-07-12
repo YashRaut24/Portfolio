@@ -10,6 +10,8 @@ import './Book.css';
 function Book() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentSpread, setCurrentSpread] = useState(0);
+  const [rightPreview, setRightPreview] = useState(false);
+  const [leftPreview, setLeftPreview] = useState(false);
   const [nextTrigger, setNextTrigger] = useState(0);
   const [prevTrigger, setPrevTrigger] = useState(0);
   const [isTurning, setIsTurning] = useState(false);
@@ -38,18 +40,29 @@ function Book() {
 
   const handleNextComplete = () => {
     setCurrentSpread((c) => Math.min(c + 1, totalSpreads - 1));
+    setRightPreview(false);
     setIsTurning(false);
   };
 
   const handlePrevComplete = () => {
     if (currentSpread === 0) {
       setIsOpen(false);
+      setLeftPreview(false);
       setIsTurning(false);
       return;
     }
     setCurrentSpread((c) => Math.max(c - 1, 0));
+    setLeftPreview(false);
     setIsTurning(false);
   };
+
+  const rightBaseContent = rightPreview && currentSpread < totalSpreads - 1
+    ? bookSpreads[currentSpread + 1].right
+    : spread.right;
+
+  const leftBaseContent = leftPreview && currentSpread > 0
+    ? bookSpreads[currentSpread - 1].left
+    : spread.left;
 
   return (
     <div className="book-container">
@@ -57,11 +70,14 @@ function Book() {
         <div className="book-stage">
           <div className={`book-spread ${!isOpen ? 'book-spread-closed' : ''}`}>
             <div className={`page-flip-wrapper ${!isOpen ? 'page-hidden' : ''}`}>
-              <Page content={spread.left} onExplore={handleExplore} />
+              <Page content={leftBaseContent} onExplore={handleExplore} />
               {isOpen && (
                 <PageFlip
                   side="left"
                   frontContent={spread.left}
+                  backContent={currentSpread > 0 ? bookSpreads[currentSpread - 1].right : null}
+                  onPreview={() => setLeftPreview(true)}
+                  onPreviewCancel={() => setLeftPreview(false)}
                   onComplete={handlePrevComplete}
                   disabled={false}
                   triggerCount={prevTrigger}
@@ -71,11 +87,14 @@ function Book() {
             </div>
             <div className="book-spine" />
             <div className="page-flip-wrapper">
-              <Page content={spread.right} onExplore={handleExplore} />
+              <Page content={rightBaseContent} onExplore={handleExplore} />
               {isOpen && (
                 <PageFlip
                   side="right"
                   frontContent={spread.right}
+                  backContent={currentSpread < totalSpreads - 1 ? bookSpreads[currentSpread + 1].left : null}
+                  onPreview={() => setRightPreview(true)}
+                  onPreviewCancel={() => setRightPreview(false)}
                   onComplete={handleNextComplete}
                   disabled={currentSpread >= totalSpreads - 1}
                   triggerCount={nextTrigger}
@@ -98,20 +117,18 @@ function Book() {
           </AnimatePresence>
         </div>
 
-        {isOpen && (
-          <div className="book-nav">
-            <button className="nav-btn" onClick={handlePrevClick} disabled={isTurning}>
-              Prev
-            </button>
-            <button
-              className="nav-btn"
-              onClick={handleNextClick}
-              disabled={isTurning || currentSpread === totalSpreads - 1}
-            >
-              Next
-            </button>
-          </div>
-        )}
+        <div className={`book-nav ${!isOpen ? 'book-nav-hidden' : ''}`}>
+          <button className="nav-btn" onClick={handlePrevClick} disabled={isTurning || !isOpen}>
+            Prev
+          </button>
+          <button
+            className="nav-btn"
+            onClick={handleNextClick}
+            disabled={isTurning || !isOpen || currentSpread === totalSpreads - 1}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
