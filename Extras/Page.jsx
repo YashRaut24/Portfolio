@@ -1,26 +1,8 @@
 import './Page.css';
 
 function Page({ content, onExplore }) {
-  if (!content) {
+  if (!content || content.type === 'blank') {
     return <div className="page page-blank" />;
-  }
-
-  if (content.type === 'blank') {
-    return <div className="page page-blank" />;
-  }
-
-  if (content.type === 'inside-cover') {
-    return <div className="page page-inside-cover" />;
-  }
-
-  if (content.type === 'cover-face') {
-    return (
-      <div className="page page-cover-face">
-        <img src="/assets/images/profile.jpg" alt="Profile" className="page-cover-photo" />
-        <h1 className="page-cover-name">Yash</h1>
-        <p className="page-cover-role">AI Engineer & Full-Stack Developer</p>
-      </div>
-    );
   }
 
   if (content.type === 'intro') {

@@ -1,0 +1,11 @@
+npm install @fontsource/kalam @fontsource/comfortaa
+
+npm install react-router-dom
+
+npm install framer-motion
+
+npm init -y
+
+npm install express dotenv cors helmet express-rate-limit express-validator nodemailer
+
+npm install react-helmet-async

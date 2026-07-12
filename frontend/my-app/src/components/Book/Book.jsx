@@ -15,6 +15,7 @@ function Book() {
   const [nextTrigger, setNextTrigger] = useState(0);
   const [prevTrigger, setPrevTrigger] = useState(0);
   const [isTurning, setIsTurning] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const navigate = useNavigate();
 
   const totalSpreads = bookSpreads.length;
@@ -30,10 +31,6 @@ function Book() {
 
   const handlePrevClick = () => {
     if (isTurning) return;
-    if (currentSpread === 0) {
-      setIsOpen(false);
-      return;
-    }
     setIsTurning(true);
     setPrevTrigger((n) => n + 1);
   };
@@ -44,17 +41,15 @@ function Book() {
     setIsTurning(false);
   };
 
-  const handlePrevComplete = () => {
-    if (currentSpread === 0) {
-      setIsOpen(false);
-      setLeftPreview(false);
-      setIsTurning(false);
-      return;
-    }
+const handlePrevComplete = () => {
+  if (currentSpread === 0) {
+    setIsClosing(true);
+  } else {
     setCurrentSpread((c) => Math.max(c - 1, 0));
     setLeftPreview(false);
     setIsTurning(false);
-  };
+  }
+};
 
   const rightBaseContent = rightPreview && currentSpread < totalSpreads - 1
     ? bookSpreads[currentSpread + 1].right
@@ -63,6 +58,10 @@ function Book() {
   const leftBaseContent = leftPreview && currentSpread > 0
     ? bookSpreads[currentSpread - 1].left
     : spread.left;
+
+  const leftBackContent = currentSpread === 0
+    ? { type: 'cover-face' }
+    : bookSpreads[currentSpread - 1].right;
 
   return (
     <div className="book-container">
@@ -75,7 +74,7 @@ function Book() {
                 <PageFlip
                   side="left"
                   frontContent={spread.left}
-                  backContent={currentSpread > 0 ? bookSpreads[currentSpread - 1].right : null}
+                  backContent={leftBackContent}
                   onPreview={() => setLeftPreview(true)}
                   onPreviewCancel={() => setLeftPreview(false)}
                   onComplete={handlePrevComplete}
@@ -104,19 +103,28 @@ function Book() {
             </div>
           </div>
 
-          <AnimatePresence>
-            {!isOpen && (
-              <motion.div
-                className="cover-slot"
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <Cover onOpen={() => setIsOpen(true)} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+<AnimatePresence>
+    {(!isOpen || isClosing) && (
+        <motion.div
+            className="cover-slot"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+        >
+            <Cover
+                onOpen={() => setIsOpen(true)}
+                isClosing={isClosing}
+                onCloseComplete={() => {
+                    setIsOpen(false);
+                    setIsClosing(false);
+                    setLeftPreview(false);
+                    setIsTurning(false);
+                }}
+            />
+        </motion.div>
+    )}
+</AnimatePresence>
         </div>
-
+            
         <div className={`book-nav ${!isOpen ? 'book-nav-hidden' : ''}`}>
           <button className="nav-btn" onClick={handlePrevClick} disabled={isTurning || !isOpen}>
             Prev

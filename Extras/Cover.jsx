@@ -1,31 +1,13 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './Cover.css';
 
-function Cover({
-    onOpen,
-    isClosing,
-    onCloseComplete
-}) {
+function Cover({ onOpen }) {
   const dragX = useMotionValue(0);
   const rotateY = useTransform(dragX, [-300, 0], [-180, 0]);
   const contentOpacity = useTransform(dragX, [-150, -80], [0, 1]);
   const [isAnimating, setIsAnimating] = useState(false);
-  useEffect(() => {
-      if (!isClosing) return;
 
-      setIsAnimating(true);
-
-      animate(dragX, 0, {
-          duration: 0.45,
-          ease: 'easeInOut',
-          onComplete: () => {
-              setIsAnimating(false);
-              onCloseComplete();
-          },
-      });
-
-  }, [isClosing]);
   const handleDrag = (event, info) => {
     if (isAnimating) return;
     const clamped = Math.min(0, Math.max(-300, info.offset.x));

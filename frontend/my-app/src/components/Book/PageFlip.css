@@ -12,7 +12,9 @@
     inset: 0;
     backface-visibility: hidden;
 }
-
+.page-leaf {
+    user-select: none;
+}
 .page-leaf-front {
     background-color: var(--color-bg-secondary);
 }
