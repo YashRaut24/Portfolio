@@ -11,9 +11,9 @@
 .book-frame {
     width: 100%;
     max-width: 900px;
-    display: flex;
-    flex-direction: column;
+    position: relative;
 }
+
 .book-stage {
     position: relative;
     height: 70vh;
@@ -45,6 +45,11 @@
     visibility: hidden;
 }
 
+.book-nav-hidden {
+    visibility: hidden;
+    pointer-events: none;
+}
+
 .turning-page {
     position: absolute;
     inset: 0;
@@ -71,9 +76,12 @@
 }
 
 .book-nav {
+    position: absolute;
+    top: calc(100% + 1rem);
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: space-between;
-    margin-top: 1rem;
 }
 
 .nav-btn {
