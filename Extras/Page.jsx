@@ -13,10 +13,6 @@ function Page({ content, onExplore }) {
     return <div className="page page-inside-cover" />;
   }
 
-  if (content.type === 'transparent') {
-    return <div className="page page-transparent" />;
-  }
-
   if (content.type === 'cover-face') {
     return (
       <div className="page page-cover-face">

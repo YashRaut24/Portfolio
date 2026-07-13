@@ -3,35 +3,29 @@ import { useEffect, useRef, useState } from 'react';
 import Page from './Page';
 import './PageFlip.css';
 
-function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel, onComplete, disabled, triggerCount, onExplore, isClosingFlip }) {
+function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel, onComplete, disabled, triggerCount, onExplore }) {
   const isRight = side === 'right';
   const dragX = useMotionValue(0);
   const rotateY = useTransform(dragX, isRight ? [-300, 0] : [0, 300], isRight ? [-180, 0] : [0, 180]);
   const [isAnimating, setIsAnimating] = useState(false);
   const previewedRef = useRef(false);
 
-  const [displayFront, setDisplayFront] = useState(frontContent);
-  const [displayBack, setDisplayBack] = useState(backContent);
-
-  useEffect(() => {
-    if (!isAnimating && !previewedRef.current) {
-      setDisplayFront(frontContent);
-      setDisplayBack(backContent);
-    }
-  }, [frontContent, backContent, isAnimating]);
+  const frontRef = useRef(frontContent);
+  const backRef = useRef(backContent);
+  if (!isAnimating && !previewedRef.current) {
+    frontRef.current = frontContent;
+    backRef.current = backContent;
+  }
 
   const finishFlip = () => {
     onComplete();
-    if (!isClosingFlip) {
-      dragX.set(0);
-    }
+    dragX.set(0);
     setIsAnimating(false);
     previewedRef.current = false;
   };
 
   useEffect(() => {
     if (triggerCount > 0 && !isAnimating) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsAnimating(true);
       previewedRef.current = true;
       onPreview && onPreview();
@@ -41,7 +35,7 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerCount]);
 
-  const handleDrag = (_, info) => {
+  const handleDrag = (event, info) => {
     if (isAnimating || disabled) return;
     if (!previewedRef.current) {
       previewedRef.current = true;
@@ -53,7 +47,7 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
     dragX.set(clamped);
   };
 
-  const handleDragEnd = (_, info) => {
+  const handleDragEnd = (event, info) => {
     if (isAnimating || disabled) return;
     const passed = isRight ? info.offset.x < -150 : info.offset.x > 150;
     if (passed) {
@@ -81,10 +75,10 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
       onDragEnd={handleDragEnd}
     >
       <div className="page-leaf-face page-leaf-front">
-        <Page content={displayFront} onExplore={onExplore} />
+        <Page content={frontRef.current} onExplore={onExplore} />
       </div>
       <div className="page-leaf-face page-leaf-back">
-        <Page content={displayBack} onExplore={onExplore} />
+        <Page content={backRef.current} onExplore={onExplore} />
       </div>
     </motion.div>
   );

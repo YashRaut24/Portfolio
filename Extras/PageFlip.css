@@ -5,18 +5,29 @@
     cursor: pointer;
     transform-style: preserve-3d;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    background-color: var(--color-bg-secondary);
+    isolation: isolate;
+    user-select: none;
+    overflow: hidden;
 }
 
 .page-leaf-face {
     position: absolute;
     inset: 0;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background-color: var(--color-bg-secondary);
+    opacity: 1;
+    visibility: visible;
 }
 
 .page-leaf-front {
     background-color: var(--color-bg-secondary);
+    z-index: 2;
 }
 
 .page-leaf-back {
     transform: rotateY(180deg);
+    background-color: var(--color-bg-secondary);
+    z-index: 1;
 }

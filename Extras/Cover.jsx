@@ -1,27 +1,65 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Cover.css';
 
-function Cover({ onOpen }) {
+function Cover({
+    onOpen,
+    isClosing,
+    onCloseComplete
+}) {
   const dragX = useMotionValue(0);
   const rotateY = useTransform(dragX, [-300, 0], [-180, 0]);
   const contentOpacity = useTransform(dragX, [-150, -80], [0, 1]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isOpenState, setIsOpenState] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
 
-  const handleDrag = (_, info) => {
+  useEffect(() => {
+    if (!isClosing) return;
+
+    setIsAnimating(true);
+    animate(dragX, 0, {
+      duration: 0.45,
+      ease: 'easeInOut',
+      onComplete: () => {
+        setIsAnimating(false);
+        setIsOpenState(false);
+        onCloseComplete();
+      },
+    });
+  }, [dragX, isClosing, onCloseComplete]);
+
+  const handleDrag = (event, info) => {
     if (isAnimating) return;
-    const clamped = Math.min(0, Math.max(-300, info.offset.x));
-    dragX.set(clamped);
+    const nextOffset = Math.min(0, Math.max(-300, info.offset.x));
+    setDragOffset(nextOffset);
+    dragX.set(nextOffset);
   };
 
-  const handleDragEnd = (_, info) => {
+  const handleDragEnd = (event, info) => {
     if (isAnimating) return;
-    if (info.offset.x < -150) {
+
+    const offset = dragOffset;
+    if (offset <= -150) {
       setIsAnimating(true);
       animate(dragX, -300, {
         duration: 0.35,
         ease: 'easeInOut',
-        onComplete: onOpen,
+        onComplete: () => {
+          setIsAnimating(false);
+          setIsOpenState(true);
+          onOpen();
+        },
+      });
+    } else if (isOpenState && offset >= 150) {
+      setIsAnimating(true);
+      animate(dragX, 0, {
+        duration: 0.35,
+        ease: 'easeInOut',
+        onComplete: () => {
+          setIsAnimating(false);
+          setIsOpenState(false);
+        },
       });
     } else {
       animate(dragX, 0, { duration: 0.25, ease: 'easeOut' });

@@ -31,38 +31,14 @@
     perspective: 1800px;
     perspective-origin: center center;
 }
-
 .book-spread-closed {
     background-color: transparent;
     box-shadow: none;
 }
-
-.book-spread-closing {
-    background: transparent !important;
-    box-shadow: none !important;
-}
-
-.book-spread-closing .page-flip-wrapper:first-child {
-    background: transparent;
-}
-
-.book-spread-closing .page-flip-wrapper:last-child {
-    background-color: var(--color-bg-secondary);
-    box-shadow: 10px 10px 30px var(--color-shadow);
-}
-
-.book-spread-closing .book-spine {
-    opacity: 0;
-}
-
 .page-flip-wrapper {
     flex: 1;
     position: relative;
     transform-style: preserve-3d;
-}
-
-.page-flip-wrapper.turning-active {
-    z-index: 10;
 }
 
 .page-hidden {
@@ -97,6 +73,11 @@
     z-index: 20;
     perspective: 1600px;
     perspective-origin: left center;
+    pointer-events: none;
+}
+
+.cover-slot .cover {
+    pointer-events: auto;
 }
 
 .book-nav {

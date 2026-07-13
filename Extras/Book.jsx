@@ -15,6 +15,7 @@ function Book() {
   const [nextTrigger, setNextTrigger] = useState(0);
   const [prevTrigger, setPrevTrigger] = useState(0);
   const [isTurning, setIsTurning] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const navigate = useNavigate();
 
   const totalSpreads = bookSpreads.length;
@@ -40,50 +41,51 @@ function Book() {
     setIsTurning(false);
   };
 
-  const handlePrevComplete = () => {
-    if (currentSpread === 0) {
-      setIsOpen(false);
-      setLeftPreview(false);
-      setIsTurning(false);
-      return;
-    }
+const handlePrevComplete = () => {
+  if (currentSpread === 0) {
+    setIsClosing(true);
+  } else {
     setCurrentSpread((c) => Math.max(c - 1, 0));
     setLeftPreview(false);
     setIsTurning(false);
-  };
+  }
+};
 
   const rightBaseContent = rightPreview && currentSpread < totalSpreads - 1
     ? bookSpreads[currentSpread + 1].right
     : spread.right;
 
-  const leftBaseContent = currentSpread === 0
-    ? (leftPreview ? { type: 'transparent' } : spread.left)
-    : (leftPreview ? bookSpreads[currentSpread - 1].left : spread.left);
+  const leftBaseContent = leftPreview && currentSpread > 0
+    ? bookSpreads[currentSpread - 1].left
+    : spread.left;
+
+  const leftBackContent = currentSpread === 0
+    ? { type: 'cover-face' }
+    : bookSpreads[currentSpread - 1].right;
 
   return (
     <div className="book-container">
       <div className="book-frame">
         <div className="book-stage">
-          <div className={`book-spread ${!isOpen ? 'book-spread-closed' : ''} ${isOpen && currentSpread === 0 && leftPreview ? 'book-spread-closing' : ''}`}>
-            <div className={`page-flip-wrapper ${!isOpen ? 'page-hidden' : ''} ${leftPreview ? 'turning-active' : ''}`}>
+          <div className={`book-spread ${!isOpen ? 'book-spread-closed' : ''}`}>
+            <div className={`page-flip-wrapper ${!isOpen ? 'page-hidden' : ''}`}>
               <Page content={leftBaseContent} onExplore={handleExplore} />
               {isOpen && (
                 <PageFlip
                   side="left"
                   frontContent={spread.left}
-                  backContent={currentSpread > 0 ? bookSpreads[currentSpread - 1].right : { type: 'cover-face' }}
+                  backContent={leftBackContent}
                   onPreview={() => setLeftPreview(true)}
                   onPreviewCancel={() => setLeftPreview(false)}
                   onComplete={handlePrevComplete}
                   disabled={false}
                   triggerCount={prevTrigger}
                   onExplore={handleExplore}
-                  isClosingFlip={currentSpread === 0}
                 />
               )}
             </div>
             <div className="book-spine" />
-            <div className={`page-flip-wrapper ${rightPreview ? 'turning-active' : ''}`}>
+            <div className="page-flip-wrapper">
               <Page content={rightBaseContent} onExplore={handleExplore} />
               {isOpen && (
                 <PageFlip
@@ -101,19 +103,28 @@ function Book() {
             </div>
           </div>
 
-          <AnimatePresence>
-            {!isOpen && (
-              <motion.div
-                className="cover-slot"
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <Cover onOpen={() => setIsOpen(true)} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+<AnimatePresence>
+    {(!isOpen || isClosing) && (
+        <motion.div
+            className="cover-slot"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+        >
+            <Cover
+                onOpen={() => setIsOpen(true)}
+                isClosing={isClosing}
+                onCloseComplete={() => {
+                    setIsOpen(false);
+                    setIsClosing(false);
+                    setLeftPreview(false);
+                    setIsTurning(false);
+                }}
+            />
+        </motion.div>
+    )}
+</AnimatePresence>
         </div>
-
+            
         <div className={`book-nav ${!isOpen ? 'book-nav-hidden' : ''}`}>
           <button className="nav-btn" onClick={handlePrevClick} disabled={isTurning || !isOpen}>
             Prev
