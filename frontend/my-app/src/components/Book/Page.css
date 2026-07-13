@@ -173,6 +173,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    padding: 2rem;
 }
 
 .page-cover-face::before {
@@ -202,6 +203,7 @@
     font-size: 1.1rem;
     color: #FFFFFF;
     opacity: 0.9;
+    white-space: nowrap;
 }
 
 
@@ -216,5 +218,14 @@
 
     .page-keyword {
         font-size: 0.85rem;
+    }
+
+    .page-cover-name {
+        font-size: 1.8rem;
+    }
+
+    .page-cover-role {
+        font-size: 0.95rem;
+        white-space: normal;
     }
 }

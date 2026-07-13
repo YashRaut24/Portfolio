@@ -7,6 +7,7 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
   const isRight = side === 'right';
   const dragX = useMotionValue(0);
   const rotateY = useTransform(dragX, isRight ? [-300, 0] : [0, 300], isRight ? [-180, 0] : [0, 180]);
+  const closingCoverContentOpacity = useTransform(dragX, [150, 220], [0, 1]);
   const [isAnimating, setIsAnimating] = useState(false);
   const previewedRef = useRef(false);
 
@@ -69,10 +70,19 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
     }
   };
 
+  const leafStyle = {
+    rotateY,
+    transformOrigin: isRight ? 'left center' : 'right center',
+  };
+
+  if (isClosingFlip) {
+    leafStyle['--cover-content-opacity'] = closingCoverContentOpacity;
+  }
+
   return (
     <motion.div
-      className="page-leaf"
-      style={{ rotateY, transformOrigin: isRight ? 'left center' : 'right center' }}
+      className={`page-leaf ${isClosingFlip ? 'page-leaf-closing-cover' : ''}`}
+      style={leafStyle}
       drag={disabled || isAnimating ? false : 'x'}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0}

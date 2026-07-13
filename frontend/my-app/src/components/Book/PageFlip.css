@@ -20,3 +20,16 @@
 .page-leaf-back {
     transform: rotateY(180deg);
 }
+
+.book-spread-closing .page-leaf-closing-cover {
+    left: -2px;
+}
+
+.page-leaf-closing-cover .page-cover-photo,
+.page-leaf-closing-cover .page-cover-name {
+    opacity: var(--cover-content-opacity, 1);
+}
+
+.page-leaf-closing-cover .page-cover-role {
+    opacity: calc(var(--cover-content-opacity, 1) * 0.9);
+}
