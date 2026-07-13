@@ -13,43 +13,66 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
-    gap: 3rem;
-    padding: 3rem;
-    padding-top: 6rem;
+    justify-content: flex-end;
+    gap: 5rem;
+    padding: 6rem clamp(1.5rem, 6vw, 5rem) 3rem clamp(1.5rem, 30vw, 24rem);
+    position: relative;
+    overflow-x: hidden;
 }
 
 .hub-circle-wrapper {
     flex-shrink: 0;
-    width: 450px;
-    height: 450px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 340px;
+    height: 600px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: none;
+    z-index: 1;
+}
+
+.hub-content-wrapper {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    max-width: 860px;
 }
 
 .hub-circle {
-    position: relative;
-    width: 360px;
-    height: 360px;
+    position: absolute;
+    left: -270px;
+    bottom: -270px;
+    width: 540px;
+    height: 540px;
     border: 2px solid var(--color-border);
     border-radius: 50%;
 }
 
-
 @media (max-width: 768px) {
     .hub-container {
-        flex-direction: column;
-        padding: 1.5rem;
-        gap: 1.5rem;
+        display: block;
+        padding: 8.5rem 1.25rem 2rem;
+        min-height: 100vh;
     }
 
     .hub-circle-wrapper {
-        width: 280px;
-        height: 280px;
+        left: 0;
+        bottom: 0;
+        width: 180px;
+        height: min(56vh, 420px);
+    }
+
+    .hub-content-wrapper {
+        width: 100%;
+        max-width: none;
     }
 
     .hub-circle {
-        width: 220px;
-        height: 220px;
+        left: -140px;
+        bottom: -140px;
+        width: 280px;
+        height: 280px;
     }
 }

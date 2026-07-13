@@ -1,17 +1,97 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Node from './Node';
 import ContentPanel from './ContentPanel';
 import { hubNodesData } from '../../data/hubNodes';
 import './CircularHub.css';
 
+const ACTIVE_ARC_ANGLE = -Math.PI / 4;
+
 function CircularHub() {
-  const [activeNodeId, setActiveNodeId] = useState(hubNodesData[0].id);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [radius, setRadius] = useState(270);
+  const scrollAccum = useRef(0);
+  const isAnimating = useRef(false);
+  const dragStartY = useRef(0);
+  const isDragging = useRef(false);
+  const wrapperRef = useRef(null);
 
-  const radius = 180;
   const totalNodes = hubNodesData.length;
+  const activeNode = hubNodesData[activeIndex];
 
-  const activeNode = hubNodesData.find((node) => node.id === activeNodeId);
+  const [rotationOffset, setRotationOffset] = useState(ACTIVE_ARC_ANGLE);
+
+  useEffect(() => {
+    const updateLayout = () => {
+      const isMobile = window.innerWidth <= 768;
+      setRadius(isMobile ? 140 : 270);
+      setRotationOffset(ACTIVE_ARC_ANGLE);
+    };
+
+    updateLayout();
+    window.addEventListener('resize', updateLayout);
+    return () => window.removeEventListener('resize', updateLayout);
+  }, []);
+
+  const goToIndex = (newIndex) => {
+    const wrapped = ((newIndex % totalNodes) + totalNodes) % totalNodes;
+    setActiveIndex(wrapped);
+  };
+
+  const advance = (direction) => {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+    goToIndex(activeIndex + direction);
+    setTimeout(() => { isAnimating.current = false; }, 350);
+  };
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const handleWheelNative = (event) => {
+      if (event.cancelable) event.preventDefault();
+      if (isAnimating.current) return;
+
+      scrollAccum.current += event.deltaY;
+      const threshold = 60;
+
+      if (scrollAccum.current > threshold) {
+        advance(-1);
+        scrollAccum.current = 0;
+      } else if (scrollAccum.current < -threshold) {
+        advance(1);
+        scrollAccum.current = 0;
+      }
+    };
+
+    el.addEventListener('wheel', handleWheelNative, { passive: false });
+    return () => el.removeEventListener('wheel', handleWheelNative);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndex]);
+
+  const handlePointerDown = (event) => {
+    isDragging.current = true;
+    dragStartY.current = event.clientY;
+  };
+
+  const handlePointerMove = (event) => {
+    if (!isDragging.current || isAnimating.current) return;
+    const deltaY = event.clientY - dragStartY.current;
+    const threshold = 50;
+
+    if (deltaY > threshold) {
+      advance(-1);
+      dragStartY.current = event.clientY;
+    } else if (deltaY < -threshold) {
+      advance(1);
+      dragStartY.current = event.clientY;
+    }
+  };
+
+  const handlePointerUp = () => {
+    isDragging.current = false;
+  };
 
   return (
     <motion.div
@@ -20,18 +100,27 @@ function CircularHub() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="hub-circle-wrapper">
+      <div
+        className="hub-circle-wrapper"
+        ref={wrapperRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+      >
         <div className="hub-circle">
           {hubNodesData.map((node, index) => {
-            const angle = (index / totalNodes) * 2 * Math.PI - Math.PI / 2;
+            const offset = index - activeIndex;
+            const angle = (offset / totalNodes) * 2 * Math.PI + rotationOffset;
+
             return (
               <Node
                 key={node.id}
                 label={node.label}
                 angle={angle}
                 radius={radius}
-                isActive={node.id === activeNodeId}
-                onClick={() => setActiveNodeId(node.id)}
+                isActive={index === activeIndex}
+                onClick={() => goToIndex(index)}
               />
             );
           })}
@@ -39,7 +128,8 @@ function CircularHub() {
       </div>
       <AnimatePresence mode="wait">
         <motion.div
-          key={activeNodeId}
+          className="hub-content-wrapper"
+          key={activeNode.id}
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -15 }}
