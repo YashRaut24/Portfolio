@@ -25,7 +25,7 @@ function CircularHub() {
     const updateLayout = () => {
       const isMobile = window.innerWidth <= 768;
       setRadius(isMobile ? 140 : 270);
-      setRotationOffset(ACTIVE_ARC_ANGLE);
+      setRotationOffset(isMobile ? ACTIVE_ARC_ANGLE : 0);
     };
 
     updateLayout();

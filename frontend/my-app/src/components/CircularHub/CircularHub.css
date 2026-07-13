@@ -23,7 +23,7 @@
 .hub-circle-wrapper {
     flex-shrink: 0;
     width: 340px;
-    height: 600px;
+    height: 700px;
     position: fixed;
     left: 0;
     bottom: 0;
@@ -31,6 +31,7 @@
     cursor: grab;
     touch-action: none;
     z-index: 1;
+    padding-top: 4rem;
 }
 
 .hub-content-wrapper {
@@ -43,18 +44,48 @@
 .hub-circle {
     position: absolute;
     left: -270px;
-    bottom: -270px;
     width: 540px;
     height: 540px;
     border: 2px solid var(--color-border);
     border-radius: 50%;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) and (max-width: 1400px) and (min-height: 700px) {
+    .hub-container {
+        display: block;
+        padding: 9rem 2rem 3rem;
+        min-height: 100vh;
+        z-index:9999;
+    }
+
+    .hub-circle-wrapper {
+        left: 0;
+        bottom: 0;
+        width: 260px;
+        height: min(60vh, 520px);
+        z-index: 9999;
+    }
+
+    .hub-content-wrapper {
+        width: 100%;
+        max-width: none;
+        z-index: 99999;
+    }
+
+    .hub-circle {
+        left: -200px;
+        bottom: -200px;
+        width: 400px;
+        height: 400px;
+    }
+}
+
+@media (max-width: 766px) {
     .hub-container {
         display: block;
         padding: 8.5rem 1.25rem 2rem;
         min-height: 100vh;
+        z-index: 99999;
     }
 
     .hub-circle-wrapper {
@@ -62,6 +93,7 @@
         bottom: 0;
         width: 180px;
         height: min(56vh, 420px);
+        z-index: 99999;
     }
 
     .hub-content-wrapper {
