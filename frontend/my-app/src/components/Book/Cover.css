@@ -4,7 +4,7 @@
     position: relative;
     cursor: pointer;
     transform-style: preserve-3d;
-    box-shadow: -20px 10px 40px rgba(0, 0, 0, 0.25);
+    box-shadow: -20px 10px 40px rgba(0, 0, 0, calc(0.25 * var(--shadow-opacity, 1)));
 }
 
 .cover-face {
@@ -19,11 +19,13 @@
 }
 
 .cover-face-front {
-    background-color: var(--color-primary);
+    background-color: #2b2b2b;
+    background-image: none;
 }
 
 .cover-face-back {
-    background-color: var(--color-primary);
+    background-color: #2b2b2b;
+    background-image: none;
     transform: rotateY(180deg);
 }
 

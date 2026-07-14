@@ -27,7 +27,6 @@
     height: 70vh;
     background-color: var(--book-bg-secondary);
     border-radius: 8px;
-    box-shadow: 0 10px 30px var(--book-shadow);
     perspective: 1800px;
     perspective-origin: center center;
 }

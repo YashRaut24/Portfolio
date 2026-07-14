@@ -97,7 +97,7 @@
 }
 
 .page-inside-cover {
-    background-color: var(--color-primary);
+    background-color: #2b2b2b;
     background-image: none;
 }
 
@@ -168,7 +168,7 @@
 }
 
 .page-cover-face {
-    background-color: var(--color-primary);
+    background-color: #2b2b2b;
     background-image: none;
     align-items: center;
     justify-content: center;

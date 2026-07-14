@@ -10,6 +10,13 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
   const closingCoverContentOpacity = useTransform(dragX, [150, 220], [0, 1]);
   const [isAnimating, setIsAnimating] = useState(false);
   const previewedRef = useRef(false);
+  const boxShadowOpacity = useTransform(
+    dragX,
+    isRight ? [-20, 0] : [0, 20],
+    isRight ? [0, 1] : [1, 0]
+  );
+
+  
 
   const [displayFront, setDisplayFront] = useState(frontContent);
   const [displayBack, setDisplayBack] = useState(backContent);
@@ -73,6 +80,7 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
   const leafStyle = {
     rotateY,
     transformOrigin: isRight ? 'left center' : 'right center',
+    '--shadow-opacity': boxShadowOpacity,
   };
 
   if (isClosingFlip) {

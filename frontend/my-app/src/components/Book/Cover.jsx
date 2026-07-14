@@ -6,6 +6,8 @@ function Cover({ onOpen }) {
   const dragX = useMotionValue(0);
   const rotateY = useTransform(dragX, [-300, 0], [-180, 0]);
   const contentOpacity = useTransform(dragX, [-150, -80], [0, 1]);
+  const boxShadowOpacity = useTransform(dragX, [-20, 0], [0, 1]);
+
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleDrag = (_, info) => {
@@ -31,7 +33,7 @@ function Cover({ onOpen }) {
   return (
     <motion.div
       className="cover"
-      style={{ rotateY, transformOrigin: 'left center' }}
+      style={{ rotateY, transformOrigin: 'left center', '--shadow-opacity': boxShadowOpacity  }}
       drag={isAnimating ? false : 'x'}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0}
