@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import './Cover.css';
 
 function Cover({ onOpen }) {
@@ -10,30 +10,31 @@ function Cover({ onOpen }) {
 
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const handleDrag = (_, info) => {
+  const transitionOptions = useMemo(() => ({ duration: 0.35, ease: 'easeInOut' }), []);
+
+  const handleDrag = useCallback((_, info) => {
     if (isAnimating) return;
     const clamped = Math.min(0, Math.max(-300, info.offset.x));
     dragX.set(clamped);
-  };
+  }, [isAnimating, dragX]);
 
-  const handleDragEnd = (_, info) => {
+  const handleDragEnd = useCallback((_, info) => {
     if (isAnimating) return;
     if (info.offset.x < -150) {
       setIsAnimating(true);
       animate(dragX, -300, {
-        duration: 0.35,
-        ease: 'easeInOut',
+        ...transitionOptions,
         onComplete: onOpen,
       });
     } else {
       animate(dragX, 0, { duration: 0.25, ease: 'easeOut' });
     }
-  };
+  }, [dragX, isAnimating, onOpen, transitionOptions]);
 
   return (
     <motion.div
       className="cover"
-      style={{ rotateY, transformOrigin: 'left center', '--shadow-opacity': boxShadowOpacity  }}
+      style={{ rotateY, transformOrigin: 'left center', '--shadow-opacity': boxShadowOpacity, willChange: 'transform' }}
       drag={isAnimating ? false : 'x'}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0}

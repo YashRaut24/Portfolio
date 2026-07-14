@@ -19,6 +19,8 @@
     height: 70vh;
     border-radius: 8px;
     overflow: visible;
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .book-spread {
@@ -58,6 +60,7 @@
     flex: 1;
     position: relative;
     transform-style: preserve-3d;
+    will-change: transform;
 }
 
 .page-flip-wrapper.turning-active {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Cover from './Cover';
@@ -20,19 +20,24 @@ function Book() {
   const totalSpreads = bookSpreads.length;
   const spread = bookSpreads[currentSpread];
 
-  const handleExplore = () => navigate('/explore');
+  const handleExplore = useCallback(() => navigate('/explore'), [navigate]);
+  const handleOpen = useCallback(() => setIsOpen(true), []);
+  const handleLeftPreview = useCallback(() => setLeftPreview(true), []);
+  const handleLeftPreviewCancel = useCallback(() => setLeftPreview(false), []);
+  const handleRightPreview = useCallback(() => setRightPreview(true), []);
+  const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
 
-  const handleNextClick = () => {
+  const handleNextClick = useCallback(() => {
     if (isTurning || currentSpread >= totalSpreads - 1) return;
     setIsTurning(true);
     setNextTrigger((n) => n + 1);
-  };
+  }, [isTurning, currentSpread, totalSpreads]);
 
-  const handlePrevClick = () => {
+  const handlePrevClick = useCallback(() => {
     if (isTurning) return;
     setIsTurning(true);
     setPrevTrigger((n) => n + 1);
-  };
+  }, [isTurning]);
 
   const handleNextComplete = () => {
     setCurrentSpread((c) => Math.min(c + 1, totalSpreads - 1));
@@ -52,13 +57,17 @@ function Book() {
     setIsTurning(false);
   };
 
-  const rightBaseContent = rightPreview && currentSpread < totalSpreads - 1
-    ? bookSpreads[currentSpread + 1].right
-    : spread.right;
+  const rightBaseContent = useMemo(() => (
+    rightPreview && currentSpread < totalSpreads - 1
+      ? bookSpreads[currentSpread + 1].right
+      : spread.right
+  ), [currentSpread, rightPreview, spread, totalSpreads]);
 
-  const leftBaseContent = currentSpread === 0
-    ? (leftPreview ? { type: 'transparent' } : spread.left)
-    : (leftPreview ? bookSpreads[currentSpread - 1].left : spread.left);
+  const leftBaseContent = useMemo(() => (
+    currentSpread === 0
+      ? (leftPreview ? { type: 'transparent' } : spread.left)
+      : (leftPreview ? bookSpreads[currentSpread - 1].left : spread.left)
+  ), [currentSpread, leftPreview, spread]);
 
   return (
     <div className="book-container">
@@ -72,8 +81,8 @@ function Book() {
                   side="left"
                   frontContent={spread.left}
                   backContent={currentSpread > 0 ? bookSpreads[currentSpread - 1].right : { type: 'cover-face' }}
-                  onPreview={() => setLeftPreview(true)}
-                  onPreviewCancel={() => setLeftPreview(false)}
+                  onPreview={handleLeftPreview}
+                  onPreviewCancel={handleLeftPreviewCancel}
                   onComplete={handlePrevComplete}
                   disabled={false}
                   triggerCount={prevTrigger}
@@ -90,8 +99,8 @@ function Book() {
                   side="right"
                   frontContent={spread.right}
                   backContent={currentSpread < totalSpreads - 1 ? bookSpreads[currentSpread + 1].left : null}
-                  onPreview={() => setRightPreview(true)}
-                  onPreviewCancel={() => setRightPreview(false)}
+                  onPreview={handleRightPreview}
+                  onPreviewCancel={handleRightPreviewCancel}
                   onComplete={handleNextComplete}
                   disabled={currentSpread >= totalSpreads - 1}
                   triggerCount={nextTrigger}
@@ -108,7 +117,7 @@ function Book() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                <Cover onOpen={() => setIsOpen(true)} />
+                <Cover onOpen={handleOpen} />
               </motion.div>
             )}
           </AnimatePresence>

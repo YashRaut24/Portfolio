@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Page from './Page';
 import './PageFlip.css';
 
@@ -49,7 +49,9 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerCount]);
 
-  const handleDrag = (_, info) => {
+  const transitionOptions = useMemo(() => ({ duration: 0.35, ease: 'easeInOut' }), []);
+
+  const handleDrag = useCallback((_, info) => {
     if (isAnimating || disabled) return;
     if (!previewedRef.current) {
       previewedRef.current = true;
@@ -59,15 +61,15 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
       ? Math.min(0, Math.max(-300, info.offset.x))
       : Math.max(0, Math.min(300, info.offset.x));
     dragX.set(clamped);
-  };
+  }, [disabled, isAnimating, isRight, onPreview, dragX]);
 
-  const handleDragEnd = (_, info) => {
+  const handleDragEnd = useCallback((_, info) => {
     if (isAnimating || disabled) return;
     const passed = isRight ? info.offset.x < -150 : info.offset.x > 150;
     if (passed) {
       setIsAnimating(true);
       const target = isRight ? -300 : 300;
-      animate(dragX, target, { duration: 0.35, ease: 'easeInOut', onComplete: finishFlip });
+      animate(dragX, target, { ...transitionOptions, onComplete: finishFlip });
     } else {
       animate(dragX, 0, { duration: 0.25, ease: 'easeOut' });
       if (previewedRef.current) {
@@ -75,13 +77,14 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
         previewedRef.current = false;
       }
     }
-  };
+  }, [disabled, finishFlip, isAnimating, isRight, onPreviewCancel, dragX, transitionOptions]);
 
-  const leafStyle = {
+  const leafStyle = useMemo(() => ({
     rotateY,
     transformOrigin: isRight ? 'left center' : 'right center',
     '--shadow-opacity': boxShadowOpacity,
-  };
+    willChange: 'transform',
+  }), [rotateY, boxShadowOpacity, isRight]);
 
   if (isClosingFlip) {
     leafStyle['--cover-content-opacity'] = closingCoverContentOpacity;
@@ -90,11 +93,12 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
   return (
     <motion.div
       className={`page-leaf ${isClosingFlip ? 'page-leaf-closing-cover' : ''}`}
-      style={leafStyle}
+      style={{ ...leafStyle, willChange: 'transform' }}
       drag={disabled || isAnimating ? false : 'x'}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0}
       dragMomentum={false}
+      dragTransition={{ power: 0.2, timeConstant: 200, clamp: true }}
       onDrag={handleDrag}
       onDragEnd={handleDragEnd}
     >
