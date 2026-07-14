@@ -1,7 +1,7 @@
 .page {
     width: 100%;
     height: 100%;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--book-bg-secondary);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -20,8 +20,8 @@
     background-image: repeating-linear-gradient(to bottom,
             transparent,
             transparent 33px,
-            var(--color-border) 33px,
-            var(--color-border) 34px);
+            var(--book-border) 33px,
+            var(--book-border) 34px);
     background-position: 0 6px;
     pointer-events: none;
 }
@@ -75,7 +75,7 @@
     font-family: var(--font-book);
     font-weight: 700;
     font-size: 1.8rem;
-    color: var(--color-text);
+    color: var(--book-text);
     margin-bottom: 1rem;
 }
 
@@ -89,11 +89,11 @@
     font-family: var(--font-book);
     font-weight: 400;
     font-size: 1rem;
-    color: var(--color-text-secondary);
-    background-color: var(--color-bg);
+    color: var(--book-text-secondary);
+    background-color: var(--book-bg);
     padding: 0.4rem 0.9rem;
     border-radius: 20px;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--book-border);
 }
 
 .page-inside-cover {
@@ -125,7 +125,7 @@
     font-weight: 700;
     font-size: 1.3rem;
     font-style: italic;
-    color: var(--color-text);
+    color: var(--book-text);
     margin-bottom: 1rem;
 }
 
@@ -133,7 +133,7 @@
     font-family: var(--font-book);
     font-weight: 400;
     font-size: 1rem;
-    color: var(--color-text-secondary);
+    color: var(--book-text-secondary);
     line-height: 1.6;
 }
 
@@ -141,7 +141,7 @@
     font-family: var(--font-book);
     font-weight: 400;
     font-size: 1.1rem;
-    color: var(--color-text-secondary);
+    color: var(--book-text-secondary);
     margin-bottom: 0.8rem;
 }
 
@@ -155,12 +155,12 @@
     font-family: var(--font-book);
     font-weight: 700;
     font-size: 1.2rem;
-    color: var(--color-text);
+    color: var(--book-text);
     margin-bottom: 1rem;
 }
 
 .page-blank {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--book-bg-secondary);
 }
 
 .page.page-transparent {

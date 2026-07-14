@@ -12,6 +12,12 @@
     --color-border: #E5E5E5;
     --color-card-bg: #FFFFFF;
     --color-shadow: rgba(0, 0, 0, 0.08);
+    --book-bg: #FAFAFA;
+    --book-bg-secondary: #FFFFFF;
+    --book-text: #1A1A1A;
+    --book-text-secondary: #555555;
+    --book-border: #E5E5E5;
+    --book-shadow: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme='dark'] {
@@ -25,3 +31,4 @@
     --color-card-bg: #1E1E1E;
     --color-shadow: rgba(0, 0, 0, 0.4);
 }
+
