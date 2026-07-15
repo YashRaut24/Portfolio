@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Fredoka:wght@500;600;700&display=swap');
+
 body {
     font-family: var(--font-hub);
     background-color: var(--color-bg);
@@ -18,4 +21,13 @@ body {
     height: 1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
+}
+
+@font-face {
+    font-family: 'Sketchup';
+    src: url('/assets/fonts/SKETCHUP%20FREE%20TRIAL.woff2') format('woff2'),
+        url('/assets/fonts/SKETCHUP%20FREE%20TRIAL.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }

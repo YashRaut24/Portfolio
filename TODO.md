@@ -1,0 +1,5 @@
+- [ ] Implement root-cause fix for PageFlip drag seam snap (canonical drag delta + consistent transform)
+- [ ] Update handleDrag/handleDragEnd to use same delta source for thresholds and dragX
+- [ ] Remove/adjust dragX.set(0) snap timing in finishFlip while keeping shadows unchanged
+- [ ] Run frontend build/lint (if available) to ensure no TS/ESLint errors
+- [ ] Quick manual verification: drag right->left and left->right, confirm no seam during drag and no snap on release
