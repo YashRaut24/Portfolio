@@ -240,4 +240,15 @@
         width: 100%;
         height: 50%;
     }
+
+    .nav-btn {
+        padding: 0.9rem 1.6rem;
+        font-size: 1rem;
+        min-height: 48px;
+    }
+
+    .nav-arrow {
+        width: 24px;
+        height: 12px;
+    }
 }

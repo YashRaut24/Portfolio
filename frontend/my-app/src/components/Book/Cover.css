@@ -2,11 +2,20 @@
     width: 100%;
     height: 100%;
     position: relative;
-    cursor: pointer;
+    cursor: grab;
     transform-style: preserve-3d;
     box-shadow: -20px 10px 40px rgba(0, 0, 0, calc(0.25 * var(--shadow-opacity, 1)));
+    touch-action: pan-y;
 }
 
+.cover:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 4px;
+}
+
+.cover-dragging {
+    cursor: grabbing;
+}
 .cover-face {
     position: absolute;
     inset: 0;
@@ -39,7 +48,7 @@
 }
 
 .cover-name {
-    font-family: var(--font-hub);
+    font-family: 'Fredoka', var(--font-hub);
     font-weight: 700;
     font-size: 2.5rem;
     color: #FFFFFF;
@@ -47,13 +56,12 @@
 }
 
 .cover-role {
-    font-family: var(--font-hub);
-    font-weight: 400;
+    font-family: 'Fredoka', var(--font-hub);
+    font-weight: 500;
     font-size: 1.1rem;
     color: #FFFFFF;
     opacity: 0.9;
 }
-
 @media (max-width: 768px) {
     .cover-name {
         font-size: 1.8rem;

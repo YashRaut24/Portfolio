@@ -2,13 +2,14 @@
     position: absolute;
     inset: 0;
     z-index: 15;
-    cursor: pointer;
+    cursor: grab;
     transform-style: preserve-3d;
-    -webkit-transform-style: preserve-3d;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    will-change: transform;
     box-shadow: 0 8px 24px rgba(0, 0, 0, calc(0.15 * var(--shadow-opacity, 1)));
+    touch-action: pan-y;
+}
+
+.page-leaf-dragging {
+    cursor: grabbing;
 }
 
 .page-leaf-face {
