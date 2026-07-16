@@ -12,6 +12,7 @@
     --color-border: #E5E5E5;
     --color-card-bg: #FFFFFF;
     --color-shadow: rgba(0, 0, 0, 0.08);
+    --hub-glow-opacity: 0.22;
     --book-bg: #FAFAFA;
     --book-bg-secondary: #FFFFFF;
     --book-text: #1A1A1A;
@@ -30,5 +31,6 @@
     --color-border: #2E2E2E;
     --color-card-bg: #1E1E1E;
     --color-shadow: rgba(0, 0, 0, 0.4);
+    --hub-glow-opacity: 0.22;
 }
 
