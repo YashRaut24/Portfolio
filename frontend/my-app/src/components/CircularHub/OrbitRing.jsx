@@ -47,6 +47,7 @@ function OrbitRing({ totalNodes, activeIndex }) {
             className={`orbit-ring-tick ${tick.isActive ? 'orbit-ring-tick-active' : ''} ${tick.isVisited ? 'orbit-ring-tick-visited' : ''}`}
             cx={tick.cx}
             cy={tick.cy}
+            initial={false}
             animate={{ r: tick.isActive ? 4.5 : 3 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
           />
