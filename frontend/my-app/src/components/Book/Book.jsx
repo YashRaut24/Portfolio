@@ -6,6 +6,7 @@ import PageFlip from './PageFlip';
 import Page from './Page';
 import { bookSpreads, hiddenSpread } from '../../data/bookSpreads';
 import './Book.css';
+import { isSoundEnabled, setSoundEnabled, playSound, SOUNDS } from '../../utils/sound';
 
 function PrevArrowIcon() {
   return (
@@ -35,32 +36,61 @@ function Book() {
   const [prevTrigger, setPrevTrigger] = useState(0);
   const [isTurning, setIsTurning] = useState(false);
   const navigate = useNavigate();
-
+  const [soundOn, setSoundOn] = useState(isSoundEnabled());
   const effectiveSpreads = useMemo(
     () => (secretUnlocked ? [...bookSpreads, hiddenSpread] : bookSpreads),
     [secretUnlocked]
   );
   const totalSpreads = effectiveSpreads.length;
   const spread = effectiveSpreads[currentSpread];
+  const handleToggleSound = useCallback(() => {
+      setSoundEnabled(!soundOn);
+      setSoundOn(!soundOn);
+    }, [soundOn]);
 
   const handleExplore = useCallback(() => navigate('/explore'), [navigate]);
-  const handleOpen = useCallback(() => setIsOpen(true), []);
+  const handleOpen = useCallback(() => {
+    playSound(SOUNDS.coverOpen, 0.6);
+    setIsOpen(true);
+  }, []);
   const handleLeftPreview = useCallback(() => setLeftPreview(true), []);
   const handleLeftPreviewCancel = useCallback(() => setLeftPreview(false), []);
   const handleRightPreview = useCallback(() => setRightPreview(true), []);
-  const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
+const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
   const [endBurst, setEndBurst] = useState(false);
+
   const handleNextClick = useCallback(() => {
     if (isTurning || currentSpread >= totalSpreads - 1) return;
     setIsTurning(true);
     setNextTrigger((n) => n + 1);
   }, [isTurning, currentSpread, totalSpreads]);
-  
+
   const handlePrevClick = useCallback(() => {
     if (isTurning) return;
     setIsTurning(true);
     setPrevTrigger((n) => n + 1);
   }, [isTurning]);
+
+  const handleNextComplete = () => {
+      playSound(SOUNDS.pageFlip, 0.4);
+      setCurrentSpread((c) => Math.min(c + 1, totalSpreads - 1));
+      setRightPreview(false);
+      setIsTurning(false);
+    };
+  
+  
+  const handlePrevComplete = () => {
+      playSound(SOUNDS.pageFlip, 0.4);
+      if (currentSpread === 0) {
+        setIsOpen(false);
+        setLeftPreview(false);
+        setIsTurning(false);
+        return;
+      }
+      setCurrentSpread((c) => Math.max(c - 1, 0));
+      setLeftPreview(false);
+      setIsTurning(false);
+    };
 
   useEffect(() => {
       if (isOpen && !secretUnlocked && currentSpread === totalSpreads - 1) {
@@ -80,11 +110,7 @@ function Book() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, handleNextClick, handlePrevClick]);
 
-  const handleNextComplete = () => {
-    setCurrentSpread((c) => Math.min(c + 1, totalSpreads - 1));
-    setRightPreview(false);
-    setIsTurning(false);
-  };
+
 
   const handleUnlock = useCallback(() => {
     setSecretUnlocked(true);
@@ -106,17 +132,6 @@ function Book() {
     setLeftPreview(false);
   }, [isTurning, currentSpread, totalSpreads]);
 
-  const handlePrevComplete = () => {
-    if (currentSpread === 0) {
-      setIsOpen(false);
-      setLeftPreview(false);
-      setIsTurning(false);
-      return;
-    }
-    setCurrentSpread((c) => Math.max(c - 1, 0));
-    setLeftPreview(false);
-    setIsTurning(false);
-  };
 
 const rightBaseContent = useMemo(() => (
     rightPreview && currentSpread < totalSpreads - 1
@@ -211,6 +226,26 @@ const rightBaseContent = useMemo(() => (
               </span>
             )}
           </div>
+          <button
+            className="nav-btn nav-btn-sound"
+            onClick={handleToggleSound}
+            aria-label={soundOn ? 'Mute sound' : 'Unmute sound'}
+            aria-pressed={soundOn}
+          >
+            {soundOn ? (
+              <svg viewBox="0 0 24 24" fill="none" className="sound-icon">
+                <path d="M4 9V15H8L13 20V4L8 9H4Z" fill="currentColor" />
+                <path d="M16 8C17.5 9.5 17.5 14.5 16 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                <path d="M19 5C22 8 22 16 19 19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" className="sound-icon">
+                <path d="M4 9V15H8L13 20V4L8 9H4Z" fill="currentColor" />
+                <path d="M16 9L21 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                <path d="M21 9L16 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
     </div>
