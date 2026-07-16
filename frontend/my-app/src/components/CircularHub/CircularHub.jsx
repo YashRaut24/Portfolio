@@ -48,6 +48,25 @@ function CircularHub() {
   };
 
   useEffect(() => {
+    const handleKeyDown = (event) => {
+      const tag = document.activeElement?.tagName;
+      const isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable;
+      if (isTyping) return;
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        advance(1);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        advance(-1);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndex]);
+  
+  useEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
 
