@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import './Node.css';
 
-function Node({ label, angle, radius, isActive, onClick }) {
+function Node({ label, angle, radius, isActive, onClick, accent }) {
   const x = radius * Math.cos(angle);
   const y = radius * Math.sin(angle);
   const [ripples, setRipples] = useState([]);
+  
 
   const handleClick = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -23,7 +24,7 @@ function Node({ label, angle, radius, isActive, onClick }) {
   return (
     <button
       className={`hub-node ${isActive ? 'hub-node-active' : ''}`}
-      style={{ transform: `translate(${x}px, ${y}px)` }}
+      style={{ transform: `translate(${x}px, ${y}px)`, '--node-accent': accent }}
       onClick={handleClick}
     >
       {label}

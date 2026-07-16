@@ -27,23 +27,21 @@
 }
 
 .hub-node:hover {
-    border-color: var(--color-primary);
+    border-color: var(--node-accent, var(--color-primary));
     box-shadow:
         0 2px 4px var(--color-shadow),
         0 6px 14px var(--color-shadow),
         0 14px 30px var(--color-shadow);
 }
-
 .hub-node-active {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
+    background-color: var(--node-accent, var(--color-primary));
+    border-color: var(--node-accent, var(--color-primary));
     color: #FFFFFF;
     box-shadow:
         0 2px 6px var(--color-shadow),
         0 8px 20px var(--color-shadow),
         0 16px 36px var(--color-shadow);
 }
-
 .hub-node {
     overflow: hidden;
 }

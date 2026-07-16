@@ -35,11 +35,14 @@ function ContentPanel({ activeNode }) {
   };
 
   return (
-    <div className="content-panel">
-      <h2 className="content-panel-title">{activeNode.label}</h2>
-      {renderContent()}
-    </div>
-  );
+      <div className="content-panel" style={{ '--panel-accent': activeNode.accent }}>
+        <h2 className="content-panel-title">
+          <span className="content-panel-title-marker" aria-hidden="true" />
+          {activeNode.label}
+        </h2>
+        {renderContent()}
+      </div>
+    );
 }
 
 export default ContentPanel;

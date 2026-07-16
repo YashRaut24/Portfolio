@@ -65,7 +65,7 @@ function CircularHub() {
     return () => window.removeEventListener('keydown', handleKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
-  
+
   useEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
@@ -138,11 +138,13 @@ function CircularHub() {
             return (
               <Node
                 key={node.id}
+                ref={(el) => { nodeRefs.current[index] = el; }}
                 label={node.label}
                 angle={angle}
                 radius={radius}
                 isActive={index === activeIndex}
                 onClick={() => goToIndex(index)}
+                accent={node.accent}
               />
             );
           })}
