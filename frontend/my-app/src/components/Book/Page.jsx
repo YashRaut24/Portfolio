@@ -60,7 +60,14 @@ function Page({ content, onExplore }) {
         <div className="page page-type-timeline">
           {annotation}
           <span className="page-year">{content.year}</span>
-          <h2 className="page-title">{content.title}</h2>
+          <h2 className="page-title">
+            <span className="page-title-wrap" key={content.title}>
+              <span className="page-title-text">{content.title}</span>
+              <svg className="page-title-pencil" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 20L5 15L16 4L20 8L9 19L4 20Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+              </svg>
+            </span>
+          </h2>
           <ul className="page-keywords">
             {content.keywords.map((item, index) => (
               <li key={index} className="page-keyword">{item}</li>
