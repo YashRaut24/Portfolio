@@ -56,7 +56,17 @@ export const bookSpreads = [
   },
   {
     id: 4,
-    left: { type: 'blank' },
+    left: { type: 'placeholder' },
     right: { type: 'cta' },
   },
 ];
+
+export const hiddenSpread = {
+  id: 'secret',
+  left: { type: 'placeholder' },
+  right: {
+    type: 'intro',
+    quote: "You actually found this. Respect.",
+    description: "This page doesn't officially exist. Thanks for poking around — that kind of curiosity is basically half of engineering.",
+  },
+};
