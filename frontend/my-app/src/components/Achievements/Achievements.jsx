@@ -5,7 +5,11 @@ function Achievements() {
   return (
     <ul className="achievements-list">
       {achievementsData.map((item, index) => (
-        <li key={index} className="achievement-item">
+        <li
+          key={index}
+          className="achievement-item stagger-item"
+          style={{ '--stagger-index': index }}
+        >
           <h4 className="achievement-title">{item.title}</h4>
           <p className="achievement-desc">{item.description}</p>
         </li>

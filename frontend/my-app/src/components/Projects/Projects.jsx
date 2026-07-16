@@ -5,8 +5,10 @@ import './Projects.css';
 function Projects() {
   return (
     <div className="projects-section">
-      {projectsData.map((project) => (
-        <ProjectCard key={project.id} {...project} />
+      {projectsData.map((project, index) => (
+        <div key={project.id} className="stagger-item" style={{ '--stagger-index': index }}>
+          <ProjectCard {...project} />
+        </div>
       ))}
     </div>
   );
