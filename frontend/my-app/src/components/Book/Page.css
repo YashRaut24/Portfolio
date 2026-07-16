@@ -397,6 +397,32 @@
     opacity: 0.5;
     transform: rotate(-15deg);
 }
+.page-quote-highlight {
+    background-image: linear-gradient(120deg, #fff59d 0%, #ffe98a 100%);
+    background-repeat: no-repeat;
+    background-size: 0% 55%;
+    background-position: 0 82%;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    animation: quote-highlight-sweep 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.25s forwards;
+}
+
+@keyframes quote-highlight-sweep {
+    from {
+        background-size: 0% 55%;
+    }
+
+    to {
+        background-size: 100% 55%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-quote-highlight {
+        animation: none;
+        background-size: 100% 55%;
+    }
+}
 
 @media (max-width: 768px) {
     .page-annotation {

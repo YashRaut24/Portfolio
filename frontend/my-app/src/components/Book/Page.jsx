@@ -43,7 +43,9 @@ function Page({ content, onExplore }) {
       return (
         <div className="page page-type-intro">
           {annotation}
-          <p className="page-quote">"{content.quote}"</p>
+          <p className="page-quote">
+            "<span className="page-quote-highlight" key={content.quote}>{content.quote}</span>"
+          </p>
           <p className="page-description">{content.description}</p>
           <svg className="page-easter-egg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
             <path d="M20 8C14 8 10 13 10 19C10 23 12 26 14 29V33H26V29C28 26 30 23 30 19C30 13 26 8 20 8Z" stroke="currentColor" strokeWidth="1.2" />
