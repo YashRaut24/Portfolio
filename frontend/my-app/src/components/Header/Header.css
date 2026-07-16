@@ -10,6 +10,12 @@
     background-color: var(--color-bg);
     border-bottom: 1px solid var(--color-border);
     z-index: 90;
+    transition: padding 0.25s ease, box-shadow 0.25s ease;
+}
+
+.site-header-scrolled {
+    padding: 0.7rem 2rem;
+    box-shadow: 0 2px 12px var(--color-shadow);
 }
 
 .header-name {
@@ -17,6 +23,11 @@
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--color-text);
+    transition: font-size 0.25s ease;
+}
+
+.site-header-scrolled .header-name {
+    font-size: 0.95rem;
 }
 
 .header-actions {
@@ -33,7 +44,12 @@
     border: 1px solid var(--color-border);
     padding: 0.5rem 1rem;
     border-radius: 20px;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, padding 0.25s ease, font-size 0.25s ease;
+}
+
+.site-header-scrolled .header-btn {
+    padding: 0.4rem 0.85rem;
+    font-size: 0.75rem;
 }
 
 .header-btn:hover {
@@ -49,6 +65,19 @@
 .header-btn-primary:hover {
     background-color: var(--color-accent);
     border-color: var(--color-accent);
+}
+
+.header-btn-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .header-btn-icon {
+        width: 14px;
+        height: 14px;
+    }
 }
 
 @media (max-width: 768px) {
