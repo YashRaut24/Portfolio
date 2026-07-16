@@ -1,7 +1,7 @@
 import './Page.css';
 import { useState } from 'react';
 
-function Page({ content, onExplore }) {
+function Page({ content, onExplore, onNavigate }) {
   const [burst, setBurst] = useState(false);
 
   const handleExploreClick = () => {
@@ -29,6 +29,10 @@ function Page({ content, onExplore }) {
 
   if (content.type === 'transparent') {
     return <div className="page page-transparent" />;
+  }
+
+  if (content.type === 'placeholder') {
+      return <div className="page page-type-placeholder" />;
   }
 
   if (content.type === 'cover-face') {
@@ -73,6 +77,27 @@ function Page({ content, onExplore }) {
           <ul className="page-keywords">
             {content.keywords.map((item, index) => (
               <li key={index} className="page-keyword">{item}</li>
+            ))}
+          </ul>
+        </div>
+      );
+  }
+
+  if (content.type === 'toc') {
+      return (
+        <div className="page page-type-toc">
+          <h2 className="page-title">{content.title}</h2>
+          <ul className="page-toc-list">
+            {content.entries.map((entry, index) => (
+              <li key={index}>
+                <button
+                  className="page-toc-item"
+                  onClick={() => onNavigate && onNavigate(entry.spreadIndex)}
+                >
+                  <span>{entry.label}</span>
+                  <span className="page-toc-dots" aria-hidden="true" />
+                </button>
+              </li>
             ))}
           </ul>
         </div>

@@ -1,7 +1,21 @@
 export const bookSpreads = [
   {
-    id: 1,
+    id: 0,
     left: { type: 'inside-cover' },
+    right: {
+      type: 'toc',
+      title: 'Contents',
+      entries: [
+        { label: 'First Year', spreadIndex: 2 },
+        { label: 'Second Year', spreadIndex: 2 },
+        { label: 'Projects', spreadIndex: 3 },
+        { label: "Let's Talk", spreadIndex: 4 },
+      ],
+    },
+  },
+{
+    id: 1,
+    left: { type: 'placeholder' },
     right: {
       type: 'intro',
       quote: 'Building scalable solutions, one line at a time.',
@@ -13,8 +27,10 @@ export const bookSpreads = [
     left: {
       type: 'timeline',
       year: '2023 - 2024',
-      title: 'First Year',
+      title: 'First Year', 
       keywords: ['C', 'C++', 'Java'],
+      annotation: "still fixing this page at 2am lol",
+      annotationPosition: "bottom-left", // or "top-right" (default)
     },
     right: {
       type: 'timeline',
