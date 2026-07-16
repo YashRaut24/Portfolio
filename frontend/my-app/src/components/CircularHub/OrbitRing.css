@@ -1,0 +1,116 @@
+.orbit-tracker {
+    position: fixed;
+    bottom: 1.4rem;
+    right: 1.4rem;
+    width: 44px;
+    height: 44px;
+    z-index: 95;
+    pointer-events: none;
+}
+
+.orbit-ring {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.orbit-ring-track {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 3;
+}
+
+.orbit-ring-tick {
+    fill: var(--color-border);
+    transition: fill 0.25s ease;
+}
+
+.orbit-ring-tick-visited {
+    fill: var(--color-text-secondary);
+}
+
+.orbit-ring-tick-active {
+    fill: var(--color-primary);
+}
+
+.orbit-burst {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.orbit-burst-piece {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    border-radius: 2px;
+    background-color: var(--color-accent);
+    opacity: 0;
+    animation: orbit-burst-pop 0.9s ease-out forwards;
+}
+
+.orbit-burst-0 {
+    transform: rotate(0deg);
+}
+
+.orbit-burst-1 {
+    background-color: var(--color-primary);
+    transform: rotate(45deg);
+}
+
+.orbit-burst-2 {
+    transform: rotate(90deg);
+}
+
+.orbit-burst-3 {
+    background-color: var(--color-primary);
+    transform: rotate(135deg);
+}
+
+.orbit-burst-4 {
+    transform: rotate(180deg);
+}
+
+.orbit-burst-5 {
+    background-color: var(--color-primary);
+    transform: rotate(225deg);
+}
+
+.orbit-burst-6 {
+    transform: rotate(270deg);
+}
+
+.orbit-burst-7 {
+    background-color: var(--color-primary);
+    transform: rotate(315deg);
+}
+
+@keyframes orbit-burst-pop {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) translateY(-30px) scale(0.5);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orbit-burst-piece {
+        animation: none;
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .orbit-tracker {
+        width: 36px;
+        height: 36px;
+        bottom: 1rem;
+        right: 1rem;
+    }
+}

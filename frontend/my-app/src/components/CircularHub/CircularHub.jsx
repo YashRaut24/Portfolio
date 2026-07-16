@@ -4,6 +4,8 @@ import Node from './Node';
 import ContentPanel from './ContentPanel';
 import { hubNodesData } from '../../data/hubNodes';
 import './CircularHub.css';
+import HubDoodles from './HubDoodles';
+import OrbitRing from './OrbitRing';
 
 const ACTIVE_ARC_ANGLE = -Math.PI / 4;
 
@@ -100,6 +102,7 @@ function CircularHub() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
+      <HubDoodles activeId={activeNode.id} />
       <div
         className="hub-circle-wrapper"
         ref={wrapperRef}
@@ -138,6 +141,7 @@ function CircularHub() {
           <ContentPanel activeNode={activeNode} />
         </motion.div>
       </AnimatePresence>
+      <OrbitRing totalNodes={totalNodes} activeIndex={activeIndex} />
     </motion.div>
   );
 }
