@@ -4,8 +4,7 @@ import Page from './Page';
 import './PageFlip.css';
 import { prefersReducedMotion, getFlipTransition, getSnapBackTransition } from '../../utils/motionPrefs';
 
-function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel, onComplete, disabled, triggerCount, onExplore, isClosingFlip }) {
-  const isRight = side === 'right';
+function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel, onComplete, disabled, triggerCount, onExplore, onNavigate, onUnlock, onFlipStart, isClosingFlip }) {  const isRight = side === 'right';
   const dragX = useMotionValue(0);
   const rotateY = useTransform(dragX, isRight ? [-300, 0] : [0, 300], isRight ? [-180, 0] : [0, 180]);
   const closingCoverContentOpacity = useTransform(dragX, [150, 220], [0, 1]);
@@ -48,6 +47,7 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
             setIsAnimating(true);
             previewedRef.current = true;
             onPreview && onPreview();
+            onFlipStart && onFlipStart();
             const target = isRight ? -300 : 300;
             animate(dragX, target, { type: 'spring', stiffness: 220, damping: 24, onComplete: finishFlip });
           }
@@ -69,11 +69,12 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
     dragX.set(clamped);
   };
 
-  const handleDragEnd = (_, info) => {
+const handleDragEnd = (_, info) => {
     if (isAnimating || disabled) return;
     const passed = isRight ? info.offset.x < -150 : info.offset.x > 150;
     if (passed) {
       setIsAnimating(true);
+      onFlipStart && onFlipStart();
       const target = isRight ? -300 : 300;
       animate(dragX, target, { type: 'spring', stiffness: 260, damping: 22, onComplete: finishFlip });
     } else {
@@ -109,10 +110,10 @@ function PageFlip({ side, frontContent, backContent, onPreview, onPreviewCancel,
       onDragEnd={handleDragEnd}
     >
       <div className="page-leaf-face page-leaf-front">
-        <Page content={displayFront} onExplore={onExplore} />
+        <Page content={displayFront} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
       </div>
       <div className="page-leaf-face page-leaf-back">
-        <Page content={displayBack} onExplore={onExplore} />
+        <Page content={displayBack} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
       </div>
     </motion.div>
   );

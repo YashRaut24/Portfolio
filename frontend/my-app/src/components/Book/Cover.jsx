@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { prefersReducedMotion, getFlipTransition, getSnapBackTransition } from '../../utils/motionPrefs';
 import './Cover.css';
 
-function Cover({ onOpen }) {
+function Cover({ onOpen, onOpenStart }) {
   const dragX = useMotionValue(0);
   const rotateY = useTransform(dragX, [-300, 0], [-180, 0]);
   const contentOpacity = useTransform(dragX, [-150, -80], [0, 1]);
@@ -24,29 +24,31 @@ function Cover({ onOpen }) {
   };
 
   const handleDragEnd = (_, info) => {
-    if (isAnimating) return;
-    if (info.offset.x < -150) {
-      setIsAnimating(true);
-      animate(dragX, -300, {
-        ...getFlipTransition(),
-        onComplete: onOpen,
-      });
-    } else {
+      if (isAnimating) return;
+      if (info.offset.x < -150) {
+        setIsAnimating(true);
+        onOpenStart && onOpenStart();
+        animate(dragX, -300, {
+          ...getFlipTransition(),
+          onComplete: onOpen,
+        });
+      } else {
       setIsDragging(false);
       animate(dragX, 0, getSnapBackTransition());
     }
   };
 
   const handleKeyDown = (e) => {
-    if ((e.key === 'Enter' || e.key === ' ') && !isAnimating) {
-      e.preventDefault();
-      setIsAnimating(true);
-      animate(dragX, -300, {
-        ...getFlipTransition(),
-        onComplete: onOpen,
-      });
-    }
-  };
+      if ((e.key === 'Enter' || e.key === ' ') && !isAnimating) {
+        e.preventDefault();
+        setIsAnimating(true);
+        onOpenStart && onOpenStart();
+        animate(dragX, -300, {
+          ...getFlipTransition(),
+          onComplete: onOpen,
+        });
+      }
+    };
 
   return (
     <motion.div

@@ -62,6 +62,7 @@
     color: #FFFFFF;
     opacity: 0.9;
 }
+
 @media (max-width: 768px) {
     .cover-name {
         font-size: 1.8rem;

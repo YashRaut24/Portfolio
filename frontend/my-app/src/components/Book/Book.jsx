@@ -6,7 +6,7 @@ import PageFlip from './PageFlip';
 import Page from './Page';
 import { bookSpreads, hiddenSpread } from '../../data/bookSpreads';
 import './Book.css';
-import { isSoundEnabled, setSoundEnabled, playSound, SOUNDS } from '../../utils/sound';
+import { isSoundEnabled, setSoundEnabled, playSound, preloadSounds, SOUNDS } from '../../utils/sound';
 
 function PrevArrowIcon() {
   return (
@@ -50,9 +50,8 @@ function Book() {
 
   const handleExplore = useCallback(() => navigate('/explore'), [navigate]);
   const handleOpen = useCallback(() => {
-    playSound(SOUNDS.coverOpen, 0.6);
-    setIsOpen(true);
-  }, []);
+      setIsOpen(true);
+    }, []);
   const handleLeftPreview = useCallback(() => setLeftPreview(true), []);
   const handleLeftPreviewCancel = useCallback(() => setLeftPreview(false), []);
   const handleRightPreview = useCallback(() => setRightPreview(true), []);
@@ -71,27 +70,6 @@ const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
     setPrevTrigger((n) => n + 1);
   }, [isTurning]);
 
-  const handleNextComplete = () => {
-      playSound(SOUNDS.pageFlip, 0.4);
-      setCurrentSpread((c) => Math.min(c + 1, totalSpreads - 1));
-      setRightPreview(false);
-      setIsTurning(false);
-    };
-  
-  
-  const handlePrevComplete = () => {
-      playSound(SOUNDS.pageFlip, 0.4);
-      if (currentSpread === 0) {
-        setIsOpen(false);
-        setLeftPreview(false);
-        setIsTurning(false);
-        return;
-      }
-      setCurrentSpread((c) => Math.max(c - 1, 0));
-      setLeftPreview(false);
-      setIsTurning(false);
-    };
-
   useEffect(() => {
       if (isOpen && !secretUnlocked && currentSpread === totalSpreads - 1) {
         setEndBurst(true);
@@ -99,7 +77,9 @@ const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
         return () => clearTimeout(timer);
       }
     }, [isOpen, secretUnlocked, currentSpread, totalSpreads]);
-
+    useEffect(() => {
+        preloadSounds();
+      }, []);
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!isOpen) return;
@@ -125,13 +105,30 @@ const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secretUnlocked]);
 
-  const handleJumpTo = useCallback((index) => {
+const handleJumpTo = useCallback((index) => {
     if (isTurning || index === currentSpread) return;
     setCurrentSpread(Math.max(0, Math.min(index, totalSpreads - 1)));
     setRightPreview(false);
     setLeftPreview(false);
   }, [isTurning, currentSpread, totalSpreads]);
 
+  const handleNextComplete = () => {
+    setCurrentSpread((c) => Math.min(c + 1, totalSpreads - 1));
+    setRightPreview(false);
+    setIsTurning(false);
+  };
+
+  const handlePrevComplete = () => {
+    if (currentSpread === 0) {
+      setIsOpen(false);
+      setLeftPreview(false);
+      setIsTurning(false);
+      return;
+    }
+    setCurrentSpread((c) => Math.max(c - 1, 0));
+    setLeftPreview(false);
+    setIsTurning(false);
+  };
 
 const rightBaseContent = useMemo(() => (
     rightPreview && currentSpread < totalSpreads - 1
@@ -156,7 +153,8 @@ const rightBaseContent = useMemo(() => (
                 <PageFlip
                   side="left"
                   frontContent={spread.left}
-                  backContent={currentSpread > 0 ? effectiveSpreads[currentSpread - 1].right : { type: 'cover-face' }}                  onPreview={handleLeftPreview}
+                  backContent={currentSpread > 0 ? effectiveSpreads[currentSpread - 1].right : { type: 'cover-face' }}
+                  onPreview={handleLeftPreview}
                   onPreviewCancel={handleLeftPreviewCancel}
                   onComplete={handlePrevComplete}
                   disabled={false}
@@ -164,6 +162,7 @@ const rightBaseContent = useMemo(() => (
                   onExplore={handleExplore}
                   onNavigate={handleJumpTo}
                   onUnlock={handleUnlock}
+                  onFlipStart={() => playSound(currentSpread === 0 ? SOUNDS.coverOpen : SOUNDS.pageFlip, currentSpread === 0 ? 0.5 : 0.4, currentSpread === 0 ? 1.45 : 0)}
                   isClosingFlip={currentSpread === 0}
                 />
               )}
@@ -184,6 +183,7 @@ const rightBaseContent = useMemo(() => (
                   onExplore={handleExplore}
                   onNavigate={handleJumpTo}
                   onUnlock={handleUnlock}
+                  onFlipStart={() => playSound(SOUNDS.pageFlip, 0.4)}
                 />
               )}
             </div>
@@ -196,7 +196,7 @@ const rightBaseContent = useMemo(() => (
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                <Cover onOpen={handleOpen} />
+               <Cover onOpen={handleOpen} onOpenStart={() => playSound(SOUNDS.coverOpen, 0.6, 1.45)} />
               </motion.div>
             )}
           </AnimatePresence>

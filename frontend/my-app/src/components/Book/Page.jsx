@@ -1,12 +1,24 @@
 import './Page.css';
 import { useState } from 'react';
 
-function Page({ content, onExplore, onNavigate }) {
+function Page({ content, onExplore, onNavigate, onUnlock }) {
   const [burst, setBurst] = useState(false);
+  const [eggClicks, setEggClicks] = useState(0);
 
   const handleExploreClick = () => {
     setBurst(true);
     setTimeout(() => onExplore(), 950);
+  };
+
+  const handleEasterEggClick = () => {
+    setEggClicks((c) => {
+      const next = c + 1;
+      if (next >= 5) {
+        onUnlock && onUnlock();
+        return 0;
+      }
+      return next;
+    });
   };
 
   if (!content) {
@@ -53,7 +65,13 @@ function Page({ content, onExplore, onNavigate }) {
             "<span className="page-quote-highlight" key={content.quote}>{content.quote}</span>"
           </p>
           <p className="page-description">{content.description}</p>
-          <svg className="page-easter-egg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <svg
+            className="page-easter-egg page-easter-egg-clickable"
+            viewBox="0 0 40 40"
+            fill="none"
+            aria-hidden="true"
+            onClick={handleEasterEggClick}
+          >
             <path d="M20 8C14 8 10 13 10 19C10 23 12 26 14 29V33H26V29C28 26 30 23 30 19C30 13 26 8 20 8Z" stroke="currentColor" strokeWidth="1.2" />
             <path d="M14 35H26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
           </svg>

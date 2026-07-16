@@ -470,6 +470,10 @@
     background-color: #FBF8F1;
 }
 
+.page-easter-egg-clickable {
+    pointer-events: auto;
+    cursor: pointer;
+}
 @keyframes title-write {
     from {
         clip-path: inset(0 100% 0 0);

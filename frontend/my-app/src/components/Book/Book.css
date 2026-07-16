@@ -290,6 +290,22 @@
     transform: rotate(315deg);
 }
 
+.nav-btn-sound {
+    padding: 0.6rem;
+    gap: 0;
+}
+
+.sound-icon {
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 768px) {
+    .nav-btn-sound {
+        padding: 0.7rem;
+    }
+}
+
 @keyframes end-burst-pop {
     0% {
         opacity: 1;
