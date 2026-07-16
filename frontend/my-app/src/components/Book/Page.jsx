@@ -3,11 +3,7 @@ import { useState } from 'react';
 
 function Page({ content, onExplore }) {
   const [burst, setBurst] = useState(false);
-  const annotation = content.annotation && (
-      <span className={`page-annotation page-annotation-${content.annotationPosition || 'top-right'}`}>
-        {content.annotation}
-      </span>
-    );
+
   const handleExploreClick = () => {
     setBurst(true);
     setTimeout(() => onExplore(), 950);
@@ -16,6 +12,12 @@ function Page({ content, onExplore }) {
   if (!content) {
     return <div className="page page-blank" />;
   }
+
+  const annotation = content.annotation && (
+      <span className={`page-annotation page-annotation-${content.annotationPosition || 'top-right'}`}>
+        {content.annotation}
+      </span>
+    );
 
   if (content.type === 'blank') {
     return <div className="page page-blank" />;
