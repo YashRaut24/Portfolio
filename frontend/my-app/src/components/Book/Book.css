@@ -91,6 +91,8 @@
     transition: opacity 0.3s ease;
 }
 
+
+
 .page-flip-wrapper:first-child::after {
     right: 0;
     background:
@@ -228,6 +230,84 @@
     color: var(--book-text-secondary);
     opacity: 0.5;
 }
+
+.nav-btn-end-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.end-burst {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.end-burst-piece {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-accent);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    opacity: 0;
+    animation: end-burst-pop 0.9s ease-out forwards;
+}
+
+.end-burst-0 {
+    transform: rotate(0deg);
+}
+
+.end-burst-1 {
+    background-color: #E8B23A;
+    transform: rotate(45deg);
+}
+
+.end-burst-2 {
+    transform: rotate(90deg);
+}
+
+.end-burst-3 {
+    background-color: #C77D3E;
+    transform: rotate(135deg);
+}
+
+.end-burst-4 {
+    transform: rotate(180deg);
+}
+
+.end-burst-5 {
+    background-color: #E8B23A;
+    transform: rotate(225deg);
+}
+
+.end-burst-6 {
+    transform: rotate(270deg);
+}
+
+.end-burst-7 {
+    background-color: #C77D3E;
+    transform: rotate(315deg);
+}
+
+@keyframes end-burst-pop {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) translateY(-38px) scale(0.5);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .end-burst-piece {
+        animation: none;
+        opacity: 0;
+    }
+}   
 
 @media (max-width: 768px) {
     .book-container {

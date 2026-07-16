@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Cover from './Cover';
 import PageFlip from './PageFlip';
 import Page from './Page';
-import { bookSpreads } from '../../data/bookSpreads';
+import { bookSpreads, hiddenSpread } from '../../data/bookSpreads';
 import './Book.css';
 
 function PrevArrowIcon() {
@@ -26,7 +26,7 @@ function NextArrowIcon() {
 }
 
 function Book() {
-
+  const [secretUnlocked, setSecretUnlocked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [currentSpread, setCurrentSpread] = useState(0);
   const [rightPreview, setRightPreview] = useState(false);
@@ -36,8 +36,12 @@ function Book() {
   const [isTurning, setIsTurning] = useState(false);
   const navigate = useNavigate();
 
-  const totalSpreads = bookSpreads.length;
-  const spread = bookSpreads[currentSpread];
+  const effectiveSpreads = useMemo(
+    () => (secretUnlocked ? [...bookSpreads, hiddenSpread] : bookSpreads),
+    [secretUnlocked]
+  );
+  const totalSpreads = effectiveSpreads.length;
+  const spread = effectiveSpreads[currentSpread];
 
   const handleExplore = useCallback(() => navigate('/explore'), [navigate]);
   const handleOpen = useCallback(() => setIsOpen(true), []);
@@ -45,7 +49,7 @@ function Book() {
   const handleLeftPreviewCancel = useCallback(() => setLeftPreview(false), []);
   const handleRightPreview = useCallback(() => setRightPreview(true), []);
   const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
-
+  const [endBurst, setEndBurst] = useState(false);
   const handleNextClick = useCallback(() => {
     if (isTurning || currentSpread >= totalSpreads - 1) return;
     setIsTurning(true);
@@ -57,6 +61,14 @@ function Book() {
     setIsTurning(true);
     setPrevTrigger((n) => n + 1);
   }, [isTurning]);
+
+  useEffect(() => {
+      if (isOpen && !secretUnlocked && currentSpread === totalSpreads - 1) {
+        setEndBurst(true);
+        const timer = setTimeout(() => setEndBurst(false), 900);
+        return () => clearTimeout(timer);
+      }
+    }, [isOpen, secretUnlocked, currentSpread, totalSpreads]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -74,7 +86,25 @@ function Book() {
     setIsTurning(false);
   };
 
-  
+  const handleUnlock = useCallback(() => {
+    setSecretUnlocked(true);
+  }, []);
+
+  useEffect(() => {
+    if (secretUnlocked) {
+      setCurrentSpread(effectiveSpreads.length - 1);
+      setRightPreview(false);
+      setLeftPreview(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [secretUnlocked]);
+
+  const handleJumpTo = useCallback((index) => {
+    if (isTurning || index === currentSpread) return;
+    setCurrentSpread(Math.max(0, Math.min(index, totalSpreads - 1)));
+    setRightPreview(false);
+    setLeftPreview(false);
+  }, [isTurning, currentSpread, totalSpreads]);
 
   const handlePrevComplete = () => {
     if (currentSpread === 0) {
@@ -88,17 +118,17 @@ function Book() {
     setIsTurning(false);
   };
 
-  const rightBaseContent = useMemo(() => (
+const rightBaseContent = useMemo(() => (
     rightPreview && currentSpread < totalSpreads - 1
-      ? bookSpreads[currentSpread + 1].right
+      ? effectiveSpreads[currentSpread + 1].right
       : spread.right
-  ), [currentSpread, rightPreview, spread, totalSpreads]);
+  ), [currentSpread, rightPreview, spread, totalSpreads, effectiveSpreads]);
 
   const leftBaseContent = useMemo(() => (
     currentSpread === 0
       ? (leftPreview ? { type: 'transparent' } : spread.left)
-      : (leftPreview ? bookSpreads[currentSpread - 1].left : spread.left)
-  ), [currentSpread, leftPreview, spread]);
+      : (leftPreview ? effectiveSpreads[currentSpread - 1].left : spread.left)
+  ), [currentSpread, leftPreview, spread, effectiveSpreads]);
 
   return (
     <div className="book-container">
@@ -106,36 +136,39 @@ function Book() {
         <div className="book-stage">
           <div className={`book-spread ${!isOpen ? 'book-spread-closed' : ''} ${isOpen && currentSpread === 0 && leftPreview ? 'book-spread-closing' : ''}`}>
             <div className={`page-flip-wrapper ${!isOpen ? 'page-hidden' : ''} ${leftPreview ? 'turning-active' : ''}`}>
-              <Page content={leftBaseContent} onExplore={handleExplore} />
+            <Page content={leftBaseContent} onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
               {isOpen && (
                 <PageFlip
                   side="left"
                   frontContent={spread.left}
-                  backContent={currentSpread > 0 ? bookSpreads[currentSpread - 1].right : { type: 'cover-face' }}
-                  onPreview={handleLeftPreview}
+                  backContent={currentSpread > 0 ? effectiveSpreads[currentSpread - 1].right : { type: 'cover-face' }}                  onPreview={handleLeftPreview}
                   onPreviewCancel={handleLeftPreviewCancel}
                   onComplete={handlePrevComplete}
                   disabled={false}
                   triggerCount={prevTrigger}
                   onExplore={handleExplore}
+                  onNavigate={handleJumpTo}
+                  onUnlock={handleUnlock}
                   isClosingFlip={currentSpread === 0}
                 />
               )}
             </div>
             <div className="book-spine" />
             <div className={`page-flip-wrapper ${rightPreview ? 'turning-active' : ''}`}>
-              <Page content={rightBaseContent} onExplore={handleExplore} />
+            <Page content={rightBaseContent} onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
               {isOpen && (
                 <PageFlip
-                  side="right"
+                  side="right"  
                   frontContent={spread.right}
-                  backContent={currentSpread < totalSpreads - 1 ? bookSpreads[currentSpread + 1].left : null}
+                  backContent={currentSpread < totalSpreads - 1 ? effectiveSpreads[currentSpread + 1].left : null}
                   onPreview={handleRightPreview}
                   onPreviewCancel={handleRightPreviewCancel}
                   onComplete={handleNextComplete}
                   disabled={currentSpread >= totalSpreads - 1}
                   triggerCount={nextTrigger}
                   onExplore={handleExplore}
+                  onNavigate={handleJumpTo}
+                  onUnlock={handleUnlock}
                 />
               )}
             </div>
@@ -160,15 +193,24 @@ function Book() {
             <span>Prev</span>
           </button>
           <span className="page-count">{currentSpread + 1}/{totalSpreads}</span>
-          <button
-            className={`nav-btn nav-btn-next ${currentSpread === totalSpreads - 1 ? 'nav-btn-end' : ''}`}
-            onClick={handleNextClick}
-            disabled={isTurning || !isOpen || currentSpread === totalSpreads - 1}
-            aria-label={currentSpread === totalSpreads - 1 ? 'Book finished' : 'Next page'}
-          >
-            <span>{currentSpread === totalSpreads - 1 ? 'The End' : 'Next'}</span>
-            <NextArrowIcon />
-          </button>
+          <div className="nav-btn-end-wrap">
+            <button
+             className={`nav-btn nav-btn-next ${!secretUnlocked && currentSpread === totalSpreads - 1 ? 'nav-btn-end' : ''}`}
+              onClick={handleNextClick}
+              disabled={isTurning || !isOpen || secretUnlocked || currentSpread === totalSpreads - 1}
+              aria-label={currentSpread === totalSpreads - 1 ? 'Book finished' : 'Next page'}
+            >
+              <span>{!secretUnlocked && currentSpread === totalSpreads - 1 ? 'The End' : 'Next'}</span>
+              <NextArrowIcon />
+            </button>
+            {endBurst && (
+              <span className="end-burst" aria-hidden="true">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <span key={i} className={`end-burst-piece end-burst-${i}`} />
+                ))}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>
