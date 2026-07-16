@@ -6,6 +6,7 @@ import { hubNodesData } from '../../data/hubNodes';
 import './CircularHub.css';
 import HubDoodles from './HubDoodles';
 import OrbitRing from './OrbitRing';
+import { playSound, SOUNDS } from '../../utils/sound';
 
 const ACTIVE_ARC_ANGLE = -Math.PI / 4;
 
@@ -37,6 +38,11 @@ function CircularHub() {
 
   const goToIndex = (newIndex) => {
     const wrapped = ((newIndex % totalNodes) + totalNodes) % totalNodes;
+
+    if (wrapped === activeIndex) return;
+
+    playSound(SOUNDS.hubTransition, 0.18);
+
     setActiveIndex(wrapped);
   };
 

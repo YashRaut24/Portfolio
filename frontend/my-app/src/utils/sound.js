@@ -44,6 +44,7 @@ export function playSound(src, volume = 0.5, startOffset = 0) {
 export const SOUNDS = {
   pageFlip: '/assets/sounds/page-flip.mp3',
   coverOpen: '/assets/sounds/cover-open.mp3',
+  hubTransition: '/assets/sounds/hub-transition.mp3',
 };
 
 export function preloadSounds() {
@@ -53,3 +54,4 @@ export function preloadSounds() {
     audio.load();
   });
 }
+
