@@ -3,7 +3,11 @@ import { useState } from 'react';
 
 function Page({ content, onExplore }) {
   const [burst, setBurst] = useState(false);
-
+  const annotation = content.annotation && (
+      <span className={`page-annotation page-annotation-${content.annotationPosition || 'top-right'}`}>
+        {content.annotation}
+      </span>
+    );
   const handleExploreClick = () => {
     setBurst(true);
     setTimeout(() => onExplore(), 950);
@@ -38,6 +42,7 @@ function Page({ content, onExplore }) {
   if (content.type === 'intro') {
       return (
         <div className="page page-type-intro">
+          {annotation}
           <p className="page-quote">"{content.quote}"</p>
           <p className="page-description">{content.description}</p>
           <svg className="page-easter-egg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
@@ -51,6 +56,7 @@ function Page({ content, onExplore }) {
   if (content.type === 'timeline') {
       return (
         <div className="page page-type-timeline">
+          {annotation}
           <span className="page-year">{content.year}</span>
           <h2 className="page-title">{content.title}</h2>
           <ul className="page-keywords">
@@ -65,6 +71,7 @@ function Page({ content, onExplore }) {
   if (content.type === 'cta') {
       return (
         <div className="page page-cta page-type-cta">
+          {annotation}
           <p className="page-cta-text">Ready to see what I've built?</p>
           <div className="explore-btn-wrap">
             <button className="explore-btn" onClick={handleExploreClick}>Explore My Work</button>
