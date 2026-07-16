@@ -10,7 +10,7 @@
     position: absolute;
     width: 34px;
     height: 34px;
-    color: #4a4d3f;
+    color: var(--color-text-secondary);
     opacity: 0;
     animation-name: ink-fade;
     animation-timing-function: ease-in-out;
