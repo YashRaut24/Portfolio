@@ -22,10 +22,6 @@
     height: 100%;
 }
 
-.ink-underline {
-    width: 70px;
-    height: 14px;
-}
 
 @keyframes ink-fade {
 
@@ -48,10 +44,5 @@
     .ink-mark {
         width: 24px;
         height: 24px;
-    }
-
-    .ink-underline {
-        width: 50px;
-        height: 10px;
     }
 }

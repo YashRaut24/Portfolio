@@ -1,6 +1,6 @@
 import './InkBlots.css';
 
-const types = ['blot', 'underline', 'circle-scribble', 'asterisk'];
+const types = ['blot', 'circle-scribble', 'asterisk', 'checkmark', 'spiral', 'tally'];
 
 function generateInkMarks(count) {
   const items = [];
@@ -31,14 +31,6 @@ function BlotIcon() {
   );
 }
 
-function UnderlineIcon() {
-  return (
-    <svg viewBox="0 0 80 16" fill="none">
-      <path d="M2 8C15 4 25 12 40 8C55 4 65 12 78 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 function CircleScribbleIcon() {
   return (
     <svg viewBox="0 0 40 40" fill="none">
@@ -60,11 +52,45 @@ function AsteriskIcon() {
   );
 }
 
+function CheckmarkIcon() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none">
+      <path d="M8 20L16 30L33 8" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function SpiralIcon() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none">
+      <path
+        d="M20 20C20 17 17.5 15 15 16C12 17.5 12 22 15 24C19 27 26 25 27 19C28.5 12 21 6 13 9"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function TallyIcon() {
+  return (
+    <svg viewBox="0 0 40 40" fill="none">
+      <path d="M10 8V32" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M18 8V32" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M26 8V32" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M6 30L32 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const iconMap = {
   blot: BlotIcon,
-  underline: UnderlineIcon,
   'circle-scribble': CircleScribbleIcon,
   asterisk: AsteriskIcon,
+  checkmark: CheckmarkIcon,
+  spiral: SpiralIcon,
+  tally: TallyIcon,
 };
 
 function InkBlots() {
@@ -92,4 +118,4 @@ function InkBlots() {
   );
 }
 
-export default InkBlots;    
+export default InkBlots;
