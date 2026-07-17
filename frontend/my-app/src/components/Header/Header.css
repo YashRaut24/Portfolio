@@ -35,6 +35,15 @@
     gap: 0.8rem;
 }
 
+.header-btn:focus-visible {
+    outline: none;
+
+    border-color: var(--color-accent);
+
+    box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
 .header-btn {
     font-family: var(--font-hub);
     font-weight: 700;

@@ -92,6 +92,19 @@
     transform: scale(.9);
 }
 
+.hub-node:focus-visible {
+    outline: none;
+
+    border-color: var(--node-accent);
+
+    box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--node-accent) 28%, transparent),
+        0 0 0 6px color-mix(in srgb, var(--node-accent) 12%, transparent),
+        0 2px 6px var(--color-shadow),
+        0 8px 20px var(--color-shadow),
+        0 16px 36px var(--color-shadow);
+}
+
 .hub-node-active .hub-node-icon {
     opacity: 1;
     transform: scale(1);
