@@ -32,6 +32,23 @@
     }
 }
 
+/* Trailing highlight — brief glow left on a node as the hub coasts past it */
+.hub-node-trailing {
+    animation: hub-node-trail-fade 0.5s ease-out forwards;
+}
+
+@keyframes hub-node-trail-fade {
+    0% {
+        box-shadow: 0 0 0 3px var(--node-accent), 0 0 18px 4px var(--node-accent);
+        opacity: 1;
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent;
+        opacity: 0.85;
+    }
+}
+
 .hub-node:hover {
     border-color: var(--node-accent, var(--color-primary));
     box-shadow:
