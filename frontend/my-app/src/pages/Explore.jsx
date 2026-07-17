@@ -3,6 +3,7 @@ import ThemeToggle from '../components/ThemeToggle/ThemeToggle';
 import Header from '../components/Header/Header';
 import './Explore.css';
 import SEO from '../seo/SEO';
+import GrainOverlay from '../components/GrainOverlay/GrainOverlay';
 
 function Explore() {
   return (
@@ -11,6 +12,7 @@ function Explore() {
       <Header />
       <ThemeToggle />
       <CircularHub />
+      <GrainOverlay />
     </div>
   );
 }
