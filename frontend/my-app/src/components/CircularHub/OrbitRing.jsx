@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import './OrbitRing.css';
 
 function OrbitRing({ totalNodes, activeIndex }) {
   const [visited, setVisited] = useState(() => new Set([activeIndex]));
   const [burst, setBurst] = useState(false);
   const hasCompletedRef = useRef(false);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     setVisited((prev) => {
@@ -49,7 +50,14 @@ return (
             cy={tick.cy}
             initial={false}
             animate={{ r: tick.isActive ? 4.5 : 3 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            transition={
+              shouldReduceMotion
+                  ? { duration: 0 }
+                  : {
+                        duration: 0.25,
+                        ease: 'easeOut',
+                    }
+            }
           />
         ))}
       </svg>

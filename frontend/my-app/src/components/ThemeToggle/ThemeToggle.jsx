@@ -1,9 +1,10 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import './ThemeToggle.css';
 
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <button className="theme-toggle-btn" onClick={toggleTheme} aria-label="Toggle theme">
@@ -20,7 +21,14 @@ function ThemeToggle() {
               initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
               animate={{ rotate: 0, opacity: 1, scale: 1 }}
               exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
+             transition={
+                  shouldReduceMotion
+                      ? { duration: 0 }
+                      : {
+                            duration: 0.35,
+                            ease: 'easeInOut',
+                        }
+              }
             >
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </motion.svg>
@@ -35,7 +43,14 @@ function ThemeToggle() {
               initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
               animate={{ rotate: 0, opacity: 1, scale: 1 }}
               exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
+              transition={
+                shouldReduceMotion
+                    ? { duration: 0 }
+                    : {
+                          duration: 0.35,
+                          ease: 'easeInOut',
+                      }
+              }
             >
               <circle cx="12" cy="12" r="5" />
               <line x1="12" y1="1" x2="12" y2="3" />

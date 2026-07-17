@@ -1,10 +1,11 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import './HubRail.css';
 
 const ITEM_SPACING = 58;
 
 function HubRail({ nodes, activeIndex, direction, onSelect }) {
     const total = nodes.length;
+    const shouldReduceMotion = useReducedMotion();
 
     return (
         <div className="hub-rail">
@@ -29,12 +30,20 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
                             opacity: Math.abs(offset) > 3 ? 0 : index === activeIndex ? 1 : 0.3,
                             scale: index === activeIndex ? 1.2 : 1,
                         }}
-                        transition={{
-                            type: 'spring',
-                            stiffness: 240,
-                            damping: 24,
-                        }}
-                        whileTap={{ scale: 0.9 }}
+                        transition={
+                            shouldReduceMotion
+                                ? { duration: 0 }
+                                : {
+                                    type: 'spring',
+                                    stiffness: 240,
+                                    damping: 24,
+                                }
+                        }
+                        whileTap={
+                            shouldReduceMotion
+                                ? undefined
+                                : { scale: 0.9 }
+                        }
                         onClick={() => onSelect(index)}
                     >
                         <Icon />

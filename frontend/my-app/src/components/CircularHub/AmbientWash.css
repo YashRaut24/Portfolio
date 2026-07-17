@@ -22,7 +22,13 @@
 
     animation: ambientFloat 18s ease-in-out infinite alternate;
 }
+@media (prefers-reduced-motion: reduce) {
 
+    .ambient-wash {
+        animation: none;
+    }
+
+}
 @keyframes ambientFloat {
 
     from {

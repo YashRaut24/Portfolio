@@ -37,6 +37,13 @@
     white-space: nowrap;
 }
 
+@media (prefers-reduced-motion: reduce) {
+
+    .hub-doodle {
+        animation: none;
+    }
+
+}
 @media (max-width: 768px) {
     .hub-doodle-icon {
         width: 28px;

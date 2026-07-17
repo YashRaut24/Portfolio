@@ -327,7 +327,14 @@ function CircularHub() {
       className="hub-container"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      transition={
+        prefersReducedMotion()
+            ? { duration: 0 }
+            : {
+                  duration: 0.35,
+                  ease: [0.22, 1, 0.36, 1],
+              }
+      }
     >
       <AmbientWash color={visibleNodes[activeIndex].accent}/>
       <HubDoodles activeId={activeNode.id} />
@@ -389,10 +396,14 @@ function CircularHub() {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{
-              duration: 0.35,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            transition={
+                prefersReducedMotion()
+                    ? { duration: 0 }
+                    : {
+                          duration: 0.35,
+                          ease: [0.22, 1, 0.36, 1],
+                      }
+            }
           >
             <ContentPanel
               activeNode={activeNode}
