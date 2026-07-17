@@ -9,6 +9,7 @@ import OrbitRing from './OrbitRing';
 import { playSound, SOUNDS } from '../../utils/sound';
 import { prefersReducedMotion } from '../../utils/motionPrefs';
 import HubRail from './HubRail';
+import AmbientWash from './AmbientWash';
 
 const ACTIVE_ARC_ANGLE = -Math.PI / 4;
 const LAB_UNLOCK_TIME = 3600;
@@ -328,6 +329,7 @@ function CircularHub() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
+      <AmbientWash color={visibleNodes[activeIndex].accent}/>
       <HubDoodles activeId={activeNode.id} />
       <div
         className="hub-circle-wrapper"

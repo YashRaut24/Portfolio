@@ -1,0 +1,38 @@
+.ambient-wash-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.ambient-wash {
+    position: absolute;
+    inset: -25%;
+
+    background:
+        radial-gradient(circle at 50% 50%,
+            color-mix(in srgb, var(--wash-color) 4%, transparent) 0%,
+            color-mix(in srgb, var(--wash-color) 2.5%, transparent) 30%,
+            transparent 75%);
+
+    filter: blur(120px);
+
+    transform: scale(1.2);
+
+    animation: ambientFloat 18s ease-in-out infinite alternate;
+}
+
+@keyframes ambientFloat {
+
+    from {
+        transform:
+            scale(1.15) translate(-3%, -2%);
+    }
+
+    to {
+        transform:
+            scale(1.3) translate(3%, 2%);
+    }
+
+}
