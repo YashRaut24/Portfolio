@@ -28,7 +28,7 @@ function CircularHub() {
   const dragStartY = useRef(0);
   const isDragging = useRef(false);
   const wrapperRef = useRef(null);
-
+  
   // Velocity tracking + coast scheduling
   const pointerHistory = useRef([]);
   const inertiaTimeouts = useRef([]);
@@ -57,6 +57,7 @@ function CircularHub() {
   const activeNode = visibleNodes[activeIndex];
 
   const [rotationOffset, setRotationOffset] = useState(ACTIVE_ARC_ANGLE);
+  const [transitionDirection, setTransitionDirection] = useState(1);
 
   useEffect(() => {
     const updateLayout = () => {
@@ -161,9 +162,20 @@ function CircularHub() {
     if (wrapped === activeIndex) return;
 
     playSound(SOUNDS.hubTransition, 0.18);
+
     if (direction !== null) {
+      setTransitionDirection(direction);
       trackChallenge(activeIndex, wrapped, direction);
+    } else {
+      const forward =
+        (wrapped - activeIndex + totalNodes) % totalNodes;
+
+      const backward =
+        (activeIndex - wrapped + totalNodes) % totalNodes;
+
+      setTransitionDirection(forward <= backward ? 1 : -1);
     }
+
     setActiveIndex(wrapped);
   };
 
@@ -346,18 +358,39 @@ function CircularHub() {
           })}
         </div>
       </div>
-      <AnimatePresence mode="wait">
-        <motion.div
-          className="hub-content-wrapper"
-          key={activeNode.id}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          transition={{ duration: 0.3 }}
-        >
-          <ContentPanel activeNode={activeNode} />
-        </motion.div>
-      </AnimatePresence>
+        <AnimatePresence mode="wait" custom={transitionDirection}>
+          <motion.div
+            key={activeNode.id}
+            className="hub-content-wrapper"
+            custom={transitionDirection}
+            variants={{
+              enter: (direction) => ({
+                opacity: 0,
+                x: direction > 0 ? 50 : -50,
+              }),
+              center: {
+                opacity: 1,
+                x: 0,
+              },
+              exit: (direction) => ({
+                opacity: 0,
+                x: direction > 0 ? -50 : 50,
+              }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              duration: 0.35,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <ContentPanel
+              activeNode={activeNode}
+              history={history}
+            />
+          </motion.div>
+        </AnimatePresence>
       <OrbitRing totalNodes={totalNodes} activeIndex={activeIndex} />
     </motion.div>
   );
