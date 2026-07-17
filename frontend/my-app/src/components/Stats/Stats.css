@@ -9,3 +9,32 @@
     max-width: 450px;
     border-radius: 8px;
 }
+
+.stats-fact-chip {
+    align-self: flex-start;
+
+    max-width: 450px;
+
+    padding: .7rem 1rem;
+
+    border-radius: 999px;
+
+    background: var(--color-card-bg);
+
+    border: 1px solid var(--color-border);
+
+    color: var(--color-text-secondary);
+
+    font-family: var(--font-hub);
+    font-size: .88rem;
+    font-weight: 600;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 2px 8px var(--color-shadow);
+}
+
+.stats-fact-chip span {
+    display: block;
+}
