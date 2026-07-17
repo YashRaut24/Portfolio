@@ -49,3 +49,57 @@
     font-size: 0.85rem;
     color: var(--color-primary);
 }
+
+.project-card-container {
+    perspective: 1200px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+.project-card-inner {
+    position: relative;
+    transform-style: preserve-3d;
+    min-height: 220px;
+}
+
+.project-front,
+.project-back {
+    position: absolute;
+    inset: 0;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.project-front {
+    z-index: 2;
+}
+
+.project-back {
+    transform: rotateY(180deg);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.project-back-heading {
+    font-family: var(--font-hub);
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    color: var(--color-text);
+}
+
+.project-flip-hint {
+    display: inline-block;
+    margin-top: auto;
+
+    font-size: .75rem;
+    color: var(--color-primary);
+
+    opacity: .7;
+}
+
+.project-card {
+    min-height: 220px;
+}
