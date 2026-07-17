@@ -68,6 +68,16 @@ function StatsIcon() {
   );
 }
 
+function LabIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 3C10.3 3 9 4.3 9 6V12.5C9 13.3 8.3 14 7.5 14H6C4.7 14 3.5 15.2 3.5 16.5V19H20.5V16.5C20.5 15.2 19.3 14 18 14H16.5C15.7 14 15 13.3 15 12.5V6C15 4.3 13.7 3 12 3Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 19V17H16V19" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M12 10V12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const iconMap = {
   about: AboutIcon,
   skills: SkillsIcon,
@@ -76,6 +86,7 @@ const iconMap = {
   experience: ExperienceIcon,
   contact: ContactIcon,
   stats: StatsIcon,
+  lab: LabIcon,
 };
 
 function ContentPanel({ activeNode }) {
@@ -96,7 +107,20 @@ function ContentPanel({ activeNode }) {
         return <Contact />;
       case 'stats':
         return <Stats />;
-        
+      case 'lab':
+        return (
+          <div className="content-panel-secret">
+            <h3>Secret Lab</h3>
+            <p>
+              You found the hidden hub node! This lab is a special unlock
+              reserved for players who discover the secret pattern.
+            </p>
+            <p>
+              Try exploring the rest of the site, then come back to enjoy the
+              hidden content.
+            </p>
+          </div>
+        );
       default:
         return (
           <p className="content-panel-placeholder">

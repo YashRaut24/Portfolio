@@ -37,9 +37,9 @@ function OrbitRing({ totalNodes, activeIndex }) {
     return { cx, cy, isActive: i === activeIndex, isVisited: visited.has(i) };
   });
 
-  return (
-    <div className="orbit-tracker" aria-hidden="true">
-      <svg className="orbit-ring" viewBox="0 0 100 100">
+return (
+    <div className="orbit-tracker" aria-label={`Node ${activeIndex + 1} of ${totalNodes}`}>
+      <svg className="orbit-ring" viewBox="0 0 100 100" aria-hidden="true">
         <circle className="orbit-ring-track" cx="50" cy="50" r="40" />
         {ticks.map((tick, i) => (
           <motion.circle
@@ -53,6 +53,9 @@ function OrbitRing({ totalNodes, activeIndex }) {
           />
         ))}
       </svg>
+      <span className="orbit-tracker-count" aria-hidden="true">
+        {activeIndex + 1}
+      </span>
       {burst && (
         <span className="orbit-burst" aria-hidden="true">
           {Array.from({ length: 8 }).map((_, i) => (

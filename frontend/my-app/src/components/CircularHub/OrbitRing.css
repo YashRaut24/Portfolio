@@ -6,6 +6,9 @@
     height: 44px;
     z-index: 95;
     pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .orbit-ring {
@@ -19,7 +22,19 @@
     stroke: var(--color-border);
     stroke-width: 3;
 }
+.orbit-tracker-count {
+    position: absolute;
+    font-family: var(--font-hub);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
 
+@media (max-width: 768px) {
+    .orbit-tracker-count {
+        font-size: 0.78rem;
+    }
+}
 .orbit-ring-tick {
     fill: var(--color-border);
     transition: fill 0.25s ease;

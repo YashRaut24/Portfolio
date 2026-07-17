@@ -6,4 +6,6 @@ export const hubNodesData = [
   { id: 'experience', label: 'Experience', accent: '#C2410C' },
   { id: 'contact', label: 'Contact', accent: '#DB2777' },
   { id: 'stats', label: 'GitHub', accent: '#334155' },
+  {id: "lab",label: "Lab",accent: "#FFD54F",hidden: true,}
 ];
+
