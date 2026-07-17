@@ -8,6 +8,7 @@ import HubDoodles from './HubDoodles';
 import OrbitRing from './OrbitRing';
 import { playSound, SOUNDS } from '../../utils/sound';
 import { prefersReducedMotion } from '../../utils/motionPrefs';
+import HubRail from './HubRail';
 
 const ACTIVE_ARC_ANGLE = -Math.PI / 4;
 const LAB_UNLOCK_TIME = 3600;
@@ -391,6 +392,11 @@ function CircularHub() {
             />
           </motion.div>
         </AnimatePresence>
+        <HubRail
+            nodes={visibleNodes}
+            activeIndex={activeIndex}
+            onSelect={goToIndex}
+        />
       <OrbitRing totalNodes={totalNodes} activeIndex={activeIndex} />
     </motion.div>
   );
