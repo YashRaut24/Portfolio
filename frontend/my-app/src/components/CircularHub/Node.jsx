@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import './Node.css';
 
-function Node({ label, angle, radius, isActive, onClick, accent }) {
+function Node({ label,Icon, angle, radius, isActive, onClick, accent }) {
   const x = radius * Math.cos(angle);
   const y = radius * Math.sin(angle);
   const [ripples, setRipples] = useState([]);
@@ -56,7 +56,15 @@ function Node({ label, angle, radius, isActive, onClick, accent }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {label}
+      <div className="hub-node-content">
+          <span className="hub-node-label">{label}</span>
+
+          <Icon
+              size={34}
+              strokeWidth={2.3}
+              className="hub-node-icon"
+          />
+      </div>
       {ripples.map((ripple) => (
         <span
           key={ripple.id}

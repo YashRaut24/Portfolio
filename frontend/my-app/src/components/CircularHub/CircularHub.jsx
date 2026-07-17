@@ -334,6 +334,7 @@ function CircularHub() {
                 key={node.id}
                 ref={(el) => { nodeRefs.current[index] = el; }}
                 label={node.label}
+                Icon={node.icon}
                 angle={angle}
                 radius={radius}
                 isActive={index === activeIndex}
