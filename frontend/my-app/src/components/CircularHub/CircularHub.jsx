@@ -358,6 +358,12 @@ function CircularHub() {
             );
           })}
         </div>
+          <HubRail
+              nodes={visibleNodes}
+              activeIndex={activeIndex}
+              direction={transitionDirection}
+              onSelect={goToIndex}
+          />
       </div>
         <AnimatePresence mode="wait" custom={transitionDirection}>
           <motion.div
@@ -392,11 +398,7 @@ function CircularHub() {
             />
           </motion.div>
         </AnimatePresence>
-        <HubRail
-            nodes={visibleNodes}
-            activeIndex={activeIndex}
-            onSelect={goToIndex}
-        />
+
       <OrbitRing totalNodes={totalNodes} activeIndex={activeIndex} />
     </motion.div>
   );
