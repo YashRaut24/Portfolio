@@ -21,9 +21,15 @@
         0 1px 2px var(--color-shadow),
         0 4px 10px var(--color-shadow),
         0 10px 24px var(--color-shadow);
-    transition: transform 0.35s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
+    transition: transform 0.18s ease-out, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
     margin-left: -53px;
     margin-top: -53px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hub-node {
+        transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
+    }
 }
 
 .hub-node:hover {
