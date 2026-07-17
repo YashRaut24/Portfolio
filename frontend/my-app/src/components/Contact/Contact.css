@@ -1,17 +1,54 @@
-.contact-section {
+.contact-details {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: .8rem;
 }
 
-.contact-socials {
+.contact-detail {
     display: flex;
-    gap: 1.2rem;
+    align-items: center;
+    gap: .7rem;
+    position: relative;
+    font-family: var(--font-hub);
 }
 
-.contact-social-link {
-    font-family: var(--font-hub);
-    font-weight: 700;
-    font-size: 0.85rem;
+.copy-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: color .2s;
+}
+
+.copy-btn:hover {
     color: var(--color-primary);
+}
+
+.copy-tooltip {
+    position: absolute;
+    right: -70px;
+    font-size: .75rem;
+    color: var(--color-primary);
+    animation: fadeCopy .25s ease;
+}
+
+.contact-socials a {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+}
+
+@keyframes fadeCopy {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
