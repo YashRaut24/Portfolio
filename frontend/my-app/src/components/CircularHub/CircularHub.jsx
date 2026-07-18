@@ -22,7 +22,7 @@ const VELOCITY_SAMPLE_WINDOW = 100;      // ms — how far back we look for velo
 const STEP_ANIM_MS = 350;                // matches advance()'s own isAnimating window
 const TRAIL_FADE_MS = 500;               // how long a trailing highlight lingers on a passed node
 
-function CircularHub() {
+function CircularHub({ starFieldRef }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [radius, setRadius] = useState(270);
   const scrollAccum = useRef(0);
@@ -30,7 +30,7 @@ function CircularHub() {
   const dragStartY = useRef(0);
   const isDragging = useRef(false);
   const wrapperRef = useRef(null);
-  
+
   // Velocity tracking + coast scheduling
   const pointerHistory = useRef([]);
   const inertiaTimeouts = useRef([]);
@@ -180,6 +180,7 @@ function CircularHub() {
     }
 
     setActiveIndex(wrapped);
+    starFieldRef.current?.triggerStarBurst();
   };
 
   const advance = (direction) => {
@@ -365,6 +366,7 @@ function CircularHub() {
                 isTrailing={trailingSet.has(index)}
                 onClick={() => goToIndex(index)}
                 accent={node.accent}
+                planet={node.planet}
               />
             );
           })}

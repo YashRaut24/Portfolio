@@ -19,9 +19,12 @@
 
 .orbit-ring-track {
     fill: none;
-    stroke: var(--color-border);
-    stroke-width: 3;
+    stroke: rgba(255, 255, 255, .12);
+    stroke-width: 2.2;
+    stroke-dasharray: 4 8;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, .08));
 }
+
 .orbit-tracker-count {
     position: absolute;
     font-family: var(--font-hub);
@@ -36,18 +39,54 @@
     }
 }
 .orbit-ring-tick {
-    fill: var(--color-border);
-    transition: fill 0.25s ease;
+    fill: rgba(255, 255, 255, .18);
+
+    transition:
+        fill .25s,
+        filter .25s,
+        transform .25s;
+
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, .15));
 }
 
 .orbit-ring-tick-visited {
-    fill: var(--color-text-secondary);
+    fill: rgba(255, 255, 255, .45);
 }
 
 .orbit-ring-tick-active {
     fill: var(--color-primary);
+
+    filter:
+        drop-shadow(0 0 6px var(--color-primary)) drop-shadow(0 0 14px var(--color-primary));
+
+    transform-origin: center;
+}
+.orbit-ring {
+
+    animation: orbitRotate 120s linear infinite;
+
+    transform-origin: center;
 }
 
+@keyframes orbitRotate {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .orbit-ring {
+        animation: none;
+    }
+
+}
 .orbit-burst {
     position: absolute;
     inset: 0;

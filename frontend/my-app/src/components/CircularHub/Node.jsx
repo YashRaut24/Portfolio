@@ -50,7 +50,7 @@ function Node({ label,Icon, angle, radius, isActive, onClick, accent }) {
       type="button"
       tabIndex={0}
       aria-label={label}
-      className={`hub-node ${isActive ? 'hub-node-active' : ''}`}
+      className={`hub-node ${isActive ? "hub-node-active" : ""}`}
       style={{
         transform: `translate(${x + magnetic.dx}px, ${y + magnetic.dy}px) rotate(${magnetic.tilt}deg) scale(${magnetic.scale})`,
         '--node-accent': accent,
@@ -65,15 +65,22 @@ function Node({ label,Icon, angle, radius, isActive, onClick, accent }) {
           }
       }}
     >
-      <div className="hub-node-content">
-          <span className="hub-node-label">{label}</span>
+   <div className="hub-node-content">
+        <span
+            className="hub-node-label"
+            style={{ color: accent }}
+        >
+            {label}
+        </span>
 
-          <Icon
-              size={34}
-              strokeWidth={2.3}
-              className="hub-node-icon"
-          />
-      </div>
+        <Icon
+            size={32}
+            strokeWidth={2.4}
+            className="hub-node-icon"
+            style={{ color: accent }}
+        />
+    </div>
+
       {ripples.map((ripple) => (
         <span
           key={ripple.id}
