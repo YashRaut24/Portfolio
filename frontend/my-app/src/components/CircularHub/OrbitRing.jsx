@@ -62,7 +62,7 @@ return (
         ))}
       </svg>
       <span className="orbit-tracker-count" aria-hidden="true">
-        {activeIndex + 1}
+        {totalNodes - activeIndex}
       </span>
       {burst && (
         <span className="orbit-burst" aria-hidden="true">
