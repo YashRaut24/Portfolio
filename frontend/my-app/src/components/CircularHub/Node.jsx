@@ -47,6 +47,9 @@ function Node({ label,Icon, angle, radius, isActive, onClick, accent }) {
 
   return (
     <button
+      type="button"
+      tabIndex={0}
+      aria-label={label}
       className={`hub-node ${isActive ? 'hub-node-active' : ''}`}
       style={{
         transform: `translate(${x + magnetic.dx}px, ${y + magnetic.dy}px) rotate(${magnetic.tilt}deg) scale(${magnetic.scale})`,
@@ -55,6 +58,12 @@ function Node({ label,Icon, angle, radius, isActive, onClick, accent }) {
       onClick={handleClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleClick(e);
+          }
+      }}
     >
       <div className="hub-node-content">
           <span className="hub-node-label">{label}</span>

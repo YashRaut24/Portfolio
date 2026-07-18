@@ -1,0 +1,64 @@
+.sound-toggle {
+    position: fixed;
+    top: 9rem;
+    right: 1.3rem;
+    /* adjust depending on ThemeToggle position */
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+
+    background: var(--color-card-bg);
+    color: var(--color-text);
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease,
+        box-shadow .2s ease;
+
+    z-index: 1000;
+}
+
+.sound-toggle:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: 0 8px 24px var(--color-shadow);
+}
+
+.sound-toggle:active {
+    transform: scale(0.94);
+}
+
+.sound-toggle:focus-visible {
+    outline: none;
+
+    border-color: var(--color-accent);
+
+    box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--color-accent) 28%, transparent),
+        0 0 0 6px color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+.sound-toggle svg {
+    transition: transform .25s ease;
+}
+
+.sound-toggle:hover svg {
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .sound-toggle {
+        top: 1rem;
+        right: 4.8rem;
+    }
+}

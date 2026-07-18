@@ -20,6 +20,9 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
 
                 return (
                     <motion.button
+                        type="button"
+                        tabIndex={0}
+                        aria-label={node.label}
                         key={node.id}
                         className={`hub-rail-item ${index === activeIndex ? 'active' : ''}`}
                         style={{
@@ -44,6 +47,12 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
                                 ? undefined
                                 : { scale: 0.9 }
                         }
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                onSelect(index);
+                            }
+                        }}
                         onClick={() => onSelect(index)}
                     >
                         <Icon />

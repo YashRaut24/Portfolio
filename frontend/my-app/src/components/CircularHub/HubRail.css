@@ -49,6 +49,17 @@
         drop-shadow(0 0 6px var(--rail-accent)) drop-shadow(0 0 16px var(--rail-accent));
 }
 
+.hub-rail-item:focus-visible {
+    outline: none;
+
+    color: var(--rail-accent);
+
+    box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--rail-accent) 30%, transparent);
+
+    border-radius: 50%;
+}
+
 @media (max-width:768px) {
     .hub-rail {
         display: none;
