@@ -1,0 +1,205 @@
+.orbit-menu {
+    position: fixed;
+    top: 1.3rem;
+    right: 0.6rem;
+    z-index: 120;
+    width: 60px;
+    height: 60px;
+    overflow: visible;
+}
+
+.orbit-menu::before {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+    opacity: 0;
+    transform: scale(.75);
+    transition: .35s ease;
+    pointer-events: none;
+}
+
+.orbit-menu:hover::before {
+    opacity: 1;
+    transform: scale(1.65);
+}
+
+.orbit-main {
+    position: absolute;
+    inset: 0;
+
+    width: 50px;
+    height: 50px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--color-border);
+
+    background: var(--color-card-bg);
+
+    color: var(--color-text);
+
+    cursor: pointer;
+
+    backdrop-filter: blur(12px);
+
+    transition:
+        background .25s,
+        border-color .25s,
+        box-shadow .25s,
+        transform .25s;
+}
+
+.orbit-main:hover {
+    border-color: var(--color-primary);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--color-primary) 20%, transparent),
+        0 0 24px color-mix(in srgb, var(--color-primary) 25%, transparent);
+    transform: scale(1.04);
+}
+
+.orbit-main-active {
+    border-color: var(--color-primary);
+    box-shadow:
+        0 0 0 2px color-mix(in srgb, var(--color-primary) 35%, transparent),
+        0 0 28px color-mix(in srgb, var(--color-primary) 40%, transparent);
+}
+
+.orbit-main svg {
+    width: 22px;
+    height: 22px;
+}
+
+.orbit-item {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.orbit-link {
+    position: relative;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    border: 1px solid var(--color-border);
+
+    background: var(--color-card-bg);
+
+    color: var(--color-text);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform .25s,
+        border-color .25s,
+        background .25s,
+        box-shadow .25s;
+
+    overflow: visible;
+}
+
+.orbit-link:hover {
+    transform: scale(1.08);
+
+    border-color: var(--color-primary);
+
+    box-shadow:
+        0 0 18px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+.orbit-link svg {
+    width: 18px;
+    height: 18px;
+}
+
+.orbit-link span {
+    position: absolute;
+    right: calc(100% + 14px);
+    top: 50%;
+    opacity: 0;
+    transform: translateY(-50%) translateX(6px);
+    pointer-events: none;
+    white-space: nowrap;
+    padding: .45rem .75rem;
+    border-radius: 999px;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    font-family: var(--font-hub);
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--color-text);
+    transition:
+        opacity .18s ease,
+        transform .18s ease;
+}
+
+.orbit-link:hover span {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+.orbit-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.orbit-line {
+    stroke: color-mix(in srgb, var(--color-primary) 55%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+    opacity: 0;
+    animation: orbit-line-draw 0.3s ease forwards;
+}
+@keyframes orbit-line-draw {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orbit-line {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+@media (max-width:768px) {
+
+    .orbit-menu {
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .orbit-main {
+        width: 50px;
+        height: 50px;
+    }
+
+    .orbit-link {
+        width: 38px;
+        height: 38px;
+    }
+
+    .orbit-link span {
+        display: none;
+    }
+}
