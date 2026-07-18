@@ -1,11 +1,4 @@
-const SOUND_PREF_KEY = 'portfolio-sound-enabled';
-
-let soundEnabled = false;
-try {
-  soundEnabled = localStorage.getItem(SOUND_PREF_KEY) === 'true';
-} catch {
-  soundEnabled = false;
-}
+let soundEnabled = true;
 
 const cache = {};
 const lastPlayed = {};
@@ -18,21 +11,7 @@ function getAudio(src) {
   return cache[src];
 }
 
-export function isSoundEnabled() {
-  return soundEnabled;
-}
-
-export function setSoundEnabled(value) {
-  soundEnabled = value;
-  try {
-    localStorage.setItem(SOUND_PREF_KEY, String(value));
-  } catch {
-    // ignore storage errors (private browsing etc.)
-  }
-}
-
 export function playSound(src, volume = 0.5, startOffset = 0) {
-  if (!soundEnabled) return;
 
   const now = performance.now();
 
