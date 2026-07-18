@@ -1,49 +1,51 @@
 .grain-overlay {
     position: fixed;
-    inset: -150%;
-    z-index: 9998;
+    inset: 0;
+    z-index: 2;
 
     pointer-events: none;
     user-select: none;
 
-    opacity: 0.025;
+    opacity: .018;
 
     background-image:
-        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, .7) 0 1px, transparent 1.6px),
-        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, .55) 0 1px, transparent 1.6px),
-        radial-gradient(circle at 60% 40%, rgba(255, 255, 255, .45) 0 .8px, transparent 1.5px),
-        radial-gradient(circle at 30% 80%, rgba(255, 255, 255, .6) 0 .8px, transparent 1.5px);
+
+        radial-gradient(circle,
+            rgba(255, 255, 255, .22) 0 .5px,
+            transparent .8px),
+
+        radial-gradient(circle,
+            rgba(180, 210, 255, .12) 0 .6px,
+            transparent .9px),
+
+        radial-gradient(circle,
+            rgba(255, 255, 255, .14) 0 .4px,
+            transparent .8px);
 
     background-size:
-        170px 170px,
-        210px 210px,
-        130px 130px,
-        250px 250px;
+        180px 180px,
+        260px 260px,
+        320px 320px;
 
-    animation: grainShift .22s steps(2) infinite;
+    animation: cosmicDust 18s linear infinite;
 }
 
-@keyframes grainShift {
+@keyframes cosmicDust {
 
-    0% {
-        transform: translate(0, 0);
+    from {
+        background-position:
+            0 0,
+            0 0,
+            0 0;
     }
 
-    25% {
-        transform: translate(-2%, 1%);
+    to {
+        background-position:
+            180px 120px,
+            -260px 180px,
+            140px -220px;
     }
 
-    50% {
-        transform: translate(2%, -1%);
-    }
-
-    75% {
-        transform: translate(-1%, 2%);
-    }
-
-    100% {
-        transform: translate(0, 0);
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
