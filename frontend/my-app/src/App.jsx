@@ -2,8 +2,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
 import NotFound from './components/NotFound/NotFound';
+import { preloadSounds } from './utils/sound';
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+      preloadSounds();
+  }, []);
   return (
     <BrowserRouter>
       <Routes>

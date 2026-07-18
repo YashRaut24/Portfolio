@@ -1,7 +1,30 @@
 :root {
     --font-book: 'Patrick Hand', cursive;
     --font-hub: 'Comfortaa', sans-serif;
+    --focus-ring-width: 3px;
+    --focus-ring-color: var(--color-accent);
+    --focus-ring-shadow: 0 0 0 var(--focus-ring-width) color-mix(in srgb, var(--color-accent) 28%, transparent);
 }
+:where(button,
+    a,
+    [role="button"],
+    input,
+    textarea,
+    select):focus {
+    outline: none;
+}
+
+:where(button,
+    a,
+    [role="button"],
+    input,
+    textarea,
+    select):focus-visible {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: 3px;
+    box-shadow: var(--focus-ring-shadow);
+}
+
 :root {
     --color-bg: #FAFAFA;
     --color-bg-secondary: #FFFFFF;

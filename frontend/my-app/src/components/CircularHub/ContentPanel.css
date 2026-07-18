@@ -46,6 +46,8 @@
     height: 100%;
 }
 
+
+
 @media (max-width: 768px) {
     .content-panel-title-icon {
         width: 22px;

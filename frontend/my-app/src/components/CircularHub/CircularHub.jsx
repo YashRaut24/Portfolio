@@ -6,7 +6,7 @@ import { hubNodesData } from '../../data/hubNodes';
 import './CircularHub.css';
 import HubDoodles from './HubDoodles';
 import OrbitRing from './OrbitRing';
-import { playSound, SOUNDS } from '../../utils/sound';
+import { playSound, SOUNDS, unlockAudio } from '../../utils/sound';
 import { prefersReducedMotion } from '../../utils/motionPrefs';
 import HubRail from './HubRail';
 import AmbientWash from './AmbientWash';
@@ -144,6 +144,7 @@ function CircularHub() {
       const elapsed = now - current.startTime;
       if (elapsed <= LAB_UNLOCK_TIME) {
         setLabUnlocked(true);
+        playSound(SOUNDS.unlock, 0.4);
       }
       resetChallenge();
     }
@@ -237,8 +238,9 @@ function CircularHub() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
 
-  const handlePointerDown = (event) => {
-    clearInertia(); // cancel any coast still playing out from a previous flick
+ const handlePointerDown = (event) => {
+    unlockAudio();
+    clearInertia();
     isDragging.current = true;
     dragStartY.current = event.clientY;
     pointerHistory.current = [{ y: event.clientY, t: performance.now() }];

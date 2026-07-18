@@ -4,6 +4,7 @@ import Header from '../components/Header/Header';
 import './Explore.css';
 import SEO from '../seo/SEO';
 import GrainOverlay from '../components/GrainOverlay/GrainOverlay';
+import SoundToggle from "../components/SoundToggle/SoundToggle";
 
 function Explore() {
   return (
@@ -11,6 +12,7 @@ function Explore() {
       <SEO title="Explore | Yash's Portfolio" description="Skills, projects, achievements, and contact." />
       <Header />
       <ThemeToggle />
+      <SoundToggle />
       <CircularHub />
       <GrainOverlay />
     </div>
