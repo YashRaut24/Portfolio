@@ -4,45 +4,159 @@
     overflow: hidden;
     pointer-events: none;
     z-index: 0;
+    --px: 0;
+    --py: 0;
 }
 
+.starfield.dark {
+    --star-color: #ffffff;
+    --star-glow: rgba(255, 255, 255, .8);
+    --constellation-color: rgba(255, 255, 255, .12);
+    --shooting-star: #ffffff;
+}
+
+.starfield.light {
+    --star-color: #60759b;
+    --star-glow: rgba(96, 117, 155, .55);
+    --constellation-color: rgba(96, 117, 155, .18);
+    --shooting-star: #7a96ff;
+}
 .star {
     position: absolute;
     border-radius: 50%;
-    animation: twinkle ease-in-out infinite;
+    animation:
+        twinkle ease-in-out infinite;
+
+    transition:
+        transform .12s linear;
+    background: var(--star-color);
 }
 
 .star.small {
-    background: rgba(255, 255, 255, .9);
+    background: var(--star-color);
+
     box-shadow:
-        0 0 3px rgba(255, 255, 255, .5);
+        0 0 3px color-mix(in srgb, var(--star-color) 50%, transparent);
 }
 
 .star.medium {
-    background: #fff;
+    background: var(--star-color);
+
     box-shadow:
-        0 0 5px rgba(255, 255, 255, .9),
-        0 0 12px rgba(255, 255, 255, .45);
+        0 0 5px color-mix(in srgb, var(--star-color) 90%, transparent),
+        0 0 12px color-mix(in srgb, var(--star-color) 45%, transparent);
 }
 
 .star.large {
-    background: #fff;
+    background: var(--star-color);
+
     box-shadow:
-        0 0 8px #fff,
-        0 0 18px rgba(255, 255, 255, .9),
-        0 0 36px rgba(255, 255, 255, .5);
+        0 0 4px color-mix(in srgb, var(--star-color) 80%, transparent),
+        0 0 10px color-mix(in srgb, var(--star-color) 35%, transparent);
 }
 
+.star.burst {
+
+    animation:
+        twinkleBurst .45s ease;
+
+}
+.star.burst {
+
+    animation:
+        twinkleBurst .45s ease;
+
+}
+.constellations {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+
+    pointer-events: none;
+
+    will-change: transform;
+}
+.constellations line {
+
+    stroke: var(--constellation-color);
+
+    stroke-width: .08;
+
+    stroke-linecap: round;
+
+    animation:
+        constellationPulse 10s ease-in-out infinite;
+}
+@keyframes constellationPulse {
+
+    0%,
+    100% {
+        opacity: .25;
+    }
+
+    50% {
+        opacity: .9;
+    }
+
+}
+.shooting-star {
+    position: absolute;
+
+    width: 160px;
+    height: 2px;
+
+    background: linear-gradient(90deg,
+        transparent,
+        var(--shooting-star));
+
+    border-radius: 999px;
+
+    transform:
+        rotate(-35deg) translateX(0);
+
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--shooting-star) 80%, transparent));
+
+    animation:
+        shootingStar linear forwards;
+}
+.star-wrapper {
+    position: absolute;
+    will-change: transform;
+}
 @keyframes twinkle {
 
     0%,
     100% {
-        transform: scale(.8);
         opacity: .35;
+        filter: brightness(.9);
     }
 
     50% {
-        transform: scale(1.5);
+        opacity: .95;
+        filter: brightness(1.35);
+    }
+
+}
+@keyframes shootingStar {
+
+    from {
+        opacity: 0;
+        transform:
+            rotate(-35deg) translateX(0);
+    }
+
+    8% {
         opacity: 1;
     }
+
+    to {
+        opacity: 0;
+        transform:
+            rotate(-35deg) translateX(-700px);
+    }
+
 }
