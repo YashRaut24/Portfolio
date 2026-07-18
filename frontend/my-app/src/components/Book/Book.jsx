@@ -6,7 +6,7 @@ import PageFlip from './PageFlip';
 import Page from './Page';
 import { bookSpreads, hiddenSpread } from '../../data/bookSpreads';
 import './Book.css';
-import { isSoundEnabled, setSoundEnabled, playSound, preloadSounds, SOUNDS } from '../../utils/sound';
+import { playSound, preloadSounds, SOUNDS } from '../../utils/sound';
 
 function PrevArrowIcon() {
   return (
@@ -36,17 +36,12 @@ function Book() {
   const [prevTrigger, setPrevTrigger] = useState(0);
   const [isTurning, setIsTurning] = useState(false);
   const navigate = useNavigate();
-  const [soundOn, setSoundOn] = useState(isSoundEnabled());
   const effectiveSpreads = useMemo(
     () => (secretUnlocked ? [...bookSpreads, hiddenSpread] : bookSpreads),
     [secretUnlocked]
   );
   const totalSpreads = effectiveSpreads.length;
   const spread = effectiveSpreads[currentSpread];
-  const handleToggleSound = useCallback(() => {
-      setSoundEnabled(!soundOn);
-      setSoundOn(!soundOn);
-    }, [soundOn]);
 
   const handleExplore = useCallback(() => navigate('/explore'), [navigate]);
   const handleOpen = useCallback(() => {
@@ -226,26 +221,6 @@ const rightBaseContent = useMemo(() => (
               </span>
             )}
           </div>
-          <button
-            className="nav-btn nav-btn-sound"
-            onClick={handleToggleSound}
-            aria-label={soundOn ? 'Mute sound' : 'Unmute sound'}
-            aria-pressed={soundOn}
-          >
-            {soundOn ? (
-              <svg viewBox="0 0 24 24" fill="none" className="sound-icon">
-                <path d="M4 9V15H8L13 20V4L8 9H4Z" fill="currentColor" />
-                <path d="M16 8C17.5 9.5 17.5 14.5 16 16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                <path d="M19 5C22 8 22 16 19 19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" fill="none" className="sound-icon">
-                <path d="M4 9V15H8L13 20V4L8 9H4Z" fill="currentColor" />
-                <path d="M16 9L21 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                <path d="M21 9L16 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
-            )}
-          </button>
         </div>
       </div>
     </div>
