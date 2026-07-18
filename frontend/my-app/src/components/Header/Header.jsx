@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import './Header.css';
 
 function ResumeIcon() {
@@ -29,19 +28,11 @@ function LinkedInIcon() {
 }
 
 function Header() {
-  const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 24);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
 
   return (
-    <header className={`site-header ${scrolled ? 'site-header-scrolled' : ''}`}>
+    <header className="site-header">
       <div className="header-name">Yash</div>
       <div className="header-actions">
          <a href="/assets/resume.pdf"
