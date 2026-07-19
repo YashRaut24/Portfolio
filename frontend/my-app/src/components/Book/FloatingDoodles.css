@@ -72,13 +72,11 @@
 }
 
 @media (max-width: 768px) {
+
     .doodle {
-        width: 28px;
-        height: 28px;
+        width: 22px;
+        height: 22px;
+        opacity: 0.18;
     }
 
-    /* .doodle-squiggle {
-        width: 42px;
-        height: 14px;
-    } */
 }
