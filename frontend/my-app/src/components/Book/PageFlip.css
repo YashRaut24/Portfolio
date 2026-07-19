@@ -43,3 +43,35 @@
 .page-leaf-closing-cover .page-cover-role {
     opacity: calc(var(--cover-content-opacity, 1) * 0.9);
 }
+
+@media (max-width: 768px) {
+
+    .page-leaf {
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        border-radius: 0;
+        transform-origin: left center;
+    }
+
+    .page-leaf-face {
+        border-radius: 0;
+        overflow: hidden;
+    }
+
+    .page-leaf-front,
+    .page-leaf-back {
+        border-radius: 0;
+    }
+
+    .page-leaf-front {
+        background: #FBF8F1;
+    }
+
+    .page-leaf-back {
+        background: #FBF8F1;
+    }
+
+    .book-spread-closing .page-leaf-closing-cover {
+        left: 0;
+    }
+
+}
