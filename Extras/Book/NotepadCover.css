@@ -1,0 +1,305 @@
+.notepad-cover {
+    position: absolute;
+    top: 28px !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: calc(100% - 28px) !important;
+    max-height: calc(100% - 28px) !important;
+    overflow: hidden !important;
+
+    cursor: grab;
+    touch-action: none;
+    will-change: transform;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transform-origin: top center;
+
+    /* Curves to match the notepad body (top + bottom) */
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+}
+
+.notepad-cover:active {
+    cursor: grabbing;
+}
+
+.notepad-cover:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 4px;
+}
+
+/* Sits above the base page while closed/opening */
+.notepad-cover-front-layer {
+    z-index: 5;
+    filter: drop-shadow(0 22px 42px rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.9)));
+    transition: filter 0.18s linear;
+}
+
+/* Once folded past the halfway point */
+.notepad-cover-behind {
+    z-index: 1;
+    /* FIX: Completely killed the upward dark ambient shadow bleed */
+    filter: none !important;
+}
+
+/* After open completes: keep the rolled strip visible, tightly framed */
+.notepad-cover-open-strip {
+    z-index: 10 !important;
+    pointer-events: none;
+
+
+    /* Prevent the ambient shadow from leaking into the empty top background canvas */
+    filter: none !important;
+
+    /* Frame the top loop/roll band without clipping it away */
+    position: absolute;
+    top: 0px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 28px !important;
+    overflow: hidden !important;
+}
+
+.notepad-cover-open-strip .notepad-cover-face {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background-color: #2b2b2b !important;
+}
+
+.notepad-cover-open-strip[data-has-turned-pages="true"] .notepad-cover-face,
+.notepad-cover-open-strip.has-turned-pages .notepad-cover-face {
+    background-color: #fbf8f1 !important;
+} 
+
+.notepad-cover-open-strip .notepad-cover-face {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background-color: #2b2b2b !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+
+    /* IMPORTANT: remove clip-path on flipped faces; static coordinates hide the strip when inverted */
+    clip-path: none !important;
+}
+
+
+.notepad-cover-open-strip .notepad-cover-roll-stage {
+    height: 100%;
+    overflow: visible;
+}
+
+.notepad-cover-face {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    /* Ensure curves match the cover */
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    transform-style: flat !important;
+    -webkit-transform-style: flat !important;
+}
+
+.notepad-cover-front {
+    background-color: #2b2b2b;
+    transform: translateZ(0.5px);
+}
+
+.notepad-cover-back {
+    transform: rotateX(180deg) rotateY(180deg) translateZ(0.5px);
+    background-color: #2b2b2b;
+}
+
+/* Stage that holds the rolled strip + fold shading */
+.notepad-cover-roll-stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 40%;
+    pointer-events: none;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    overflow: visible;
+}
+
+.paper-roll {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -6px;
+    height: 24%;
+    transform-origin: top center;
+    border-top-left-radius: 999px;
+    border-top-right-radius: 999px;
+    will-change: transform, clip-path, opacity, filter;
+}
+
+/* Front rolled edge */
+.paper-roll-front {
+    background:
+        radial-gradient(220% 160% at 50% 0%,
+            rgba(255, 255, 255, 0.85) 0%,
+            rgba(255, 255, 255, 0.42) 15%,
+            rgba(255, 255, 255, 0.18) 34%,
+            rgba(255, 255, 255, 0.00) 68%),
+        linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.28) 0%,
+            rgba(40, 40, 40, 0.10) 45%,
+            rgba(0, 0, 0, 0.00) 100%);
+    filter: saturate(1.10) contrast(1.05);
+}
+
+/* Back rolled edge */
+.paper-roll-back {
+    background:
+        radial-gradient(180% 130% at 50% 0%,
+            rgba(0, 0, 0, 0.44) 0%,
+            rgba(0, 0, 0, 0.22) 18%,
+            rgba(0, 0, 0, 0.06) 38%,
+            rgba(0, 0, 0, 0.00) 68%),
+        linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.24) 0%,
+            rgba(0, 0, 0, 0.10) 42%,
+            rgba(0, 0, 0, 0.00) 100%);
+    mix-blend-mode: multiply;
+    filter: contrast(1.15);
+}
+
+.paper-roll {
+    opacity: calc(0.05 + var(--roll-progress, 0) * 1.0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    border-top-left-radius: 999px;
+    border-top-right-radius: 999px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transform:
+        translateY(calc(var(--roll-progress, 0) * -2px)) translateZ(calc(1px + var(--roll-progress, 0) * 10px)) rotateX(calc(var(--roll-progress, 0) * -25deg)) scaleY(calc(0.35 + var(--roll-progress, 0) * 1.15));
+}
+
+/* Fold shadow on top of roll */
+.fold-shadow {
+    position: absolute;
+    left: -2%;
+    right: -2%;
+    top: -2px;
+    height: 26%;
+    pointer-events: none;
+    transform-origin: top center;
+    background:
+        radial-gradient(130% 90% at 50% 0%,
+            rgba(0, 0, 0, 0.52) 0%,
+            rgba(0, 0, 0, 0.26) 28%,
+            rgba(0, 0, 0, 0.00) 70%),
+        linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.36) 0%,
+            rgba(0, 0, 0, 0.14) 46%,
+            rgba(0, 0, 0, 0.00) 84%);
+    clip-path: polygon(0 28%, 100% 8%, 100% 85%, 0 100%);
+    opacity: calc(var(--roll-progress, 0) * 1.0);
+    filter: blur(0.25px);
+    transform:
+        translateZ(calc(2px + var(--roll-progress, 0) * 14px)) rotateX(calc(var(--roll-progress, 0) * -12deg)) scaleY(calc(0.25 + var(--roll-progress, 0) * 1.1));
+    mix-blend-mode: multiply;
+}
+
+/* Underside highlight appears as the roll thickens */
+.underside-highlight {
+    position: absolute;
+    left: -2%;
+    right: -2%;
+    top: 2px;
+    height: 18%;
+    pointer-events: none;
+    transform-origin: top center;
+    background:
+        radial-gradient(170% 120% at 50% 0%,
+            rgba(255, 255, 255, 0.72) 0%,
+            rgba(255, 255, 255, 0.30) 16%,
+            rgba(255, 255, 255, 0.08) 34%,
+            rgba(255, 255, 255, 0.00) 65%),
+        linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.22) 0%,
+            rgba(0, 0, 0, 0.00) 88%);
+    clip-path: polygon(0 42%, 100% 18%, 100% 100%, 0 90%);
+    opacity: calc(var(--roll-progress, 0) * 1.0);
+    transform:
+        translateZ(calc(1px + var(--roll-progress, 0) * 10px)) rotateX(calc(var(--roll-progress, 0) * -8deg)) scaleY(calc(0.2 + var(--roll-progress, 0) * 1.25));
+}
+
+.notepad-cover-photo {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    margin-bottom: 1.5rem;
+}
+
+.notepad-cover-name {
+    font-family: 'Fredoka', var(--font-hub);
+    font-weight: 700;
+    font-size: 2rem;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 0.7rem;
+}
+
+.notepad-cover-role {
+    font-family: 'Fredoka', var(--font-hub);
+    font-weight: 500;
+    font-size: 1rem;
+    color: #FFFFFF;
+    opacity: 0.9;
+    line-height: 1.45;
+    text-align: center;
+    max-width: 240px;
+    margin-bottom: 2rem;
+}
+
+.notepad-cover-hint {
+    font-family: var(--font-hub);
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.02em;
+    animation: notepad-hint-bob 1.8s ease-in-out infinite;
+}
+
+@keyframes notepad-hint-bob {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.55;
+    }
+
+    50% {
+        transform: translateY(-6px);
+        opacity: 0.9;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .notepad-cover-hint {
+        animation: none;
+    }
+}

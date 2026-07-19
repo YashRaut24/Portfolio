@@ -1,0 +1,416 @@
+.book-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    perspective: 1800px;
+}
+
+.book-frame {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+}
+
+.book-frame::after {
+    content: '';
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: -18px;
+    height: 24px;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    z-index: -1;
+}
+
+.book-frame-turning::after {
+    transform: scaleX(0.92) translateX(2%);
+    opacity: 0.8;
+}
+
+.book-stage {
+    position: relative;
+    height: 70vh;
+    border-radius: 8px;
+    overflow: visible;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.book-spread {
+    position: relative;
+    display: flex;
+    height: 70vh;
+    background-color: var(--book-bg-secondary);
+    border-radius: 8px;
+    perspective: 1800px;
+    perspective-origin: center center;
+}
+
+.book-spread-closed {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.book-spread-closing {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.book-spread-closing .page-flip-wrapper:first-child {
+    background: transparent;
+}
+
+.book-spread-closing .page-flip-wrapper:last-child {
+    background-color: var(--book-bg-secondary);
+    box-shadow: 10px 10px 30px var(--book-shadow);
+}
+
+.book-spread-closing .book-spine {
+    opacity: 0;
+}
+
+.page-flip-wrapper {
+    flex: 1;
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.page-flip-wrapper:first-child::after,
+.page-flip-wrapper:last-child::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    pointer-events: none;
+    z-index: 2;
+    transition: opacity 0.3s ease;
+}
+
+
+
+.page-flip-wrapper:first-child::after {
+    right: 0;
+    background:
+        linear-gradient(to left, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.05) 18%, transparent 55%),
+        linear-gradient(to left, rgba(0, 0, 0, 0.05) 0%, transparent 100%);
+}
+
+.page-flip-wrapper:last-child::after {
+    left: 0;
+    background:
+        linear-gradient(to right, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.05) 18%, transparent 55%),
+        linear-gradient(to right, rgba(0, 0, 0, 0.05) 0%, transparent 100%);
+}
+
+.page-flip-wrapper.turning-active::after {
+    opacity: 0;
+}
+
+.page-flip-wrapper.turning-active {
+    z-index: 10;
+}
+
+.page-hidden {
+    visibility: hidden;
+}
+
+.book-nav-hidden {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.turning-page {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background-color: var(--book-bg-secondary);
+}
+
+.book-spine {
+    width: 2px;
+    background: linear-gradient(to right, transparent, var(--book-border), transparent);
+    flex-shrink: 0;
+    z-index: 5;
+}
+
+.cover-slot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    z-index: 20;
+    perspective: 1600px;
+    perspective-origin: left center;
+}
+
+.book-nav {
+    position: absolute;
+    top: calc(100% + 1rem);
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.page-count {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem;
+    color: var(--book-text-secondary);
+    opacity: 0.8;
+}
+
+.nav-btn {
+    font-family: var(--font-hub);
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--book-text);
+    background-color: var(--book-bg-secondary);
+    border: 1px solid var(--book-border);
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.nav-btn:active:not(:disabled) {
+    transform: scale(0.96);
+}
+.nav-arrow {
+    width: 20px;
+    height: 10px;
+    flex-shrink: 0;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background-color: var(--book-border);
+}
+
+.nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.nav-btn-end:disabled {
+    opacity: 1;
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--color-accent);
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.05rem;
+    cursor: default;
+}
+
+.nav-btn-end:disabled .nav-arrow {
+    display: none;
+}
+
+.keyboard-hint {
+    position: absolute;
+    top: calc(100% + 2.6rem);
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: var(--font-hub);
+    font-size: 0.75rem;
+    color: var(--book-text-secondary);
+    opacity: 0.5;
+}
+
+.nav-btn-end-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.end-burst {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.end-burst-piece {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-accent);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    opacity: 0;
+    animation: end-burst-pop 0.9s ease-out forwards;
+}
+
+.end-burst-0 {
+    transform: rotate(0deg);
+}
+
+.end-burst-1 {
+    background-color: #E8B23A;
+    transform: rotate(45deg);
+}
+
+.end-burst-2 {
+    transform: rotate(90deg);
+}
+
+.end-burst-3 {
+    background-color: #C77D3E;
+    transform: rotate(135deg);
+}
+
+.end-burst-4 {
+    transform: rotate(180deg);
+}
+
+.end-burst-5 {
+    background-color: #E8B23A;
+    transform: rotate(225deg);
+}
+
+.end-burst-6 {
+    transform: rotate(270deg);
+}
+
+.end-burst-7 {
+    background-color: #C77D3E;
+    transform: rotate(315deg);
+}
+
+.nav-btn-sound {
+    padding: 0.6rem;
+    gap: 0;
+}
+
+.sound-icon {
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 768px) {
+    .nav-btn-sound {
+        padding: 0.7rem;
+    }
+}
+
+@keyframes end-burst-pop {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) translateY(-38px) scale(0.5);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .end-burst-piece {
+        animation: none;
+        opacity: 0;
+    }
+}   
+
+@media (max-width: 768px) {
+
+    .book-container {
+        width: 100%;
+        height: 100dvh;
+        padding: 0.75rem;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .book-frame {
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .book-stage {
+        height: 78vh;
+    }
+
+    .book-spread {
+        width: 100%;
+        height: 78vh;
+        flex-direction: column;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .page-flip-wrapper {
+        width: 100%;
+        height: 100%;
+        flex: none;
+    }
+
+    .page-flip-wrapper:first-child {
+        display: none;
+    }
+
+    .book-spine {
+        display: none;
+    }
+
+    .cover-slot {
+        width: 100%;
+        height: 100%;
+        right: 0;
+        top: 0;
+    }
+
+    .book-nav {
+        width: 100%;
+        left: 0;
+        right: 0;
+        bottom: -70px;
+        top: auto;
+        padding: 0;
+    }
+
+    .page-count {
+        font-size: 1rem;
+    }
+
+    .nav-btn {
+        min-height: 46px;
+        padding: 0.8rem 1.25rem;
+        font-size: 0.95rem;
+    }
+
+    .nav-arrow {
+        width: 22px;
+        height: 10px;
+    }
+
+    .keyboard-hint {
+        display: none;
+    }
+
+    .book-spread-mobile {
+        display: block;
+        width: 100%;
+        height: 78vh;
+    }
+
+    .book-spread-mobile .page-flip-wrapper {
+        width: 100%;
+        height: 100%;
+    }
+}
