@@ -64,11 +64,35 @@
 }
 
 @media (max-width: 768px) {
+
+    .cover {
+        border-radius: 10px;
+        box-shadow: -10px 10px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .cover-face {
+        padding: 2rem 1.5rem;
+    }
+
+    .cover-photo {
+        width: 82px;
+        height: 82px;
+        margin-bottom: 1.5rem;
+        border-width: 2px;
+    }
+
     .cover-name {
-        font-size: 1.8rem;
+        font-size: 2rem;
+        text-align: center;
+        line-height: 1.1;
+        margin-bottom: 0.7rem;
     }
 
     .cover-role {
-        font-size: 0.95rem;
+        font-size: 1rem;
+        line-height: 1.45;
+        text-align: center;
+        max-width: 240px;
     }
+
 }
