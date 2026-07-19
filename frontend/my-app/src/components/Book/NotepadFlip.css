@@ -1,0 +1,118 @@
+.notepad-flip {
+    position: absolute;
+    inset: 0;
+    touch-action: none;
+    cursor: grab;
+    perspective: 3000px !important;
+    /* Higher depth matrix value to emphasize thin paper dimensions */
+    transform-origin: top center !important;
+    transform-style: preserve-3d !important;
+    -webkit-transform-style: preserve-3d !important;
+    will-change: transform !important;
+    border-radius: 14px;
+    z-index: 30;
+}
+
+.notepad-flip:active {
+    cursor: grabbing;
+}
+
+.notepad-flip-front-layer {
+    z-index: 5;
+    filter: drop-shadow(0 16px 28px rgba(0, 0, 0, calc(var(--shadow-opacity, 0.1) * 1.1)));
+}
+
+.notepad-flip-behind {
+    z-index: 1;
+    filter: drop-shadow(0 -6px 14px rgba(0, 0, 0, 0.14));
+}
+
+.notepad-flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    overflow: hidden;
+    border-radius: 14px;
+    border-bottom-left-radius: 14px !important;
+    border-bottom-right-radius: 14px !important;
+    transform-origin: top center !important;
+    transform-style: preserve-3d !important;
+    -webkit-transform-style: preserve-3d !important;
+    will-change: clip-path, transform !important;
+}
+
+.drag-handle-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 999;
+    background: transparent;
+    pointer-events: auto;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+.notepad-flip-front {
+    transform: translateZ(0.5px);
+    background: #fbf8f1;
+}
+
+.notepad-flip-front .page {
+    padding-top: 52px;
+    height: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    user-select: none !important;
+}
+
+.notepad-flip-back {
+    transform: rotateX(180deg) rotateY(180deg) translateZ(-1px) !important;
+    background: #fbf8f1;
+    pointer-events: none;
+}
+
+.notepad-flip-front-layer .notepad-flip-back {
+    visibility: hidden !important;
+}
+
+.notepad-flip-behind .notepad-flip-back {
+    visibility: visible !important;
+}
+
+.notepad-flip-back-content {
+    width: 100%;
+    height: 100%;
+    transform: rotateX(180deg) rotateY(180deg) !important;
+}
+
+.notepad-flip-back-content .page {
+    padding-top: 52px;
+    height: 100%;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    overflow: hidden;
+    box-shadow: none;
+    user-select: none !important;
+}
+
+/* Highly Organic Soft-Crease Linear Blend for Lightweight Paper Elements */
+.curl-shadow-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 65px;
+    /* Deeper coverage window creates a wider, realistic light reflection profile */
+    pointer-events: none;
+    z-index: 10;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.0) 0%,
+            rgba(255, 255, 255, 0.15) 25%,
+            /* Soft ambient paper gleam on the roll peak */
+            rgba(0, 0, 0, 0.06) 60%,
+            rgba(0, 0, 0, 0.22) 100%
+            /* Core bottom shading crease line */
+        );
+    mix-blend-mode: multiply;
+    will-change: transform, opacity;
+    transform: translateY(-100%);
+}
