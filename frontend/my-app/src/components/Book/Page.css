@@ -529,31 +529,133 @@
 }
 
 @media (max-width: 768px) {
-    .page-annotation {
-        font-size: 0.85rem;
-        max-width: 110px;
-    }
-}
 
-@media (max-width: 768px) {
     .page {
-        padding: 1.2rem;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        width: 100%;
+        height: 100%;
+
+        padding: 3.8rem 1.5rem 2rem;
+
+        border-radius: 0;
+
+        background-color: #fbf8f1;
+
+        box-shadow:
+            inset 0 18px 12px rgba(0, 0, 0, .05),
+            0 8px 20px rgba(0, 0, 0, .10);
+
+        overflow-y: auto;
+    }
+
+    /* notebook top binding */
+    .page::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 28px;
+
+        background:
+            linear-gradient(to bottom,
+                #ffffff 0%,
+                #f6f6f6 100%);
+
+        box-shadow:
+            inset 0 -1px rgba(0, 0, 0, .08),
+            0 2px 6px rgba(0, 0, 0, .08);
+
+        z-index: 2;
+    }
+
+    /* ruled paper */
+    .page::before {
+        left: 0;
+        right: 0;
+        top: 28px;
+
+        background-image:
+            repeating-linear-gradient(to bottom,
+                transparent,
+                transparent 31px,
+                rgba(70, 95, 180, .14) 31px,
+                rgba(70, 95, 180, .14) 32px);
+    }
+
+    .page-year {
+        font-size: 1rem;
+        line-height: 32px;
     }
 
     .page-title {
-        font-size: 1.4rem;
+        font-size: 1.8rem;
+        line-height: 1.3;
+        margin-bottom: .6rem;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .page-description {
+        font-size: .96rem;
+        line-height: 2rem;
+    }
+
+    .page-keywords {
+        margin-top: 1.2rem;
+        gap: .6rem;
     }
 
     .page-keyword {
-        font-size: 0.85rem;
+        font-size: .82rem;
+        padding: .45rem .9rem;
+    }
+
+    .page-quote {
+        font-size: 1.05rem;
+        line-height: 2rem;
+        padding: .75rem;
+    }
+
+    .page-toc-item {
+        font-size: 1rem;
+        line-height: 2.1rem;
+    }
+
+    .page-annotation {
+        font-size: .8rem;
+        max-width: 95px;
+    }
+
+    .page-easter-egg {
+        width: 18px;
+        height: 18px;
+        bottom: 1rem;
+        right: 1rem;
+    }
+
+    .page-cover-face {
+        padding: 2rem 1.5rem;
+    }
+
+    .page-cover-photo {
+        width: 82px;
+        height: 82px;
     }
 
     .page-cover-name {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 
     .page-cover-role {
-        font-size: 0.95rem;
+        font-size: .95rem;
         white-space: normal;
+        text-align: center;
     }
+
 }
