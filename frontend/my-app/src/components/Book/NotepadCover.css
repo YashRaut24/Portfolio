@@ -1,12 +1,11 @@
 .notepad-cover {
     position: absolute;
-    top: 28px !important;
+    top: 0 !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    height: calc(100% - 28px) !important;
-    max-height: calc(100% - 28px) !important;
-    overflow: hidden !important;
+    height: 100% !important;
+    overflow: visible !important;
     cursor: grab;
     touch-action: none;
     will-change: transform;
@@ -26,50 +25,85 @@
 }
 
 .notepad-cover-front-layer {
-    z-index: 5;
-    filter: drop-shadow(0 22px 42px rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.9)));
-    transition: filter 0.18s linear;
+    z-index: 36;
+    filter: drop-shadow(0 20px 42px rgba(0, 0, 0, calc(var(--shadow-opacity) * 0.95)));
+    transition: filter 0.2s linear;
 }
 
 .notepad-cover-behind {
-    z-index: 1;
+    z-index: 3;
     filter: none !important;
 }
 
-/* Open strip stance locked to top wire boundary */
+/* =========================================================
+   30PX ROLLED BINDING STRIP
+   ========================================================= */
+
 .notepad-cover-open-strip {
-    z-index: 10 !important;
+    z-index: 55 !important;
     pointer-events: none;
     filter: none !important;
     position: absolute;
     top: 0px !important;
     left: 0 !important;
     right: 0 !important;
-    height: 28px !important;
-    overflow: hidden !important;
+    height: 30px !important;
+    max-height: 30px !important;
+    min-height: 30px !important;
+    overflow: visible !important;
 }
 
-/* EXPLICIT FIX: REMAINS PURE BLACK ON OPEN AT FIRST SPREAD (PAGE 1) */
+/* STATE 1: Page 1/7 (Contents) - SOLID DARK COVER SCROLL */
 .notepad-cover-open-strip .notepad-cover-face {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 30px !important;
+    max-height: 30px !important;
     opacity: 1 !important;
     visibility: visible !important;
-    background-color: #2b2b2b !important;
-    /* Solid cover gray-black */
-    border-bottom-left-radius: 12px !important;
-    border-bottom-right-radius: 12px !important;
-    border-top-left-radius: 0px !important;
-    border-top-right-radius: 0px !important;
+    padding: 0 !important;
+
+    background: linear-gradient(to bottom,
+            #4c4c4c 0%,
+            #363636 28%,
+            #242422 68%,
+            #121212 100%) !important;
+
+    border-radius: 4px 4px 5px 5px !important;
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.35),
+        0 2px 4px rgba(0, 0, 0, 0.22),
+        inset 0 1px 1px rgba(255, 255, 255, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.55) !important;
     clip-path: none !important;
+    transform: none !important;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* EXPLICIT FIX: DYNAMICALLY SWAPS TO LIGHT WHITE/CREAM WHEN PAPER PAGES ARE turned ABOVE IT */
+/* STATE 2: Page 2/7+ (Turned pages stacked above) - LIGHT CREAM PAPER SCROLL */
 .notepad-cover-open-strip[data-has-turned-pages="true"] .notepad-cover-face,
 .notepad-cover-open-strip.has-turned-pages .notepad-cover-face {
-    background-color: #fbf8f1 !important;
-    /* Notepad paper page background canvas color */
+    height: 30px !important;
+    max-height: 30px !important;
+    background: linear-gradient(to bottom,
+            #ffffff 0%,
+            #faf6eb 28%,
+            #e2d6c3 70%,
+            #c2b098 100%) !important;
+    border-radius: 4px 4px 5px 5px !important;
+    box-shadow:
+        0 6px 12px -1px rgba(0, 0, 0, 0.22),
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.95),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.18) !important;
 }
 
-/* Clears out hidden text blocks inside open strip mode instantly */
+.notepad-cover-open-strip .notepad-cover-roll-stage,
+.notepad-cover-open-strip .paper-roll,
+.notepad-cover-open-strip .fold-shadow,
+.notepad-cover-open-strip .underside-highlight,
 .notepad-cover-open-strip .paper-face-content,
 .notepad-cover-open-strip .notepad-cover-photo,
 .notepad-cover-open-strip .notepad-cover-name,
@@ -80,18 +114,12 @@
     visibility: hidden !important;
 }
 
-.notepad-cover-open-strip .notepad-cover-roll-stage {
-    height: 100%;
-    overflow: visible;
-}
-
 .notepad-cover-face {
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     border-radius: 14px;
@@ -101,130 +129,20 @@
     align-items: center;
     justify-content: center;
     padding: 2rem 1.5rem;
-    transform-style: flat !important;
-    -webkit-transform-style: flat !important;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
 }
 
 .notepad-cover-front {
     background-color: #2b2b2b;
-    transform: translateZ(0.5px);
+    transform: translateZ(1px);
 }
 
 .notepad-cover-back {
-    transform: rotateX(180deg) rotateY(180deg) translateZ(0.5px);
-    background-color: #2b2b2b;
-}
-
-.notepad-cover-roll-stage {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 40%;
-    pointer-events: none;
-    transform-style: preserve-3d;
-    -webkit-transform-style: preserve-3d;
-    overflow: visible;
-}
-
-.paper-roll {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -6px;
-    height: 24%;
-    transform-origin: top center;
-    border-top-left-radius: 999px;
-    border-top-right-radius: 999px;
-    will-change: transform, clip-path, opacity, filter;
-}
-
-.paper-roll-front {
+    transform: rotateX(180deg) translateZ(1px);
     background:
-        radial-gradient(220% 160% at 50% 0%,
-            rgba(255, 255, 255, 0.85) 0%,
-            rgba(255, 255, 255, 0.42) 15%,
-            rgba(255, 255, 255, 0.18) 34%,
-            rgba(255, 255, 255, 0.00) 68%),
-        linear-gradient(to bottom,
-            rgba(255, 255, 255, 0.28) 0%,
-            rgba(40, 40, 40, 0.10) 45%,
-            rgba(0, 0, 0, 0.00) 100%);
-    filter: saturate(1.10) contrast(1.05);
-}
-
-.paper-roll-back {
-    background:
-        radial-gradient(180% 130% at 50% 0%,
-            rgba(0, 0, 0, 0.44) 0%,
-            rgba(0, 0, 0, 0.22) 18%,
-            rgba(0, 0, 0, 0.06) 38%,
-            rgba(0, 0, 0, 0.00) 68%),
-        linear-gradient(to bottom,
-            rgba(0, 0, 0, 0.24) 0%,
-            rgba(0, 0, 0, 0.10) 42%,
-            rgba(0, 0, 0, 0.00) 100%);
-    mix-blend-mode: multiply;
-    filter: contrast(1.15);
-}
-
-.paper-roll {
-    opacity: calc(0.05 + var(--roll-progress, 0) * 1.0);
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    border-top-left-radius: 999px;
-    border-top-right-radius: 999px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    transform:
-        translateY(calc(var(--roll-progress, 0) * -2px)) translateZ(calc(1px + var(--roll-progress, 0) * 10px)) rotateX(calc(var(--roll-progress, 0) * -25deg)) scaleY(calc(0.35 + var(--roll-progress, 0) * 1.15));
-}
-
-.fold-shadow {
-    position: absolute;
-    left: -2%;
-    right: -2%;
-    top: -2px;
-    height: 26%;
-    pointer-events: none;
-    transform-origin: top center;
-    background:
-        radial-gradient(130% 90% at 50% 0%,
-            rgba(0, 0, 0, 0.52) 0%,
-            rgba(0, 0, 0, 0.26) 28%,
-            rgba(0, 0, 0, 0.00) 70%),
-        linear-gradient(to bottom,
-            rgba(0, 0, 0, 0.36) 0%,
-            rgba(0, 0, 0, 0.14) 46%,
-            rgba(0, 0, 0, 0.00) 84%);
-    clip-path: polygon(0 28%, 100% 8%, 100% 85%, 0 100%);
-    opacity: calc(var(--roll-progress, 0) * 1.0);
-    filter: blur(0.25px);
-    transform:
-        translateZ(calc(2px + var(--roll-progress, 0) * 14px)) rotateX(calc(var(--roll-progress, 0) * -12deg)) scaleY(calc(0.25 + var(--roll-progress, 0) * 1.1));
-    mix-blend-mode: multiply;
-}
-
-.underside-highlight {
-    position: absolute;
-    left: -2%;
-    right: -2%;
-    top: 2px;
-    height: 18%;
-    pointer-events: none;
-    transform-origin: top center;
-    background:
-        radial-gradient(170% 120% at 50% 0%,
-            rgba(255, 255, 255, 0.72) 0%,
-            rgba(255, 255, 255, 0.30) 16%,
-            rgba(255, 255, 255, 0.08) 34%,
-            rgba(255, 255, 255, 0.00) 65%),
-        linear-gradient(to bottom,
-            rgba(255, 255, 255, 0.22) 0%,
-            rgba(0, 0, 0, 0.00) 88%);
-    clip-path: polygon(0 42%, 100% 18%, 100% 100%, 0 90%);
-    opacity: calc(var(--roll-progress, 0) * 1.0);
-    transform:
-        translateZ(calc(1px + var(--roll-progress, 0) * 10px)) rotateX(calc(var(--roll-progress, 0) * -8deg)) scaleY(calc(0.2 + var(--roll-progress, 0) * 1.25));
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.14)),
+        #252525;
 }
 
 .notepad-cover-photo {
