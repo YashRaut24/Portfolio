@@ -1,12 +1,13 @@
-
 .mobile-notepad {
+    --notepad-binding-height: 30px;      /* MATCHED TO 30PX ROLL */
+    --notepad-hinge-overlap: 4px;
+    --notepad-content-padding-top: 40px;  /* CLEARS THE 30PX ROLL */
     width: 100%;
     height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* CENTER the notepad container layout onto the mobile screen */
     padding: 16px;
     box-sizing: border-box;
     overflow: hidden;
@@ -17,10 +18,6 @@
     width: 82%;
     max-width: 310px;
     height: 58vh;
-    /* Keeps your slender legal pad proportions exactly the same */
-
-    /* CRITICAL: Allows the curling paper sheets to travel beyond the 
-       confines of the base page frame during animation without getting clipped */
     overflow: visible;
 
     border-radius: 14px;
@@ -28,38 +25,21 @@
     box-shadow:
         0 12px 32px rgba(0, 0, 0, 0.12),
         inset 0 2px 0 rgba(255, 255, 255, 0.8);
-}
-/* top tear strip - stays on top (z-index 20+) so flipping pages appear
-   to pass behind/through the binding, exactly like a real notepad */
-.notepad-page::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 28px;
-    background: #f8f8f8;
-    border-bottom: 1px solid rgba(0, 0, 0, .08);
-    z-index: 20;
+    transition: box-shadow 0.28s ease, transform 0.28s ease;
 }
 
-/* spiral holes */
-.notepad-page::after {
-    content: "";
-    position: absolute;
-    top: 7px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 14px;
+.notepad-page-cover-moving,
+.notepad-page-turning {
+    box-shadow:
+        0 19px 44px rgba(0, 0, 0, 0.19),
+        0 7px 14px rgba(0, 0, 0, 0.09),
+        inset 0 2px 0 rgba(255, 255, 255, 0.85);
+}
 
-    background:
-        radial-gradient(circle, #d7d7d7 3px, transparent 4px);
-
-    background-size: 28px 14px;
-    background-repeat: repeat-x;
-
-    z-index: 21;
+.mobile-notepad-open .notepad-page {
+    box-shadow:
+        0 16px 38px rgba(0, 0, 0, 0.15),
+        inset 0 2px 0 rgba(255, 255, 255, 0.82);
 }
 
 .notepad-stack {
@@ -71,20 +51,6 @@
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
 }
-.notepad-base-page {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    /* Sits flat underneath the active flipping layer */
-}
-
-.notepad-base-page .page {
-    /* Allow the persistent folded cover strip to sit above page content. */
-    padding-top: 40px;
-    height: 100%;
-    border-radius: 0;
-    box-shadow: none;
-}
 
 .notepad-base-page {
     position: absolute;
@@ -93,15 +59,13 @@
 }
 
 .notepad-base-page .page {
-    padding-top: 40px;
+    padding-top: var(--notepad-content-padding-top);
     height: 100%;
     border-radius: 0;
     box-shadow: none;
 }
 
-
-/* Thin decorative slivers behind the base page to sell the idea of a
-   stack of paper underneath - purely visual, not interactive. */
+/* Stack slivers */
 .notepad-stack-sliver {
     position: absolute;
     left: 6px;
@@ -126,51 +90,41 @@
     background: #f0ebdd;
 }
 
+/* Clean Navigation Bar */
 .mobile-nav {
     width: 100%;
     max-width: 420px;
-
     margin-top: 18px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .mobile-nav button {
-
     border: none;
-
     background: white;
-
     padding: 14px 22px;
-
     border-radius: 10px;
-
     font-family: var(--font-book);
-
     font-size: 1rem;
-
     cursor: pointer;
-
     box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
 
+.mobile-nav button:active:not(:disabled) {
+    transform: scale(0.96);
 }
 
 .mobile-nav button:disabled {
-
     opacity: .4;
-
     cursor: not-allowed;
-
 }
 
 .mobile-nav span {
-
     font-family: var(--font-book);
-
     font-size: 1rem;
-
     color: #555;
-
+    text-align: center;
 }

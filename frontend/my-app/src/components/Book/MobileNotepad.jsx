@@ -12,6 +12,7 @@ export default function MobileNotepad() {
   const [secretUnlocked, setSecretUnlocked] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [previewDirection, setPreviewDirection] = useState(null); // 'next' | 'prev' | null
+  const [coverMoving, setCoverMoving] = useState(false);
 
   const flipRef = useRef(null);
 
@@ -20,9 +21,6 @@ export default function MobileNotepad() {
     [secretUnlocked]
   );
 
-  // Flatten spreads into a page list, keeping a map from spread index ->
-  // the first page index it produced, so the TOC ("toc" page type) can
-  // still jump correctly on mobile.
   const { pages, spreadIndexToPageIndex } = useMemo(() => {
     const arr = [];
     const map = {};
@@ -85,17 +83,19 @@ export default function MobileNotepad() {
 
   const handleExplore = useCallback(() => navigate("/explore"), [navigate]);
   const handleUnlock = useCallback(() => setSecretUnlocked(true), []);
+  const handleCoverOpen = useCallback(() => {
+    setCoverMoving(false);
+    setOpened(true);
+  }, []);
 
   if (!opened) {
     return (
-      <div className="mobile-notepad">
-        <div className="notepad-page">
+      <div className="mobile-notepad mobile-notepad-closed">
+        <div className={`notepad-page ${coverMoving ? "notepad-page-cover-moving" : ""}`}>
           <div className="notepad-stack">
             <div className="notepad-stack-sliver notepad-stack-sliver-2" />
             <div className="notepad-stack-sliver notepad-stack-sliver-1" />
 
-            {/* The real first page, waiting underneath the cover so it's
-                what gets revealed as the cover folds back, not blank space. */}
             <div className="notepad-base-page">
               <Page
                 content={pages[0]}
@@ -105,26 +105,26 @@ export default function MobileNotepad() {
               />
             </div>
 
-            <NotepadCover onOpen={() => setOpened(true)} pageIndex={pageIndex} />
+            <NotepadCover
+              onOpen={handleCoverOpen}
+              onMotionStart={() => setCoverMoving(true)}
+              onMotionEnd={() => setCoverMoving(false)}
+              pageIndex={pageIndex}
+            />
           </div>
         </div>
       </div>
     );
   }
 
-  // The base page shows whatever content should already be waiting
-  // underneath the flipping leaf: the next page while flipping forward,
-  // the previous page while flipping backward, otherwise the current page.
   const baseContent =
     previewDirection === "next" && hasNext
       ? pages[pageIndex + 1]
-      : previewDirection === "prev" && hasPrev
-      ? pages[pageIndex - 1]
       : pages[pageIndex];
 
   return (
-    <div className="mobile-notepad">
-      <div className="notepad-page">
+    <div className="mobile-notepad mobile-notepad-open">
+      <div className={`notepad-page ${previewDirection ? "notepad-page-turning" : ""}`}>
         <div className="notepad-stack">
           <div className="notepad-stack-sliver notepad-stack-sliver-2" />
           <div className="notepad-stack-sliver notepad-stack-sliver-1" />
@@ -138,8 +138,7 @@ export default function MobileNotepad() {
             />
           </div>
 
-          {/* Mount the cover to keep the static top folded strip visible */}
-          <NotepadCover onOpen={() => setOpened(true)} pageIndex={pageIndex} />
+          <NotepadCover openStrip onOpen={handleCoverOpen} pageIndex={pageIndex} />
 
           <NotepadFlip
             ref={flipRef}
