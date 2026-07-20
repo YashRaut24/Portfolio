@@ -24,6 +24,7 @@ const NotepadFlip = forwardRef(function NotepadFlip(
   },
   ref
 ) {
+  // Direct motion value driving 3D page flip rotation [0 to -180 deg]
   const rotateX = useMotionValue(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isBehind, setIsBehind] = useState(false);
@@ -38,25 +39,22 @@ const NotepadFlip = forwardRef(function NotepadFlip(
 
   const progress = useTransform(rotateX, [0, -180], [0, 1]);
 
-  const scaleY = useTransform(rotateX, [0, -45, -90, -135, -180], [1, 0.62, 0.28, 0.62, 1]);
-  const y = useTransform(rotateX, [0, -45, -90, -135, -180], [0, -32, -86, -32, 0]);
-  const paperScale = useTransform(rotateX, [0, -90, -180], [1, 0.95, 1]);
-  const perspectiveOriginY = useTransform(progress, [0, 0.5, 1], ["0%", "35%", "0%"]);
+  // Gentle physical paper flex during mid-flip
+  const scaleY = useTransform(rotateX, [0, -90, -180], [1, 0.95, 1]);
+  const paperScale = useTransform(rotateX, [0, -90, -180], [1, 0.985, 1]);
+  const perspectiveOriginY = useTransform(progress, [0, 0.5, 1], ["0%", "15%", "0%"]);
 
-  const clipPathValues = useTransform(progress,
-    [0, 0.25, 0.5, 0.75, 1],
-    [
-      "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-      "polygon(0% 0%, 100% 0%, 100% 82%, 0% 82%)",
-      "polygon(0% 0%, 100% 0%, 100% 48%, 0% 48%)",
-      "polygon(0% 0%, 100% 0%, 100% 12%, 0% 12%)",
-      "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"
-    ]
+  // Dynamic shadow opacity scaling with angle
+  const shadowOpacityCurve = useTransform(
+    progress,
+    [0, 0.15, 0.5, 0.85, 1],
+    [0, 0.72, 1, 0.5, 0]
   );
-
-  const shadowY = useTransform(progress, [0, 0.5, 1], ["100%", "45%", "0%"]);
-  const shadowOpacityCurve = useTransform(progress, [0, 0.1, 0.5, 0.9, 1], [0, 0.95, 1, 0.95, 0]);
-  const shadowOpacity = useTransform(rotateX, [-180, -179.5, -90, 0], [0, 0, 0.4, 0.1]);
+  const shadowOpacity = useTransform(
+    rotateX,
+    [-180, -179.5, -90, 0],
+    [0, 0, 0.4, 0.1]
+  );
 
   const resetIdle = () => {
     dragDirRef.current = null;
@@ -65,14 +63,20 @@ const NotepadFlip = forwardRef(function NotepadFlip(
     setIsDragging(false);
   };
 
-  const commit = (dir) => {
+  const commit = (dir, info = null) => {
     setIsAnimating(true);
+
+    // Convert pointer pixel speed into degree velocity for smooth spring handoff
+    const pixelVelocityY = info?.velocity?.y ?? 0;
+    const degreeVelocity = (pixelVelocityY / DRAG_DISTANCE) * -180;
+
     if (dir === "next") {
       animate(rotateX, -180, {
         type: "spring",
-        stiffness: 110,
-        damping: 22,
-        mass: 0.65,
+        stiffness: 115,
+        damping: 20,
+        mass: 0.75,
+        velocity: degreeVelocity,
         onComplete: () => {
           rotateX.set(0);
           onCommitNext && onCommitNext();
@@ -82,9 +86,10 @@ const NotepadFlip = forwardRef(function NotepadFlip(
     } else {
       animate(rotateX, 0, {
         type: "spring",
-        stiffness: 110,
-        damping: 22,
-        mass: 0.65,
+        stiffness: 115,
+        damping: 20,
+        mass: 0.75,
+        velocity: degreeVelocity,
         onComplete: () => {
           rotateX.set(0);
           onCommitPrev && onCommitPrev();
@@ -94,13 +99,19 @@ const NotepadFlip = forwardRef(function NotepadFlip(
     }
   };
 
-  const cancel = (dir) => {
+  const cancel = (dir, info = null) => {
     setIsAnimating(true);
     const target = dir === "next" ? 0 : -180;
+
+    const pixelVelocityY = info?.velocity?.y ?? 0;
+    const degreeVelocity = (pixelVelocityY / DRAG_DISTANCE) * -180;
+
     animate(rotateX, target, {
       type: "spring",
-      stiffness: 140,
-      damping: 20,
+      stiffness: 135,
+      damping: 19,
+      mass: 0.8,
+      velocity: degreeVelocity,
       onComplete: () => {
         onPreviewCancel && onPreviewCancel();
         resetIdle();
@@ -172,26 +183,28 @@ const NotepadFlip = forwardRef(function NotepadFlip(
 
     const dy = info.offset.y;
     const commitDistance = DRAG_DISTANCE * COMMIT_RATIO;
+
     const passed = dir === "next" ? dy < -commitDistance : dy > commitDistance;
-    const isFlick = dir === "next" ? info.velocity.y < -250 : info.velocity.y > 250;
+    const isFlick =
+      dir === "next" ? info.velocity.y < -250 : info.velocity.y > 250;
 
     if (passed || isFlick) {
-      commit(dir);
+      commit(dir, info);
     } else {
-      cancel(dir);
+      cancel(dir, info);
     }
   };
 
-  const frontLeafContent = currentContent;
-  const backLeafContent = direction === "next" ? nextContent : prevContent;
+  const frontLeafContent = direction === "prev" ? prevContent : currentContent;
 
   return (
     <motion.div
-      className={`notepad-flip ${isBehind ? "notepad-flip-behind" : "notepad-flip-front-layer"}`}
+      className={`notepad-flip ${
+        isBehind ? "notepad-flip-behind" : "notepad-flip-front-layer"
+      }`}
       style={{
-        rotateX,
+        rotateX, // Restored 3D rotational response for live mouse dragging
         scaleY,
-        y,
         scale: paperScale,
         perspectiveOriginY,
         transformOrigin: "top center",
@@ -206,10 +219,8 @@ const NotepadFlip = forwardRef(function NotepadFlip(
       onDrag={handleDrag}
       onDragEnd={handleDragEnd}
     >
-      <motion.div 
-        className="notepad-flip-face notepad-flip-front"
-        style={{ clipPath: clipPathValues }}
-      >
+      {/* Front Face Sheet */}
+      <div className="notepad-flip-face notepad-flip-front">
         <div className={`drag-handle-overlay ${isDragging ? "active" : ""}`} />
         <Page
           content={frontLeafContent}
@@ -217,26 +228,14 @@ const NotepadFlip = forwardRef(function NotepadFlip(
           onNavigate={onNavigate}
           onUnlock={onUnlock}
         />
-        <motion.div 
-          className="curl-shadow-overlay" 
-          style={{ top: shadowY, opacity: shadowOpacityCurve }}
+        <motion.div
+          className="curl-shadow-overlay"
+          style={{ opacity: shadowOpacityCurve }}
         />
-      </motion.div>
+      </div>
 
-      <motion.div 
-        className="notepad-flip-face notepad-flip-back" 
-        style={{ clipPath: clipPathValues }}
-      >
-        <div className={`drag-handle-overlay ${isDragging ? "active" : ""}`} />
-        <div className="notepad-flip-back-content">
-          <Page
-            content={backLeafContent}
-            onExplore={onExplore}
-            onNavigate={onNavigate}
-            onUnlock={onUnlock}
-          />
-        </div>
-      </motion.div>
+      {/* Back Face Sheet */}
+      <div className="notepad-flip-face notepad-flip-back" />
     </motion.div>
   );
 });
