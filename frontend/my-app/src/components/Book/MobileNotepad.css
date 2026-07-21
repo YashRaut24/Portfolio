@@ -1,33 +1,58 @@
 .mobile-notepad {
-    --notepad-binding-height: 30px;      /* MATCHED TO 30PX ROLL */
-    --notepad-hinge-overlap: 4px;
-    --notepad-content-padding-top: 40px;  /* CLEARS THE 30PX ROLL */
+    --notepad-binding-height: 28px;
+    --notepad-content-padding-top: 52px;
     width: 100%;
     height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 16px;
+    /* Change from center to flex-start with a fixed top offset */
+    justify-content: flex-start;
+    padding-top: 8vh;
+    /* Locks the notepad at a consistent distance from the top */
+    padding-left: 16px;
+    padding-right: 16px;
     box-sizing: border-box;
     overflow: hidden;
+    margin-top: 5.rem;
 }
 
+.notepad-fixed-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 42px;
+    background: #2B2B2B;
+    z-index: 40;
+    pointer-events: none;
+}
+.mobile-notepad-open .notepad-fixed-header {
+    display: none !important;
+}
+.mobile-notepad-closed,
+.mobile-notepad-open {
+    position: relative;
+}
 .notepad-page {
     position: relative;
     width: 82%;
     max-width: 310px;
     height: 58vh;
+    max-height: 480px;
     overflow: visible;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
 
-    border-radius: 14px;
     background: #fbf8f1;
     box-shadow:
         0 12px 32px rgba(0, 0, 0, 0.12),
         inset 0 2px 0 rgba(255, 255, 255, 0.8);
     transition: box-shadow 0.28s ease, transform 0.28s ease;
+    margin-top: 6rem;
 }
-
 .notepad-page-cover-moving,
 .notepad-page-turning {
     box-shadow:
@@ -50,18 +75,20 @@
     perspective-origin: 50% 0%;
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
+    
 }
 
 .notepad-base-page {
     position: absolute;
     inset: 0;
     z-index: 2;
+    
 }
 
 .notepad-base-page .page {
-    padding-top: var(--notepad-content-padding-top);
+    padding-top: var(--notepad-content-padding-top) !important;
     height: 100%;
-    border-radius: 0;
+    box-sizing: border-box;
     box-shadow: none;
 }
 
@@ -72,33 +99,53 @@
     right: 6px;
     bottom: 0;
     background: #f5f1e6;
-    border-radius: 0 0 4px 4px;
+    border-radius: 0 0 8px 8px;
     z-index: 0;
 }
 
 .notepad-stack-sliver-1 {
-    height: calc(100% - 4px);
-    left: 4px;
-    right: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    height: calc(100% - 5px);
+    left: 5px;
+    right: 5px;
+    bottom: -3px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.08);
 }
 
 .notepad-stack-sliver-2 {
-    height: calc(100% - 7px);
-    left: 2px;
-    right: 2px;
+    height: calc(100% - 9px);
+    left: 3px;
+    right: 3px;
+    bottom: -6px;
     background: #f0ebdd;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.07);
+}
+
+.notepad-stack-sliver-3 {
+    height: calc(100% - 13px);
+    left: 1px;
+    right: 1px;
+    bottom: -9px;
+    background: #e9e1cb;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Clean Navigation Bar */
 .mobile-nav {
     width: 100%;
-    max-width: 420px;
-    margin-top: 18px;
+    max-width: 310px;
+    margin-top: 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
+    /* Keeps the nav space reserved even if hidden/transitioning */
+    flex-shrink: 0;
+}
+
+.mobile-nav-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
 }
 
 .mobile-nav button {
@@ -127,4 +174,24 @@
     font-size: 1rem;
     color: #555;
     text-align: center;
+}
+
+.closed-layer {
+    position: absolute;
+    inset: 0;
+}
+
+.opened-layer {
+    position: absolute;
+    inset: 0;
+}
+
+.closed-layer.hidden {
+    pointer-events: none;
+    opacity: 0;
+}
+
+.opened-layer.hidden {
+    pointer-events: none;
+    opacity: 0;
 }
