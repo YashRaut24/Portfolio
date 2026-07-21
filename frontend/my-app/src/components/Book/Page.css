@@ -529,61 +529,53 @@
 }
 
 @media (max-width: 768px) {
-
-    .page {
+.page {
         justify-content: flex-start;
         align-items: flex-start;
-
         width: 100%;
         height: 100%;
-
-        padding: 3.8rem 1.5rem 2rem;
-
+        /* Adjusted padding top to cleanly flow below the 42px fixed header */
+        padding: 1.5rem 1.5rem 2rem;
         border-radius: 0;
-
         background-color: #fbf8f1;
-
         box-shadow:
             inset 0 18px 12px rgba(0, 0, 0, .05),
             0 8px 20px rgba(0, 0, 0, .10);
-
         overflow-y: auto;
+        box-sizing: border-box;
     }
 
     /* notebook top binding */
-    .page::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        height: 28px;
-
-        background:
-            linear-gradient(to bottom,
-                #ffffff 0%,
-                #f6f6f6 100%);
-
-        box-shadow:
-            inset 0 -1px rgba(0, 0, 0, .08),
-            0 2px 6px rgba(0, 0, 0, .08);
-
-        z-index: 2;
-    }
+        /* .page::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 28px;
+            background: linear-gradient(to bottom,
+                    #4c4c4c 0%,
+                    #363636 28%,
+                    #242422 68%,
+                    #121212 100%);
+            box-shadow:
+                inset 0 -1px rgba(0, 0, 0, .3),
+                0 2px 6px rgba(0, 0, 0, .2);
+            z-index: 2;
+        }
 
     /* ruled paper */
-    .page::before {
-        left: 0;
-        right: 0;
-        top: 28px;
-
-        background-image:
-            repeating-linear-gradient(to bottom,
-                transparent,
-                transparent 31px,
-                rgba(70, 95, 180, .14) 31px,
-                rgba(70, 95, 180, .14) 32px);
-    }
+ /* .page::before {
+     left: 0;
+     right: 0;
+     top: 28px;
+     background-image:
+         repeating-linear-gradient(to bottom,
+             transparent,
+             transparent 31px,
+             rgba(70, 95, 180, .14) 31px,
+             rgba(70, 95, 180, .14) 32px);
+ }  */
 
     .page-year {
         font-size: 1rem;
