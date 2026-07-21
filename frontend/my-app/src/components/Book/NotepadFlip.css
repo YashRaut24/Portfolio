@@ -3,29 +3,38 @@
     inset: 0;
     touch-action: none;
     cursor: grab;
-    perspective: 2500px !important;
+    perspective: 1400px;
     transform-origin: top center !important;
     transform-style: preserve-3d !important;
     -webkit-transform-style: preserve-3d !important;
     will-change: transform !important;
-    border-radius: 14px;
-    z-index: 34;
-    overflow: hidden !important;
-    /* Clips upward rotational spill over top binding line */
-}
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+        
 
+    /* Change this from 34 to 60 */
+    z-index: 80;
+
+    overflow: visible !important;
+}
 .notepad-flip:active {
     cursor: grabbing;
 }
 
 .notepad-flip-front-layer {
-    z-index: 34;
+    /* Change this from 34 to 60 */
+    z-index: 80;
     filter: drop-shadow(0 16px 30px rgba(0, 0, 0, calc(var(--shadow-opacity, 0.1) * 1.2)));
     transition: filter 0.2s linear;
 }
-
 .notepad-flip-behind {
-    z-index: 4;
+    /* Must render BELOW .notepad-base-page (z-index: 2) so that once a
+       turned leaf settles "behind", the base page's already-updated
+       content is what the user actually sees — not this leaf still
+       sitting on top of it. */
+    z-index: 65;
     filter: drop-shadow(0 -5px 14px rgba(0, 0, 0, 0.12));
 }
 
@@ -35,13 +44,14 @@
     backface-visibility: hidden !important;
     -webkit-backface-visibility: hidden !important;
     overflow: hidden;
-    border-radius: 14px;
+    border-radius: 0;
     border-bottom-left-radius: 14px !important;
     border-bottom-right-radius: 14px !important;
     transform-origin: top center !important;
     transform-style: preserve-3d !important;
     -webkit-transform-style: preserve-3d !important;
     will-change: transform !important;
+    clip-path: inset(0 round 0 0 14px 14px);
 }
 
 .drag-handle-overlay {
@@ -58,6 +68,7 @@
 .notepad-flip-front {
     transform: translateZ(1px);
     background: #fbf8f1;
+    
 }
 
 .notepad-flip-front .page {
@@ -89,4 +100,29 @@
             rgba(0, 0, 0, 0.22) 100%);
     mix-blend-mode: multiply;
     will-change: opacity;
+}
+/* Add inside the existing mobile media query in NotepadFlip.css */
+@media (max-width: 768px) {
+    .notepad-flip {
+        position: absolute;
+        top: 42px !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: calc(100% - 42px) !important;
+
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 14px !important;
+        border-bottom-right-radius: 14px !important;
+        overflow: hidden !important;
+    }
+
+    .notepad-flip-face {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 14px;
+        border-bottom-right-radius: 14px;
+        overflow: hidden !important;
+    }
 }
