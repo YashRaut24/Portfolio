@@ -92,7 +92,9 @@ export default function MobileNotepad() {
     return (
       <div className="mobile-notepad mobile-notepad-closed">
         <div className={`notepad-page ${coverMoving ? "notepad-page-cover-moving" : ""}`}>
+          <div className="notepad-fixed-header" />
           <div className="notepad-stack">
+            <div className="notepad-stack-sliver notepad-stack-sliver-3" />
             <div className="notepad-stack-sliver notepad-stack-sliver-2" />
             <div className="notepad-stack-sliver notepad-stack-sliver-1" />
 
@@ -128,7 +130,7 @@ export default function MobileNotepad() {
         <div className="notepad-stack">
           <div className="notepad-stack-sliver notepad-stack-sliver-2" />
           <div className="notepad-stack-sliver notepad-stack-sliver-1" />
-
+          <NotepadCover openStrip onOpen={handleCoverOpen} pageIndex={pageIndex} />
           <div className="notepad-base-page">
             <Page
               content={baseContent}
@@ -138,7 +140,7 @@ export default function MobileNotepad() {
             />
           </div>
 
-          <NotepadCover openStrip onOpen={handleCoverOpen} pageIndex={pageIndex} />
+
 
           <NotepadFlip
             ref={flipRef}
