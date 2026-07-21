@@ -1,9 +1,11 @@
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./NotepadCover.css";
 
 const DRAG_DISTANCE = 240;
 const COMMIT_RATIO = 0.55;
+const STRIP_HEIGHT = 45;
+const STRIP_COLLAPSE_START = 125;
 
 export default function NotepadCover({
   onOpen,
@@ -15,100 +17,136 @@ export default function NotepadCover({
   const hasTurnedPages = pageIndex > 0;
   const turnedPagesAttr = hasTurnedPages ? "true" : "false";
 
-  const rotateX = useMotionValue(openStrip ? -180 : 0);
+  const rotateX = useMotionValue(openStrip ? 180 : 0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isBehind, setIsBehind] = useState(openStrip);
   const [isOpenComplete, setIsOpenComplete] = useState(openStrip);
+  const [isDraggingNow, setIsDraggingNow] = useState(false);
+  const pointerStartY = useRef(0);
+  const pointerStartAngle = useRef(0);
+  const coverRef = useRef(null);
+  const [stripScale, setStripScale] = useState(0.1);
+
+  useEffect(() => {
+    const el = coverRef.current;
+    if (!el) return;
+    const measure = () => {
+      const h = el.offsetHeight;
+      if (h > 0) setStripScale(STRIP_HEIGHT / h);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const shadowOpacity = useTransform(
     rotateX,
-    [-180, -140, -90, -45, 0],
+    [180, 140, 90, 45, 0],
     [0, 0.15, 0.7, 0.45, 0.28]
   );
 
-  const rollProgress = useTransform(rotateX, [0, -180], [0, 1]);
-  const contentOpacity = useTransform(rotateX, [0, -28, -76], [1, 0.72, 0]);
+  const rollProgress = useTransform(rotateX, [0, 180], [0, 1]);
+  const contentOpacity = useTransform(
+    rotateX,
+    [0, 20, STRIP_COLLAPSE_START],
+    [1, 0.4, 0]
+  );
 
+  const stripProgress = useTransform(
+    rotateX,
+    [STRIP_COLLAPSE_START, 180],
+    [0, 1],
+    { clamp: true }
+  );
+
+  const coverScaleY = useTransform(stripProgress, [0, 1], [1, stripScale]);
+  const coverScaleX = useTransform(
+      rotateX,
+   [0, 45, 90, 135, 180],
+   [1, 0.94, 0.88, 0.94, 1]
+   );
+  
   useEffect(() => {
-    const unsub = rotateX.on("change", (v) => {
-      if (!openStrip) setIsBehind(v <= -90);
+    if (openStrip) return undefined;
+    const unsubscribe = rotateX.on("change", (latest) => {
+      if (latest >= 175) setIsBehind(true);
+      else if (latest <= 170) setIsBehind(false);
     });
-    return unsub;
-  }, [openStrip, rotateX]);
+    return unsubscribe;
+  }, [rotateX, openStrip]);
 
-  const commitOpenFromCurrent = (info = null) => {
+  const settleTo = (targetAngle, info = null) => {
     if (isAnimating || openStrip) return;
     setIsAnimating(true);
-    onMotionStart && onMotionStart();
-
-    // Preserve gesture velocity for seamless release transition
-    const pixelVelocityY = info?.velocity?.y ?? 0;
-    const degreeVelocity = (pixelVelocityY / DRAG_DISTANCE) * -180;
-
-    animate(rotateX, -180, {
-      type: "spring",
-      stiffness: 110,
-      damping: 20,
-      mass: 0.8,
-      velocity: degreeVelocity,
-      onComplete: () => {
-        setIsAnimating(false);
-        setIsBehind(true);
-        setIsOpenComplete(true);
-        onMotionEnd && onMotionEnd();
-        onOpen && onOpen();
-      },
-    });
-  };
-
-  const springClosedFromCurrent = (info = null) => {
-    if (isAnimating || openStrip) return;
-    setIsAnimating(true);
+    setIsDraggingNow(false);
     onMotionStart && onMotionStart();
 
     const pixelVelocityY = info?.velocity?.y ?? 0;
-    const degreeVelocity = (pixelVelocityY / DRAG_DISTANCE) * -180;
+    const degreeVelocity = -(pixelVelocityY / DRAG_DISTANCE) * 180;
+    const opening = targetAngle >= 180;
 
-    animate(rotateX, 0, {
+    animate(rotateX, targetAngle, {
       type: "spring",
-      stiffness: 130,
+      stiffness: opening ? 95 : 110,
       damping: 18,
-      mass: 0.8,
+      mass: 0.85,
       velocity: degreeVelocity,
+      restDelta: 0.001,
       onComplete: () => {
+        const nowOpen = targetAngle >= 180;
+        setIsOpenComplete(nowOpen);
         setIsAnimating(false);
-        setIsBehind(false);
-        setIsOpenComplete(false);
         onMotionEnd && onMotionEnd();
+        if (nowOpen) onOpen && onOpen();
       },
     });
   };
 
-  const handleDragStart = () => {
+  const handlePointerDown = (e) => {
     if (isAnimating || openStrip) return;
+
+    e.currentTarget.setPointerCapture(e.pointerId);
+    pointerStartY.current = e.clientY;
+    pointerStartAngle.current = rotateX.get();
+
     setIsOpenComplete(false);
-    onMotionStart && onMotionStart();
+    setIsDraggingNow(true);
+
+    onMotionStart?.();
   };
 
-  const handleDrag = (_, info) => {
-    if (isAnimating || openStrip) return;
-    const clamped = Math.min(0, Math.max(-DRAG_DISTANCE, info.offset.y));
-    rotateX.set((clamped / DRAG_DISTANCE) * -180);
+  const handlePointerMove = (e) => {
+    if (!isDraggingNow || isAnimating || openStrip) return;
+
+    const deltaY = e.clientY - pointerStartY.current;
+
+    const next = Math.max(
+      0,
+      Math.min(
+        180,
+        pointerStartAngle.current - (deltaY / DRAG_DISTANCE) * 180
+      )
+    );
+
+    rotateX.set(next);
   };
 
-  const handleDragEnd = (_, info) => {
+  const handlePointerUp = (e) => {
+    if (!isDraggingNow) return;
+
+    e.currentTarget.releasePointerCapture(e.pointerId);
+    
     if (isAnimating || openStrip) return;
 
-    const dy = info.offset.y;
-    const commitDistance = DRAG_DISTANCE * COMMIT_RATIO;
-    const passed = dy < -commitDistance;
-    const isFlickUp = info.velocity.y < -250;
+    setIsDraggingNow(false);
 
-    if (passed || isFlickUp) {
-      commitOpenFromCurrent(info);
+    const current = rotateX.get();
+
+    if (current >= 90) {
+      settleTo(180);
     } else {
-      setIsOpenComplete(false);
-      springClosedFromCurrent(info);
+      settleTo(0);
     }
   };
 
@@ -116,29 +154,36 @@ export default function NotepadCover({
 
   return (
     <motion.div
+      ref={coverRef}
       data-has-turned-pages={turnedPagesAttr}
       className={`notepad-cover ${
         isStrip
           ? "notepad-cover-open-strip"
           : isBehind
           ? "notepad-cover-behind"
+          : isDraggingNow 
+          ? "" 
           : "notepad-cover-front-layer"
       }`}
+transformTemplate={({ rotateX, scaleY, z }) => {
+        return `perspective(2500px) translateZ(${z || "0px"}) translateY(${isStrip ? "-3px" : "0px"}) rotateX(${rotateX || "0deg"}) scaleY(${scaleY !== undefined ? scaleY : 1})`;
+      }}
       style={{
         rotateX: isStrip ? 0 : rotateX,
-        transformOrigin: "top center",
+        scaleY: isStrip ? 1 : coverScaleY,
+        z: isStrip ? 0 : isBehind ? -5 : 5,
+        transformOrigin: "50% 0%",
         willChange: "transform",
         "--shadow-opacity": shadowOpacity,
         "--roll-progress": isStrip ? 1 : rollProgress,
         touchAction: "none",
+        transformStyle: "preserve-3d",
+        transformPerspective: 2500,
       }}
-      drag={!openStrip && !isAnimating ? "y" : false}
-      dragConstraints={{ top: 0, bottom: 0 }}
-      dragElastic={0}
-      dragMomentum={false}
-      onDragStart={handleDragStart}
-      onDrag={handleDrag}
-      onDragEnd={handleDragEnd}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
     >
       <div className="notepad-cover-roll-stage" aria-hidden="true">
         <div className="paper-roll paper-roll-front" />
@@ -147,22 +192,50 @@ export default function NotepadCover({
         <div className="underside-highlight" />
       </div>
 
+      <motion.div
+        className="notepad-ring-tag"
+        aria-hidden="true"
+        style={{
+          opacity: isStrip ? 0 : contentOpacity,
+          display: isStrip ? "none" : "flex",
+        }}
+      >
+        <svg
+          className="notepad-ring-svg"
+          viewBox="0 0 60 40"
+          width="52"
+          height="34"
+        >
+          <defs>
+            <linearGradient id="ringMetal" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#f2f2f2" />
+              <stop offset="45%" stopColor="#b9b9b9" />
+              <stop offset="100%" stopColor="#7c7c7c" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M13,31 A17,15 0 1 1 47,31"
+            fill="none"
+            stroke="url(#ringMetal)"
+            strokeWidth="4.5"
+            strokeLinecap="round"
+          />
+        </svg>
+        <span className="notepad-tag">Profile</span>
+      </motion.div>
+
       <div className="notepad-cover-face notepad-cover-front">
         <motion.div
           className="paper-face-content"
           style={{
             opacity: isStrip ? 0 : contentOpacity,
+            pointerEvents: isStrip ? "none" : "auto",
             display: isStrip ? "none" : "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <img
-            src="/assets/images/profile.jpg"
-            alt="Profile"
-            className="notepad-cover-photo"
-          />
           <h1 className="notepad-cover-name">Yash</h1>
           <p className="notepad-cover-role">
             AI Engineer & Full-Stack Developer
