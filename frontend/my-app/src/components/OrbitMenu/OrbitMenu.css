@@ -8,23 +8,6 @@
     overflow: visible;
 }
 
-.orbit-menu::before {
-    content: "";
-    position: absolute;
-    inset: 4px;
-    border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
-    opacity: 0;
-    transform: scale(.75);
-    transition: .35s ease;
-    pointer-events: none;
-}
-
-.orbit-menu:hover::before {
-    opacity: 1;
-    transform: scale(1.65);
-}
-
 .orbit-main {
     position: absolute;
     inset: 0;
@@ -182,11 +165,12 @@
     }
 }
 
-@media (max-width:768px) {
-
+@media (max-width: 768px) {
     .orbit-menu {
         top: 1rem;
-        right: 1rem;
+        right: 5px;
+        /* Bring the menu above the CircularHub overlay on mobile */
+        z-index: 999999;
     }
 
     .orbit-main {

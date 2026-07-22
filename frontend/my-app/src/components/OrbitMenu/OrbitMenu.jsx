@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react"; 
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
 import "./OrbitMenu.css";
@@ -74,39 +74,48 @@ function ThemeIcon({ dark }) {
 export default function OrbitMenu() {
     const [isPinned, setIsPinned] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile(); // Check on initial load
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
     const open = isPinned || isHovered;
     const closeTimeoutRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
-
+    const scale = isMobile ? 0.8 : 1;
 const items = [
     {
       label: "Resume",
       icon: <ResumeIcon />,
       href: "/assets/resume.pdf",
       download: true,
-      x: -115,
-      y: 0,
+      x: -115 * scale, // Applied scale
+      y: 0 * scale,    // Applied scale
     },
     {
       label: "GitHub",
       icon: <GithubIcon />,
       href: "https://github.com/yourusername",
-      x: -95,
-      y: 55,
+      x: -95 * scale,  // Applied scale
+      y: 55 * scale,   // Applied scale
     },
     {
       label: "LinkedIn",
       icon: <LinkedinIcon />,
       href: "https://linkedin.com/in/yourusername",
-      x: -55,
-      y: 95,
+      x: -55 * scale,  // Applied scale
+      y: 95 * scale,   // Applied scale
     },
     {
       label: "Theme",
       icon: <ThemeIcon dark={theme === "dark"} />,
       onClick: toggleTheme,
-      x: 0,
-      y: 115,
+      x: 0 * scale,    // Applied scale
+      y: 115 * scale,  // Applied scale
     },
   ];
 

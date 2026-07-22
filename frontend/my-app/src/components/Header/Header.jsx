@@ -33,7 +33,7 @@ function Header() {
 
   return (
     <header className="site-header">
-      <div className="header-name">Yash</div>
+      <div className="header-name">Yash Raut</div>
     </header>
   );
 }
