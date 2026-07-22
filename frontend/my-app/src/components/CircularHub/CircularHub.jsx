@@ -65,7 +65,9 @@ function CircularHub({ starFieldRef }) {
     const updateLayout = () => {
       const isMobile = window.innerWidth <= 768;
       setRadius(isMobile ? 140 : 270);
-      setRotationOffset(isMobile ? ACTIVE_ARC_ANGLE : 0);
+      
+      // Desktop: 0 (Right). Mobile: Top-Left (-135 degrees / -0.75 PI)
+      setRotationOffset(isMobile ? -Math.PI * 0.75 : 0);
     };
 
     updateLayout();
@@ -198,12 +200,14 @@ function CircularHub({ starFieldRef }) {
 
       // Arrow keys follow the same convention as scroll/drag:
       // "down" gestures advance(-1), "up" gestures advance(1)
-      if (event.key === 'ArrowDown') {
+if (event.key === 'ArrowDown') {
         event.preventDefault();
-        advance(-1);
+        // Down arrow: advance(1) on mobile, advance(-1) on desktop
+        advance(window.innerWidth <= 768 ? 1 : -1);
       } else if (event.key === 'ArrowUp') {
         event.preventDefault();
-        advance(1);
+        // Up arrow: advance(-1) on mobile, advance(1) on desktop
+        advance(window.innerWidth <= 768 ? -1 : 1);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -225,11 +229,11 @@ function CircularHub({ starFieldRef }) {
       scrollAccum.current += event.deltaY;
       const threshold = 60;
 
-      if (scrollAccum.current > threshold) {
-        advance(-1);
+if (scrollAccum.current > threshold) {
+        advance(window.innerWidth <= 768 ? 1 : -1);
         scrollAccum.current = 0;
       } else if (scrollAccum.current < -threshold) {
-        advance(1);
+        advance(window.innerWidth <= 768 ? -1 : 1);
         scrollAccum.current = 0;
       }
     };
@@ -256,11 +260,11 @@ function CircularHub({ starFieldRef }) {
     pointerHistory.current.push({ y: event.clientY, t: performance.now() });
     if (pointerHistory.current.length > 6) pointerHistory.current.shift();
 
-    if (deltaY > threshold) {
-      advance(-1);
+if (deltaY > threshold) {
+      advance(window.innerWidth <= 768 ? 1 : -1);
       dragStartY.current = event.clientY;
     } else if (deltaY < -threshold) {
-      advance(1);
+      advance(window.innerWidth <= 768 ? -1 : 1);
       dragStartY.current = event.clientY;
     }
   };
@@ -300,7 +304,11 @@ function CircularHub({ starFieldRef }) {
     if (Math.abs(velocity) < INERTIA_MIN_VELOCITY) return;
 
     // dragging down (positive velocity) matches the existing "deltaY > threshold -> advance(-1)" convention
-    const direction = velocity > 0 ? -1 : 1;
+   // Downward flick (positive velocity) is 1 on mobile, -1 on desktop
+    const isMobile = window.innerWidth <= 768;
+    const direction = velocity > 0 
+      ? (isMobile ? 1 : -1) 
+      : (isMobile ? -1 : 1);
     const steps = Math.min(
       INERTIA_MAX_STEPS,
       Math.round(Math.abs(velocity) / INERTIA_MIN_VELOCITY)

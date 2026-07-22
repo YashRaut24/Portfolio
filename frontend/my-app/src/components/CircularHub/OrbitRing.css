@@ -161,10 +161,16 @@
 }
 
 @media (max-width: 768px) {
-    .orbit-tracker {
+.orbit-tracker {
         width: 36px;
         height: 36px;
         bottom: 1rem;
-        right: 1rem;
+        /* Move to the left side */
+        right: auto;
+        left: 1rem;
+    }
+
+    .orbit-tracker-count {
+        font-size: 0.78rem;
     }
 }

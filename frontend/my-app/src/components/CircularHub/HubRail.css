@@ -62,6 +62,9 @@
 
 @media (max-width:768px) {
     .hub-rail {
-        display: none;
+        display: block;
+        right: auto;
+        left: 8px;
+        z-index: 999999;
     }
 }

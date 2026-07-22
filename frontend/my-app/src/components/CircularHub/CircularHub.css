@@ -80,15 +80,18 @@
 }
 
 @media (max-width: 766px) {
-    .hub-container {
+.hub-container {
         display: block;
-        padding: 8.5rem 1.25rem 2rem;
+        /* Adjusted padding: adds right padding to avoid the hub and shifts content left */
+        padding: 8.5rem 20px 4rem 4rem;
         min-height: 100vh;
         z-index: 99999;
     }
 
     .hub-circle-wrapper {
-        left: 0;
+        /* Move wrapper to the right */
+        left: auto;
+        right: 0;
         bottom: 0;
         width: 180px;
         height: min(56vh, 420px);
@@ -101,7 +104,9 @@
     }
 
     .hub-circle {
-        left: -140px;
+        /* Move circle to the right */
+        left: auto;
+        right: -140px;
         bottom: -140px;
         width: 280px;
         height: 280px;
