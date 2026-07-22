@@ -85,7 +85,7 @@ function Cover({
           className="cover-photo"
         />
         <motion.h1 className="cover-name" style={{ opacity: contentOpacity }}>
-          Yash
+          Yash Raut
         </motion.h1>
         <motion.p className="cover-role" style={{ opacity: contentOpacity }}>
           AI Engineer & Full-Stack Developer

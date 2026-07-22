@@ -80,7 +80,12 @@
 
 .notepad-base-page {
     position: absolute;
-    inset: 0;
+    top: 45px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(100% - 45px);
+
     z-index: 2;
     
 }
@@ -132,13 +137,14 @@
 /* Clean Navigation Bar */
 .mobile-nav {
     width: 100%;
-    max-width: 310px;
-    margin-top: 14px;
+    margin-top: 24px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    /* Pulls buttons inward */
+    gap: 1.5rem;
+    /* Creates exact, consistent spacing between items */
     align-items: center;
     box-sizing: border-box;
-    /* Keeps the nav space reserved even if hidden/transitioning */
     flex-shrink: 0;
 }
 
@@ -150,14 +156,19 @@
 
 .mobile-nav button {
     border: none;
-    background: white;
-    padding: 14px 22px;
+    background: #ffffff;
+    color: #2b2b2b;
+    /* Explicit dark text color for visibility */
+    font-weight: 600;
+    /* Makes the text bolder and easier to read */
+    padding: 12px 20px;
     border-radius: 10px;
     font-family: var(--font-book);
     font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
-    transition: transform 0.16s ease, box-shadow 0.16s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    /* Slightly stronger shadow to lift off background */
+    transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.2s ease;
 }
 
 .mobile-nav button:active:not(:disabled) {
@@ -165,17 +176,22 @@
 }
 
 .mobile-nav button:disabled {
-    opacity: .4;
+    opacity: 0.45;
+    /* Keeps disabled state clear but visible */
     cursor: not-allowed;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    /* Flattens the button when disabled */
 }
 
 .mobile-nav span {
     font-family: var(--font-book);
-    font-size: 1rem;
-    color: #555;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #333;
     text-align: center;
+    min-width: 45px;
+    /* Prevents layout jumping when page numbers change */
 }
-
 .closed-layer {
     position: absolute;
     inset: 0;

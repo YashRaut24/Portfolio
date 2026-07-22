@@ -1,6 +1,12 @@
 .notepad-flip {
     position: absolute;
-    inset: 0;
+
+    top: 45px !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: calc(100% - 45px) !important;
+
     touch-action: none;
     cursor: grab;
     perspective: 1400px;
@@ -12,12 +18,12 @@
     border-top-right-radius: 0;
     border-bottom-left-radius: 14px;
     border-bottom-right-radius: 14px;
-        
-
-    /* Change this from 34 to 60 */
     z-index: 80;
-
     overflow: visible !important;
+
+    /* ADD THESE LINES TO FIX TEXT BLURRINESS */
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
 }
 .notepad-flip:active {
     cursor: grabbing;
@@ -43,6 +49,11 @@
     inset: 0;
     backface-visibility: hidden !important;
     -webkit-backface-visibility: hidden !important;
+
+    /* CHANGE THIS FROM translateZ(0) TO FORCE CRISP TEXT RENDERING */
+    transform: translateZ(0.5px);
+    -webkit-transform: translateZ(0.5px);
+
     overflow: hidden;
     border-radius: 0;
     border-bottom-left-radius: 14px !important;
@@ -52,6 +63,9 @@
     -webkit-transform-style: preserve-3d !important;
     will-change: transform !important;
     clip-path: inset(0 round 0 0 14px 14px);
+
+    /* ADD TEXT SMOOTHING */
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .drag-handle-overlay {
@@ -59,7 +73,7 @@
     inset: 0;
     z-index: 999;
     background: transparent;
-    pointer-events: auto;
+    pointer-events: none;
     user-select: none !important;
     -webkit-user-select: none !important;
 }
@@ -83,6 +97,7 @@
 .notepad-flip-back {
     transform: rotateX(180deg) translateZ(1px);
     background: #f8f4e8;
+    
 }
 
 /* Paper Curl Shading Overlay */
@@ -105,11 +120,11 @@
 @media (max-width: 768px) {
     .notepad-flip {
         position: absolute;
-        top: 42px !important;
+        top: 45px !important;
         bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        height: calc(100% - 42px) !important;
+        height: calc(100% - 45px) !important;
 
         border-top-left-radius: 0 !important;
         border-top-right-radius: 0 !important;

@@ -5,7 +5,7 @@ import "./NotepadFlip.css";
 
 const DRAG_DISTANCE = 220;
 const COMMIT_RATIO = 0.35;
-const STRIP_HEIGHT = 30; 
+const STRIP_HEIGHT = 45;
 const STRIP_COLLAPSE_START = 125;
 
 const NotepadFlip = forwardRef(function NotepadFlip(
@@ -67,12 +67,6 @@ const NotepadFlip = forwardRef(function NotepadFlip(
     return unsubscribe;
   }, [rotateX]);
 
-  const delayedRotate = useTransform(
-    rotateX,
-    [0,15,180],
-    [0,0,180]
-);
-
   const stripProgress = useTransform(rotateX, [STRIP_COLLAPSE_START, 180], [0, 1], { clamp: true });
   const scaleY = useTransform(stripProgress, [0, 1], [1, stripScale]);
   
@@ -81,7 +75,6 @@ const NotepadFlip = forwardRef(function NotepadFlip(
   const perspectiveOriginY = useTransform(progress, [0, 0.5, 1], ["0%", "15%", "0%"]);
   const shadowOpacityCurve = useTransform(progress, [0, 0.15, 0.5, 0.85, 1], [0, 0.72, 1, 0.5, 0]);
   const shadowOpacity = useTransform(rotateX, [180, 90, 0], [0.1, 0.4, 0.1]);
-
   const resetIdle = () => {
     dragDirRef.current = null;
     setDirection(null);
@@ -89,32 +82,30 @@ const NotepadFlip = forwardRef(function NotepadFlip(
     setIsDragging(false);
   };
 
-  const commit = (dir, pixelVelocityY = 0) => {
+const commit = (dir, pixelVelocityY = 0) => {
     setIsAnimating(true);
-    // Negative pixel velocity (moving UP) maps to positive degree velocity
     const degreeVelocity = -(pixelVelocityY / DRAG_DISTANCE) * 180;
 
-    // Thin and soft paper physics
+    // Snappy, non-overshooting physics
     const springConfig = {
       type: "spring",
-      stiffness:60,
-      damping:18,
-      mass:0.8,
+      stiffness: 180,
+      damping: 26,
+      mass: 0.45,
       velocity: degreeVelocity,
-      restDelta: 0.001,
+      restDelta: 0.01, // Settles cleanly and immediately
     };
 
     if (dir === "next") {
-      animate(rotateX, 188, {
+      animate(rotateX, 180, {
         ...springConfig,
         onComplete: () => {
-          rotateX.set(180);
           onCommitNext && onCommitNext();
           rotateX.set(0);
           resetIdle();
         },
       });
-    }else {
+    } else {
       animate(rotateX, 0, {
         ...springConfig,
         onComplete: () => {
@@ -253,34 +244,30 @@ const NotepadFlip = forwardRef(function NotepadFlip(
 
   const frontLeafContent = direction === "prev" ? prevContent : currentContent;
   const backLeafContent = direction === "next" ? currentContent : prevContent;
-  const translateZ = useTransform(
-      rotateX,
-      [0, 20, 60, 120, 180],
-      [0, -12, -42, -18, 0]
-  );
-
-  const translateY = useTransform(
-      rotateX,
-      [0, 25, 90, 180],
-      [0, 10, 22, 0]
-  );
-  return (
+// Replace the old translateZ and translateY with these tighter values:
+const translateZ = useTransform(rotateX, [0, 20, 60, 120, 180], [0, -12, -42, -18, 0]);
+const translateY = useTransform(rotateX, [0, 25, 90, 180], [0, -11, 22, 0]);  // const translateY = useTransform(
+  //     rotateX,
+  //     [0, 25, 90, 180],
+  //     [0, 10, 22, 0]
+  // );
+return (
     <motion.div
       ref={flipRefElement}
       className={`notepad-flip ${
         isBehind ? "notepad-flip-behind" : "notepad-flip-front-layer"
       }`}
       style={{
-          rotateX: delayedRotate,
-          scaleY,
-          translateZ,
-          translateY,
-          perspectiveOriginY,
-          transformOrigin: "top center",
-          touchAction: "none",
-          "--shadow-opacity": shadowOpacity,
-          transformPerspective: 1400,
-          transformStyle: "preserve-3d",
+        rotateX: rotateX, // Direct rotation for instant responsiveness
+        scaleY,
+        translateZ,
+        translateY,
+        perspectiveOriginY,
+        transformOrigin: "top center",
+        touchAction: "none",
+        "--shadow-opacity": shadowOpacity,
+        transformPerspective: 1400,
+        transformStyle: "preserve-3d",
       }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}

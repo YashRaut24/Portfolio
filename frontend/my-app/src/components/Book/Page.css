@@ -13,6 +13,10 @@
     align-items: flex-start;
     justify-content: center;
     padding: 2rem 2.5rem;
+    -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        transform: translateZ(0);
 }
 .page::before {
     content: '';
@@ -543,6 +547,10 @@
             0 8px 20px rgba(0, 0, 0, .10);
         overflow-y: auto;
         box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            transform: translateZ(0);
     }
 
     /* notebook top binding */

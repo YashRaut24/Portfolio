@@ -119,10 +119,7 @@ export default function MobileNotepad() {
     );
   }
 
-  const baseContent =
-    previewDirection === "next" && hasNext
-      ? pages[pageIndex + 1]
-      : pages[pageIndex];
+  const baseContent = pages[pageIndex];
 
   return (
     <div className="mobile-notepad mobile-notepad-open">
@@ -130,7 +127,13 @@ export default function MobileNotepad() {
         <div className="notepad-stack">
           <div className="notepad-stack-sliver notepad-stack-sliver-2" />
           <div className="notepad-stack-sliver notepad-stack-sliver-1" />
-          <NotepadCover openStrip onOpen={handleCoverOpen} pageIndex={pageIndex} />
+          
+          <NotepadCover 
+            openStrip 
+            onOpen={handleCoverOpen} 
+            pageIndex={pageIndex} 
+          />
+
           <div className="notepad-base-page">
             <Page
               content={baseContent}
@@ -139,8 +142,6 @@ export default function MobileNotepad() {
               onUnlock={handleUnlock}
             />
           </div>
-
-
 
           <NotepadFlip
             ref={flipRef}
