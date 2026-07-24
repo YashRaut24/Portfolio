@@ -1,10 +1,19 @@
+/* HubRail.css */
+
 .hub-rail {
     position: fixed;
+    /* Changed from absolute */
     top: 50%;
-    right: 16px;
+    right: 24px;
+    /* Positioned to the right side */
+    left: auto;
+    /* Removes the previous left calculation */
+
     transform: translateY(-50%);
+
     width: 42px;
     height: 420px;
+
     pointer-events: none;
     z-index: 100;
 }
@@ -51,20 +60,28 @@
 
 .hub-rail-item:focus-visible {
     outline: none;
-
     color: var(--rail-accent);
-
-    box-shadow:
-        0 0 0 3px color-mix(in srgb, var(--rail-accent) 30%, transparent);
-
     border-radius: 50%;
 }
 
 @media (max-width:768px) {
     .hub-rail {
         display: block;
-        right: auto;
+        position: fixed;
         left: 8px;
-        z-index: 999999;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+
+@media (max-width: 1024px) {
+    .hub-rail {
+        display: block;
+        position: fixed;
+        left: 12px;
+        right: auto;
+        /* Force reset from desktop right position */
+        top: 50%;
+        transform: translateY(-50%);
     }
 }
