@@ -66,7 +66,10 @@
 
 .orbit-link {
     position: relative;
-
+touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
     width: 42px;
     height: 42px;
 
@@ -95,13 +98,10 @@
     overflow: visible;
 }
 
-.orbit-link:hover {
-    transform: scale(1.08);
-
-    border-color: var(--color-primary);
-
-    box-shadow:
-        0 0 18px color-mix(in srgb, var(--color-primary) 30%, transparent);
+.orbit-link:hover span,
+.orbit-link span.tooltip-visible {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
 }
 .orbit-link svg {
     width: 18px;
@@ -109,6 +109,7 @@
 }
 
 .orbit-link span {
+    display: block;
     position: absolute;
     right: calc(100% + 14px);
     top: 50%;
@@ -164,7 +165,19 @@
         opacity: 1;
     }
 }
+@media (max-width:768px) {
 
+    .orbit-link span {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .orbit-link span.tooltip-visible {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+
+}
 @media (max-width: 768px) {
     .orbit-menu {
         top: 1rem;
@@ -184,6 +197,6 @@
     }
 
     .orbit-link span {
-        display: none;
+        display: block;
     }
 }
