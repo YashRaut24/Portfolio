@@ -6,7 +6,7 @@ import { hubNodesData } from '../../data/hubNodes';
 import './CircularHub.css';
 import HubDoodles from './HubDoodles';
 import OrbitRing from './OrbitRing';
-import { playSound, SOUNDS, unlockAudio } from '../../utils/sound';
+import { playSound, SOUNDS, unlockAudio, preloadSounds } from '../../utils/sound'; // Added preloadSounds
 import { prefersReducedMotion } from '../../utils/motionPrefs';
 import HubRail from './HubRail';
 import AmbientWash from './AmbientWash';
@@ -59,7 +59,11 @@ function CircularHub({ starFieldRef }) {
   const [rotationOffset, setRotationOffset] = useState(ACTIVE_ARC_ANGLE);
   const [transitionDirection, setTransitionDirection] = useState(1);
 
-  // FIXED: Layout thresholds updated to 1024px to match CSS
+  // Preload sounds on mount so they are instantly ready for scrolling
+  useEffect(() => {
+    preloadSounds();
+  }, []);
+
   useEffect(() => {
     const updateLayout = () => {
       const width = window.innerWidth;
@@ -68,13 +72,13 @@ function CircularHub({ starFieldRef }) {
       
       if (isMobile) {
           setRadius(140);
-          setRotationOffset(-Math.PI * 0.75); // Top-Left for mobile
+          setRotationOffset(-Math.PI * 0.75); 
       } else if (isTablet) {
           setRadius(170);
-          setRotationOffset(-Math.PI * 0.75); // Top-Left for tablet
+          setRotationOffset(-Math.PI * 0.75); 
       } else {
           setRadius(270);
-          setRotationOffset(0); // Right for desktop
+          setRotationOffset(0); 
       }
     };
 
@@ -171,7 +175,8 @@ function CircularHub({ starFieldRef }) {
 
     if (wrapped === activeIndex) return;
 
-    playSound(SOUNDS.hubTransition, 0.18);
+    // Increased volume from 0.18 to 0.4 to prevent it being inaudible on rapid scroll
+    playSound(SOUNDS.hubTransition, 0.4);
 
     if (direction !== null) {
       setTransitionDirection(direction);
@@ -197,9 +202,10 @@ function CircularHub({ starFieldRef }) {
     setTimeout(() => { isAnimating.current = false; }, STEP_ANIM_MS);
   };
 
-  // FIXED: Keyboard navigation updated for 1024px breakpoint
   useEffect(() => {
     const handleKeyDown = (event) => {
+      unlockAudio(); // Kept here: Keydown is a valid gesture for browser audio unlock
+      
       const tag = document.activeElement?.tagName;
       const isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable;
       if (isTyping) return;
@@ -216,12 +222,14 @@ function CircularHub({ starFieldRef }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeIndex]);
 
-  // FIXED: Scroll navigation updated for 1024px breakpoint
   useEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
 
     const handleWheelNative = (event) => {
+      // Removed unlockAudio() from here because 'wheel' events cannot unlock audio
+      // and can throw errors in strict browser environments, silently breaking the scroll.
+      
       if (event.cancelable) event.preventDefault();
       if (isAnimating.current) return;
 
@@ -244,14 +252,13 @@ function CircularHub({ starFieldRef }) {
   }, [activeIndex]);
 
  const handlePointerDown = (event) => {
-    unlockAudio();
+    unlockAudio(); // Kept here: Clicks and touches are valid gestures for browser audio unlock
     clearInertia();
     isDragging.current = true;
     dragStartY.current = event.clientY;
     pointerHistory.current = [{ y: event.clientY, t: performance.now() }];
   };
 
-  // FIXED: Swipe navigation updated for 1024px breakpoint
   const handlePointerMove = (event) => {
     if (!isDragging.current || isAnimating.current) return;
     const deltaY = event.clientY - dragStartY.current;
@@ -288,7 +295,6 @@ function CircularHub({ starFieldRef }) {
     return (last.y - ref.y) / dt; 
   };
 
-  // FIXED: Inertia flick direction updated for 1024px breakpoint
   const handlePointerUp = () => {
     if (!isDragging.current) return;
     isDragging.current = false;
@@ -330,6 +336,7 @@ function CircularHub({ starFieldRef }) {
     }, cumulativeDelay + STEP_ANIM_MS);
     inertiaTimeouts.current.push(stopCoastingId);
   };
+  
 
   return (
     <motion.div
