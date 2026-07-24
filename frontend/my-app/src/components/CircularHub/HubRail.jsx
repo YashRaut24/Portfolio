@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import './HubRail.css';
 
@@ -7,8 +8,100 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
     const total = nodes.length;
     const shouldReduceMotion = useReducedMotion();
 
+    const scrollAccum = useRef(0);
+    const dragStartY = useRef(0);
+    const isDragging = useRef(false);
+
+    // Helper to calculate the next index circularly
+    const advance = (step) => {
+        let nextIndex = activeIndex + step;
+        if (nextIndex >= total) nextIndex = 0;
+        if (nextIndex < 0) nextIndex = total - 1;
+        onSelect(nextIndex);
+    };
+
+    const handleWheel = (e) => {
+        scrollAccum.current += e.deltaY;
+        if (scrollAccum.current > 60) {
+            advance(-1); // Scrolling down moves the rail down
+            scrollAccum.current = 0;
+        } else if (scrollAccum.current < -60) {
+            advance(1); // Scrolling up moves the rail up
+            scrollAccum.current = 0;
+        }
+    };
+
+    // --- MOBILE TOUCH EVENTS (Guarantees smooth mobile swiping) ---
+    const handleTouchStart = (e) => {
+        isDragging.current = true;
+        dragStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+        if (!isDragging.current) return;
+        const deltaY = e.touches[0].clientY - dragStartY.current;
+        
+        // Slightly more sensitive threshold (40) for mobile screens
+        if (deltaY > 40) {
+            advance(-1); // Swipe down
+            dragStartY.current = e.touches[0].clientY;
+        } else if (deltaY < -40) {
+            advance(1);  // Swipe up
+            dragStartY.current = e.touches[0].clientY;
+        }
+    };
+
+    const handleTouchEnd = () => {
+        isDragging.current = false;
+    };
+
+    // --- DESKTOP MOUSE DRAG EVENTS ---
+    const handlePointerDown = (e) => {
+        if (e.pointerType === 'touch') return; // Let touch events handle mobile
+        isDragging.current = true;
+        dragStartY.current = e.clientY;
+        
+        // currentTarget ensures we capture on the container, not the inner SVG
+        if (e.currentTarget.setPointerCapture) {
+            e.currentTarget.setPointerCapture(e.pointerId);
+        }
+    };
+
+    const handlePointerMove = (e) => {
+        if (!isDragging.current || e.pointerType === 'touch') return;
+        const deltaY = e.clientY - dragStartY.current;
+        
+        if (deltaY > 40) {
+            advance(-1);
+            dragStartY.current = e.clientY;
+        } else if (deltaY < -40) {
+            advance(1); 
+            dragStartY.current = e.clientY;
+        }
+    };
+
+    const handlePointerUp = (e) => {
+        if (e.pointerType === 'touch') return;
+        isDragging.current = false;
+        
+        if (e.currentTarget.hasPointerCapture && e.currentTarget.hasPointerCapture(e.pointerId)) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+        }
+    };
+
     return (
-        <div className="hub-rail">
+        <div 
+            className="hub-rail"
+            onWheel={handleWheel}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+        >
             {nodes.map((node, index) => {
                 const Icon = node.icon;
 
