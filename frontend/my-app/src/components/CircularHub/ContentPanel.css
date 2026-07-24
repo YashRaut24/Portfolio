@@ -2,23 +2,32 @@
     flex: 1;
     padding: 2.5rem;
 
-    /* 1. A completely solid dark background (matches your dark nodes) */
-    background-color: #0f1117;
-
-    /* 2. A crisp, solid border tinted slightly by the active node's color */
-    border: 1px solid color-mix(in srgb, var(--panel-accent, var(--color-primary)) 30%, transparent);
-
+    /* Transparent background, no border, no shadow */
+    background-color: transparent;
     border-radius: 8px;
     min-height: 560px;
+    /* background-color: #0f1117; */
+    /* border: 1px solid color-mix(in srgb, var(--panel-accent, var(--color-primary)) 30%, transparent); */
+    /* box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.6),
+        0 4px 10px rgba(0, 0, 0, 0.4); */
+    /* Restricts the panel's height and enables internal scrolling */
+    max-height: 75vh;
+    overflow-y: auto;
 
-    /* 3. A deep, heavy drop shadow to lift the solid panel off the starfield */
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.6),
-        0 4px 10px rgba(0, 0, 0, 0.4);
+    /* HIDE SCROLLBAR (Firefox & Edge) */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 
     /* Smoothly transitions the border color when you click different nodes */
     transition: border-color 0.3s ease;
 }
+
+/* HIDE SCROLLBAR (Chrome, Safari, Opera) */
+.content-panel::-webkit-scrollbar {
+    display: none;
+}
+
 .content-panel-title {
     font-family: var(--font-hub);
     font-weight: 700;
@@ -37,12 +46,14 @@
     background-color: var(--panel-accent, var(--color-primary));
     flex-shrink: 0;
 }
+
 .content-panel-placeholder {
     font-family: var(--font-hub);
     font-weight: 400;
     font-size: 1rem;
     color: var(--color-text-secondary);
 }
+
 .content-panel-title-icon {
     width: 28px;
     height: 28px;
@@ -56,11 +67,11 @@
     height: 100%;
 }
 
-
 @media (max-width: 1024px) {
     .content-panel {
         padding: 2rem;
         min-height: 50vh;
+        max-height: 60vh;
     }
 
     .content-panel-title {
@@ -72,6 +83,7 @@
     .content-panel {
         padding: 1.2rem;
         min-height: 55vh;
+        max-height: 65vh;
     }
 
     .content-panel-title {
