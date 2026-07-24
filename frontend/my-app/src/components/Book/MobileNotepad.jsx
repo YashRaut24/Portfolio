@@ -1,9 +1,10 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NotepadCover from "./NotepadCover";
 import Page from "./Page";
 import NotepadFlip from "./NotepadFlip";
 import { bookSpreads, hiddenSpread } from "../../data/bookSpreads";
+import { playSound, preloadSounds, SOUNDS } from "../../utils/sound"; // Imported sound utilities
 import "./MobileNotepad.css";
 
 export default function MobileNotepad() {
@@ -15,6 +16,11 @@ export default function MobileNotepad() {
   const [coverMoving, setCoverMoving] = useState(false);
 
   const flipRef = useRef(null);
+
+  // Preload sounds when the mobile component mounts to prevent latency
+  useEffect(() => {
+    preloadSounds();
+  }, []);
 
   const spreads = useMemo(
     () => (secretUnlocked ? [...bookSpreads, hiddenSpread] : bookSpreads),
@@ -49,8 +55,17 @@ export default function MobileNotepad() {
   const hasNext = pageIndex < pages.length - 1;
   const hasPrev = pageIndex > 0;
 
-  const handlePreviewNext = useCallback(() => setPreviewDirection("next"), []);
-  const handlePreviewPrev = useCallback(() => setPreviewDirection("prev"), []);
+  // Added sound to swipe gestures
+  const handlePreviewNext = useCallback(() => {
+    setPreviewDirection("next");
+    playSound(SOUNDS.pageFlip, 0.4);
+  }, []);
+
+  const handlePreviewPrev = useCallback(() => {
+    setPreviewDirection("prev");
+    playSound(SOUNDS.pageFlip, 0.4);
+  }, []);
+
   const handlePreviewCancel = useCallback(() => setPreviewDirection(null), []);
 
   const handleCommitNext = useCallback(() => {
@@ -63,11 +78,14 @@ export default function MobileNotepad() {
     setPreviewDirection(null);
   }, []);
 
+  // Added sound to button clicks
   const handleNextClick = useCallback(() => {
+    playSound(SOUNDS.pageFlip, 0.4);
     flipRef.current?.triggerNext();
   }, []);
 
   const handlePrevClick = useCallback(() => {
+    playSound(SOUNDS.pageFlip, 0.4);
     flipRef.current?.triggerPrev();
   }, []);
 
@@ -109,7 +127,10 @@ export default function MobileNotepad() {
 
             <NotepadCover
               onOpen={handleCoverOpen}
-              onMotionStart={() => setCoverMoving(true)}
+              onMotionStart={() => {
+                setCoverMoving(true);
+                playSound(SOUNDS.coverOpen, 0.6, 1.45); // Added cover sound here
+              }}
               onMotionEnd={() => setCoverMoving(false)}
               pageIndex={pageIndex}
             />
