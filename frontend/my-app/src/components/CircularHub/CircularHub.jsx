@@ -15,12 +15,12 @@ const ACTIVE_ARC_ANGLE = -Math.PI / 4;
 const LAB_UNLOCK_TIME = 3600;
 
 // Inertia tuning
-const INERTIA_MIN_VELOCITY = 0.35;       // px/ms — below this, no coast
-const INERTIA_MAX_STEPS = 4;             // hard cap on extra nodes per flick
-const INERTIA_STEP_DELAYS = [380, 470, 580, 720]; // ms between successive coasted steps (deceleration)
-const VELOCITY_SAMPLE_WINDOW = 100;      // ms — how far back we look for velocity calc
-const STEP_ANIM_MS = 350;                // matches advance()'s own isAnimating window
-const TRAIL_FADE_MS = 500;               // how long a trailing highlight lingers on a passed node
+const INERTIA_MIN_VELOCITY = 0.35;       
+const INERTIA_MAX_STEPS = 4;             
+const INERTIA_STEP_DELAYS = [380, 470, 580, 720]; 
+const VELOCITY_SAMPLE_WINDOW = 100;      
+const STEP_ANIM_MS = 350;                
+const TRAIL_FADE_MS = 500;               
 
 function CircularHub({ starFieldRef }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -31,12 +31,10 @@ function CircularHub({ starFieldRef }) {
   const isDragging = useRef(false);
   const wrapperRef = useRef(null);
 
-  // Velocity tracking + coast scheduling
   const pointerHistory = useRef([]);
   const inertiaTimeouts = useRef([]);
   const isCoastingRef = useRef(false);
 
-  // Trailing highlight tracking
   const [trailingSet, setTrailingSet] = useState(new Set());
   const trailTimeouts = useRef(new Map());
   const prevActiveIndexRef = useRef(activeIndex);
@@ -61,13 +59,23 @@ function CircularHub({ starFieldRef }) {
   const [rotationOffset, setRotationOffset] = useState(ACTIVE_ARC_ANGLE);
   const [transitionDirection, setTransitionDirection] = useState(1);
 
+  // FIXED: Layout thresholds updated to 1024px to match CSS
   useEffect(() => {
     const updateLayout = () => {
-      const isMobile = window.innerWidth <= 768;
-      setRadius(isMobile ? 140 : 270);
+      const width = window.innerWidth;
+      const isTablet = width <= 1024 && width > 768;
+      const isMobile = width <= 768;
       
-      // Desktop: 0 (Right). Mobile: Top-Left (-135 degrees / -0.75 PI)
-      setRotationOffset(isMobile ? -Math.PI * 0.75 : 0);
+      if (isMobile) {
+          setRadius(140);
+          setRotationOffset(-Math.PI * 0.75); // Top-Left for mobile
+      } else if (isTablet) {
+          setRadius(170);
+          setRotationOffset(-Math.PI * 0.75); // Top-Left for tablet
+      } else {
+          setRadius(270);
+          setRotationOffset(0); // Right for desktop
+      }
     };
 
     updateLayout();
@@ -75,7 +83,6 @@ function CircularHub({ starFieldRef }) {
     return () => window.removeEventListener('resize', updateLayout);
   }, []);
 
-  // Cleanup any pending coast / trail timers on unmount
   useEffect(() => {
     return () => {
       clearInertia();
@@ -111,14 +118,12 @@ function CircularHub({ starFieldRef }) {
     trailTimeouts.current.set(index, timeoutId);
   };
 
-  // Whenever activeIndex changes mid-coast, leave a fading highlight on the node we just left
   useEffect(() => {
     const prev = prevActiveIndexRef.current;
     if (isCoastingRef.current && prev !== activeIndex) {
       addTrail(prev);
     }
     prevActiveIndexRef.current = activeIndex;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
 
   const trackChallenge = (from, to, direction) => {
@@ -192,29 +197,26 @@ function CircularHub({ starFieldRef }) {
     setTimeout(() => { isAnimating.current = false; }, STEP_ANIM_MS);
   };
 
+  // FIXED: Keyboard navigation updated for 1024px breakpoint
   useEffect(() => {
     const handleKeyDown = (event) => {
       const tag = document.activeElement?.tagName;
       const isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable;
       if (isTyping) return;
 
-      // Arrow keys follow the same convention as scroll/drag:
-      // "down" gestures advance(-1), "up" gestures advance(1)
-if (event.key === 'ArrowDown') {
+      if (event.key === 'ArrowDown') {
         event.preventDefault();
-        // Down arrow: advance(1) on mobile, advance(-1) on desktop
-        advance(window.innerWidth <= 768 ? 1 : -1);
+        advance(window.innerWidth <= 1024 ? 1 : -1);
       } else if (event.key === 'ArrowUp') {
         event.preventDefault();
-        // Up arrow: advance(-1) on mobile, advance(1) on desktop
-        advance(window.innerWidth <= 768 ? -1 : 1);
+        advance(window.innerWidth <= 1024 ? -1 : 1);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
 
+  // FIXED: Scroll navigation updated for 1024px breakpoint
   useEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
@@ -223,24 +225,22 @@ if (event.key === 'ArrowDown') {
       if (event.cancelable) event.preventDefault();
       if (isAnimating.current) return;
 
-      // Wheel input cancels any pending drag-coast
       clearInertia();
 
       scrollAccum.current += event.deltaY;
       const threshold = 60;
 
-if (scrollAccum.current > threshold) {
-        advance(window.innerWidth <= 768 ? 1 : -1);
+      if (scrollAccum.current > threshold) {
+        advance(window.innerWidth <= 1024 ? 1 : -1);
         scrollAccum.current = 0;
       } else if (scrollAccum.current < -threshold) {
-        advance(window.innerWidth <= 768 ? -1 : 1);
+        advance(window.innerWidth <= 1024 ? -1 : 1);
         scrollAccum.current = 0;
       }
     };
 
     el.addEventListener('wheel', handleWheelNative, { passive: false });
     return () => el.removeEventListener('wheel', handleWheelNative);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
 
  const handlePointerDown = (event) => {
@@ -251,25 +251,24 @@ if (scrollAccum.current > threshold) {
     pointerHistory.current = [{ y: event.clientY, t: performance.now() }];
   };
 
+  // FIXED: Swipe navigation updated for 1024px breakpoint
   const handlePointerMove = (event) => {
     if (!isDragging.current || isAnimating.current) return;
     const deltaY = event.clientY - dragStartY.current;
     const threshold = 50;
 
-    // Keep a short rolling history for velocity calc on release
     pointerHistory.current.push({ y: event.clientY, t: performance.now() });
     if (pointerHistory.current.length > 6) pointerHistory.current.shift();
 
-if (deltaY > threshold) {
-      advance(window.innerWidth <= 768 ? 1 : -1);
+    if (deltaY > threshold) {
+      advance(window.innerWidth <= 1024 ? 1 : -1);
       dragStartY.current = event.clientY;
     } else if (deltaY < -threshold) {
-      advance(window.innerWidth <= 768 ? -1 : 1);
+      advance(window.innerWidth <= 1024 ? -1 : 1);
       dragStartY.current = event.clientY;
     }
   };
 
-  // Estimate release velocity (px/ms) from recent samples
   const getFlickVelocity = () => {
     const history = pointerHistory.current;
     if (history.length < 2) return 0;
@@ -286,9 +285,10 @@ if (deltaY > threshold) {
 
     const dt = last.t - ref.t;
     if (dt <= 0) return 0;
-    return (last.y - ref.y) / dt; // positive = finger moved down
+    return (last.y - ref.y) / dt; 
   };
 
+  // FIXED: Inertia flick direction updated for 1024px breakpoint
   const handlePointerUp = () => {
     if (!isDragging.current) return;
     isDragging.current = false;
@@ -303,12 +303,11 @@ if (deltaY > threshold) {
 
     if (Math.abs(velocity) < INERTIA_MIN_VELOCITY) return;
 
-    // dragging down (positive velocity) matches the existing "deltaY > threshold -> advance(-1)" convention
-   // Downward flick (positive velocity) is 1 on mobile, -1 on desktop
-    const isMobile = window.innerWidth <= 768;
+    const isMobileOrTablet = window.innerWidth <= 1024;
     const direction = velocity > 0 
-      ? (isMobile ? 1 : -1) 
-      : (isMobile ? -1 : 1);
+      ? (isMobileOrTablet ? 1 : -1) 
+      : (isMobileOrTablet ? -1 : 1);
+      
     const steps = Math.min(
       INERTIA_MAX_STEPS,
       Math.round(Math.abs(velocity) / INERTIA_MIN_VELOCITY)
@@ -326,7 +325,6 @@ if (deltaY > threshold) {
       inertiaTimeouts.current.push(timeoutId);
     }
 
-    // Turn off "coasting" state a beat after the last scheduled step finishes animating
     const stopCoastingId = setTimeout(() => {
       isCoastingRef.current = false;
     }, cumulativeDelay + STEP_ANIM_MS);
@@ -379,13 +377,14 @@ if (deltaY > threshold) {
             );
           })}
         </div>
-          <HubRail
+
+      </div>
+            <HubRail
               nodes={visibleNodes}
               activeIndex={activeIndex}
               direction={transitionDirection}
               onSelect={goToIndex}
           />
-      </div>
         <AnimatePresence mode="wait" custom={transitionDirection}>
           <motion.div
             key={activeNode.id}
