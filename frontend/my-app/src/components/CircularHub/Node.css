@@ -1,4 +1,4 @@
-:root[data-theme="dark"] {
+:root {
     --node-bg: #0f1117;
     --node-border: rgba(255, 255, 255, .08);
     --node-shadow:
@@ -6,33 +6,6 @@
         0 0 14px rgba(0, 0, 0, .45);
 
     --active-node-bg: #0f1117;
-}
-
-:root[data-theme="light"] {
-    --node-bg: #ffffff;
-    --node-border: #d6e0f2;
-
-    --node-shadow:
-        0 8px 22px rgba(72, 94, 144, .12);
-
-    --active-node-bg: #ffffff;
-}
-
-:root[data-theme="light"] .hub-node:not(.hub-node-active) {
-    background: #f7f9fd;
-
-    border-color: #d8e2f2;
-
-    box-shadow:
-        0 6px 18px rgba(90, 110, 150, .10);
-
-    color: #2f3b55;
-}
-
-:root[data-theme="light"] .hub-node:hover {
-    box-shadow:
-        0 0 16px color-mix(in srgb, var(--node-accent) 30%, transparent),
-        0 8px 22px rgba(90, 110, 150, .15);
 }
 
 .hub-node {
