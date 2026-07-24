@@ -43,6 +43,7 @@ export default function OrbitMenu({ onExit }) {
     const [isHovered, setIsHovered] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [activeTooltip, setActiveTooltip] = useState(null);
+    
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth <= 768);
         checkMobile(); // Check on initial load
@@ -53,68 +54,69 @@ export default function OrbitMenu({ onExit }) {
     const open = isPinned || isHovered;
     const closeTimeoutRef = useRef(null);
     const scale = isMobile ? 0.8 : 1;
-const items = [
-    {
-      label: "Resume",
-      icon: <ResumeIcon />,
-      action: () => window.location.href = "/assets/resume.pdf",
-      x: -115 * scale, // Applied scale
-      y: 0 * scale,    // Applied scale
-    },
-    {
-      label: "GitHub",
-      icon: <GithubIcon />,
-      action: () => window.open("https://github.com/yourusername", "_blank"),
-      x: -95 * scale,  // Applied scale
-      y: 55 * scale,   // Applied scale
-    },
-    {
-      label: "LinkedIn",
-      icon: <LinkedinIcon />,
-      action: () => window.open("https://linkedin.com/in/yourusername", "_blank"),
-      x: -55 * scale,  // Applied scale
-      y: 95 * scale,   // Applied scale
-    },
-    {
-    label: "Exit Orbit",
-    action: onExit,
-    icon: <LogOut size={18} />,
-    x: 0 * scale,
-    y: 115 * scale,
-  },
-  ];
+    
+    const items = [
+      {
+        label: "Resume",
+        icon: <ResumeIcon />,
+        action: () => window.location.href = "/assets/resume.pdf",
+        x: -115 * scale, 
+        y: 0 * scale,    
+      },
+      {
+        label: "GitHub",
+        icon: <GithubIcon />,
+        action: () => window.open("https://github.com/yourusername", "_blank"),
+        x: -95 * scale,  
+        y: 55 * scale,   
+      },
+      {
+        label: "LinkedIn",
+        icon: <LinkedinIcon />,
+        action: () => window.open("https://linkedin.com/in/yourusername", "_blank"),
+        x: -55 * scale,  
+        y: 95 * scale,   
+      },
+      {
+        label: "Exit Orbit",
+        action: onExit,
+        icon: <LogOut size={18} />,
+        x: 0 * scale,
+        y: 115 * scale,
+      },
+    ];
 
- const handleMenuMouseEnter = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-    setIsHovered(true);
-  };
+    const handleMenuMouseEnter = () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = null;
+      }
+      setIsHovered(true);
+    };
 
-  const handleMenuMouseLeave = () => {
-    if (isPinned) return;
-    closeTimeoutRef.current = setTimeout(() => {
-      setIsHovered(false);
-    }, 200);
-  };
+    const handleMenuMouseLeave = () => {
+      if (isPinned) return;
+      closeTimeoutRef.current = setTimeout(() => {
+        setIsHovered(false);
+      }, 200);
+    };
 
-const handleMobileAction = (e, item) => {
-  if (!isMobile) return;
+    const handleMobileAction = (e, item) => {
+      if (!isMobile) return;
 
-  if (activeTooltip !== item.label) {
-    e.preventDefault();
-    setActiveTooltip(item.label);
+      if (activeTooltip !== item.label) {
+        e.preventDefault();
+        setActiveTooltip(item.label);
 
-    setTimeout(() => {
+        setTimeout(() => {
+          setActiveTooltip(null);
+        }, 1800);
+
+        return;
+      }
       setActiveTooltip(null);
-    }, 1800);
+    };
 
-    return;
-  }
-
-  setActiveTooltip(null);
-};
   return (
     <div
         className="orbit-menu"
@@ -155,82 +157,29 @@ const handleMobileAction = (e, item) => {
             <motion.div
               key={item.label}
               className="orbit-item"
-              initial={{
-                opacity: 0,
-                scale: 0.5,
-                x: 0,
-                y: 0,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                x: item.x,
-                y: item.y,
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0.5,
-                x: 0,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.35,
-                delay: index * 0.05,
-              }}
+              initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+              animate={{ opacity: 1, scale: 1, x: item.x, y: item.y }}
+              exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+              transition={{ duration: 0.35, delay: index * 0.05 }}
             >
-              {item.href ? (
-<button
-    className="orbit-link"
-    onPointerDown={() => {
-        if (isMobile) {
-            setActiveTooltip(item.label);
-        }
-    }}
-    onPointerUp={() => {
-        if (isMobile) {
-            setActiveTooltip(null);
-        }
-
-        item.action?.();
-    }}
-    onPointerLeave={() => setActiveTooltip(null)}
-    onPointerCancel={() => setActiveTooltip(null)}
->
-    {item.icon}
-
-    <span
-        className={
-            activeTooltip === item.label
-                ? "tooltip-visible"
-                : ""
-        }
-    >
-        {item.label}
-    </span>
-</button>
-              ) : (
-                <button
-                    className="orbit-link"
-                    onClick={(e) => {
-                        handleMobileAction(e, item);
-                        if (activeTooltip === item.label) {
-                            item.onClick?.();
-                        }
-                    }}
-                  onClick={item.onClick}
-                >
-                  {item.icon}
-                  <span
-                    className={
-                      activeTooltip === item.label
-                        ? "tooltip-visible"
-                        : ""
-                    }
-                  >
-                    {item.label}
-                  </span>
-                </button>
-              )}
+              <button
+                  className="orbit-link"
+                  onClick={(e) => {
+                      handleMobileAction(e, item);
+                      // On Desktop: Fire immediately. 
+                      // On Mobile: Only fire if they tap the already-active tooltip.
+                      if (!isMobile || activeTooltip === item.label) {
+                          item.action?.(); // Now correctly calls item.action()!
+                      }
+                  }}
+                  onPointerLeave={() => setActiveTooltip(null)}
+                  onPointerCancel={() => setActiveTooltip(null)}
+              >
+                {item.icon}
+                <span className={activeTooltip === item.label ? "tooltip-visible" : ""}>
+                  {item.label}
+                </span>
+              </button>
             </motion.div>
           ))}
       </AnimatePresence>
