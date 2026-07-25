@@ -236,6 +236,11 @@ transformTemplate={({ rotateX, scaleY, z }) => {
             justifyContent: "center",
           }}
         >
+          <img
+            src="/assets/images/YashPhoto_.jpg"
+            alt="Profile"
+            className="notepad-cover-photo"
+          />
           <h1 className="notepad-cover-name">Yash</h1>
           <p className="notepad-cover-role">
             AI Engineer & Full-Stack Developer
