@@ -67,7 +67,7 @@ function Cover({ onOpen, onOpenStart }) {
     >
       <div className="cover-face cover-face-front">
         <motion.img
-          src="/assets/images/profile.jpg"
+          src="/assets/images/YashPhoto_.jpg"
           style={{ opacity: contentOpacity }}
           alt="Profile"
           className="cover-photo"
