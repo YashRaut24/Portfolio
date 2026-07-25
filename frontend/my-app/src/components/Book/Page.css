@@ -14,10 +14,11 @@
     justify-content: center;
     padding: 2rem 2.5rem;
     -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-        transform: translateZ(0);
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transform: translateZ(0);
 }
+
 .page::before {
     content: '';
     position: absolute;
@@ -289,6 +290,7 @@
     color: var(--book-text);
     margin-bottom: 1rem;
 }
+
 .page-easter-egg {
     position: absolute;
     bottom: 1.2rem;
@@ -304,6 +306,7 @@
 .page:hover .page-easter-egg {
     opacity: 0.18;
 }
+
 .page-blank {
     background-color: var(--book-bg-secondary);
 }
@@ -362,6 +365,7 @@
     opacity: 0.9;
     white-space: nowrap;
 }
+
 .page-annotation {
     position: absolute;
     max-width: 140px;
@@ -401,6 +405,7 @@
     opacity: 0.5;
     transform: rotate(-15deg);
 }
+
 .page-quote-highlight {
     background-image: linear-gradient(120deg, #fff59d 0%, #ffe98a 100%);
     background-repeat: no-repeat;
@@ -433,41 +438,93 @@
     animation: title-pencil-move 1.1s steps(24) forwards;
 }
 
+/* ---------------------------------- */
+/* Footer page number (front & back)  */
+/* ---------------------------------- */
+
+.page-number {
+    position: absolute;
+    bottom: 1rem;
+    font-family: 'Kalam', cursive;
+    font-weight: 400;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    color: var(--book-text-secondary);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.page-number-left {
+    left: 1.7rem;
+}
+
+.page-number-right {
+    right: 1.7rem;
+}
+
+/* -------------------------------------------- */
+/* Table of contents entries + microinteraction */
+/* -------------------------------------------- */
+
 .page-toc-list {
     list-style: none;
     width: 100%;
 }
 
 .page-toc-item {
+    position: relative;
     font-family: var(--font-book);
     font-size: 1.1rem;
     color: var(--book-text-secondary);
     line-height: 34px;
+    height: 34px;
     cursor: pointer;
     background: none;
     border: none;
-    padding: 0;
+    padding: 0 0.45rem;
+    margin: 0 -0.45rem;
     text-align: left;
     display: flex;
-    align-items: baseline;
+    align-items: flex-end;
     gap: 0.5rem;
-    width: 100%;
+    width: calc(100% + 0.9rem);
+}
+
+.page-toc-label,
+.page-toc-dots,
+.page-toc-pagenum {
+    position: relative;
+    z-index: 1;
+}
+
+.page-toc-label {
     transition: color 0.2s ease;
 }
 
-.page-toc-item:hover {
-    color: var(--color-accent);
-}
-
-.page-toc-item:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+.page-toc-item:hover .page-toc-label,
+.page-toc-item:focus-visible .page-toc-label {
+    color: #C4823D;
 }
 
 .page-toc-dots {
     flex: 1;
     border-bottom: 1px dotted var(--book-border);
     height: 0.7em;
+}
+
+.page-toc-pagenum {
+    font-family: 'Kalam', cursive;
+    font-size: 0.95rem;
+    min-width: 1.7em;
+    text-align: right;
+    color: var(--book-text-secondary);
+    opacity: 0.75;
+    flex-shrink: 0;
+}
+
+.page-toc-item:focus-visible {
+    outline: 2px solid var(--book-text-secondary);
+    outline-offset: 2px;
 }
 
 .page-type-placeholder {
@@ -478,6 +535,7 @@
     pointer-events: auto;
     cursor: pointer;
 }
+
 @keyframes title-write {
     from {
         clip-path: inset(0 100% 0 0);
@@ -533,7 +591,7 @@
 }
 
 @media (max-width: 768px) {
-.page {
+    .page {
         justify-content: flex-start;
         align-items: flex-start;
         width: 100%;
@@ -548,13 +606,13 @@
         overflow-y: auto;
         box-sizing: border-box;
         -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-            transform: translateZ(0);
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        transform: translateZ(0);
     }
 
     /* notebook top binding */
-        /* .page::after {
+    /* .page::after {
             content: "";
             position: absolute;
             left: 0;
@@ -573,7 +631,7 @@
         }
 
     /* ruled paper */
- /* .page::before {
+    /* .page::before {
      left: 0;
      right: 0;
      top: 28px;
@@ -625,6 +683,23 @@
     .page-toc-item {
         font-size: 1rem;
         line-height: 2.1rem;
+    }
+
+    .page-toc-pagenum {
+        font-size: .85rem;
+    }
+
+    .page-number {
+        font-size: .78rem;
+        bottom: .8rem;
+    }
+
+    .page-number-left {
+        left: 1.2rem;
+    }
+
+    .page-number-right {
+        right: 1.2rem;
     }
 
     .page-annotation {

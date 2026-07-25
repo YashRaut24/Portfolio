@@ -1,7 +1,7 @@
 import './Page.css';
 import { useState } from 'react';
 
-function Page({ content, onExplore, onNavigate, onUnlock }) {
+function Page({ content, onExplore, onNavigate, onUnlock, pageSide }) {
   const [burst, setBurst] = useState(false);
   const [eggClicks, setEggClicks] = useState(0);
 
@@ -31,6 +31,19 @@ function Page({ content, onExplore, onNavigate, onUnlock }) {
       </span>
     );
 
+  // Physical page number shown in the footer of every numbered page (front and back faces alike).
+  // Left-hand pages get it in the bottom-left corner, right-hand pages bottom-right —
+  // matching how page numbers sit in a real book. Defaults to the right corner
+  // when no side is known (e.g. the single-column mobile notepad view).
+  const pageNumberEl = content.pageNumber ? (
+    <span
+      className={`page-number ${pageSide === 'left' ? 'page-number-left' : 'page-number-right'}`}
+      aria-hidden="true"
+    >
+      {String(content.pageNumber).padStart(2, '0')}
+    </span>
+  ) : null;
+
   if (content.type === 'blank') {
     return <div className="page page-blank" />;
   }
@@ -44,7 +57,11 @@ function Page({ content, onExplore, onNavigate, onUnlock }) {
   }
 
   if (content.type === 'placeholder') {
-      return <div className="page page-type-placeholder" />;
+      return (
+        <div className="page page-type-placeholder">
+          {pageNumberEl}
+        </div>
+      );
   }
 
   if (content.type === 'cover-face') {
@@ -75,6 +92,7 @@ function Page({ content, onExplore, onNavigate, onUnlock }) {
             <path d="M20 8C14 8 10 13 10 19C10 23 12 26 14 29V33H26V29C28 26 30 23 30 19C30 13 26 8 20 8Z" stroke="currentColor" strokeWidth="1.2" />
             <path d="M14 35H26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
           </svg>
+          {pageNumberEl}
         </div>
       );
   }
@@ -97,6 +115,7 @@ function Page({ content, onExplore, onNavigate, onUnlock }) {
               <li key={index} className="page-keyword">{item}</li>
             ))}
           </ul>
+          {pageNumberEl}
         </div>
       );
   }
@@ -112,12 +131,18 @@ function Page({ content, onExplore, onNavigate, onUnlock }) {
                   className="page-toc-item"
                   onClick={() => onNavigate && onNavigate(entry.spreadIndex)}
                 >
-                  <span>{entry.label}</span>
+                  <span className="page-toc-label">{entry.label}</span>
                   <span className="page-toc-dots" aria-hidden="true" />
+                  {entry.pageNumber && (
+                    <span className="page-toc-pagenum">
+                      {String(entry.pageNumber).padStart(2, '0')}
+                    </span>
+                  )}
                 </button>
               </li>
             ))}
           </ul>
+          {pageNumberEl}
         </div>
       );
   }
@@ -137,6 +162,7 @@ function Page({ content, onExplore, onNavigate, onUnlock }) {
               </span>
             )}
           </div>
+          {pageNumberEl}
         </div>
       );
     }
