@@ -4,20 +4,22 @@ export const bookSpreads = [
     left: { type: 'inside-cover' },
     right: {
       type: 'toc',
+      pageNumber: 1,
       title: 'Contents',
       entries: [
-        { label: 'First Year', spreadIndex: 2 },
-        { label: 'Second Year', spreadIndex: 2 },
-        { label: 'Projects', spreadIndex: 3 },
-        { label: "Let's Talk", spreadIndex: 4 },
+        { label: 'First Year', spreadIndex: 2, pageNumber: 4 },
+        { label: 'Second Year', spreadIndex: 2, pageNumber: 5 },
+        { label: 'Projects', spreadIndex: 3, pageNumber: 6 },
+        { label: "Let's Talk", spreadIndex: 4, pageNumber: 9 },
       ],
     },
   },
-{
+  {
     id: 1,
-    left: { type: 'placeholder' },
+    left: { type: 'placeholder', pageNumber: 2 },
     right: {
       type: 'intro',
+      pageNumber: 3,
       quote: 'Building scalable solutions, one line at a time.',
       description: 'A short line about who I am and what drives me goes here.',
     },
@@ -26,14 +28,16 @@ export const bookSpreads = [
     id: 2,
     left: {
       type: 'timeline',
+      pageNumber: 4,
       year: '2023 - 2024',
-      title: 'First Year', 
+      title: 'First Year',
       keywords: ['C', 'C++', 'Java'],
       annotation: "still fixing this page at 2am lol",
       annotationPosition: "bottom-left", // or "top-right" (default)
     },
     right: {
       type: 'timeline',
+      pageNumber: 5,
       year: '2024 - 2025',
       title: 'Second Year',
       keywords: ['MERN Stack', 'DSA Basics'],
@@ -43,12 +47,14 @@ export const bookSpreads = [
     id: 3,
     left: {
       type: 'timeline',
+      pageNumber: 6,
       year: '2025 - 2026',
       title: 'Third Year',
       keywords: ['AI Engineering', 'FastAPI', 'React'],
     },
     right: {
       type: 'timeline',
+      pageNumber: 7,
       year: '2026 - Ongoing',
       title: 'Fourth Year',
       keywords: ['Placeholder'],
@@ -56,8 +62,8 @@ export const bookSpreads = [
   },
   {
     id: 4,
-    left: { type: 'placeholder' },
-    right: { type: 'cta' },
+    left: { type: 'placeholder', pageNumber: 8 },
+    right: { type: 'cta', pageNumber: 9 },
   },
 ];
 
