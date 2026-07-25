@@ -159,7 +159,7 @@ const rightBaseContent = useMemo(() => (
           >
             {!isMobile && (
               <div className={`page-flip-wrapper ${!isOpen ? 'page-hidden' : ''} ${leftPreview ? 'turning-active' : ''}`}>
-                <Page content={leftBaseContent} onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
+                <Page content={leftBaseContent} pageSide="left" onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
                   {isOpen && (
                     <PageFlip
                       side="left"
@@ -181,7 +181,7 @@ const rightBaseContent = useMemo(() => (
             )}
             {!isMobile && <div className="book-spine" />}
             <div className={`page-flip-wrapper ${rightPreview ? 'turning-active' : ''}`}>
-            <Page content={rightBaseContent} onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
+            <Page content={rightBaseContent} pageSide="right" onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
               {isOpen && (
                 <PageFlip
                   side="right"  
