@@ -37,6 +37,7 @@
     overflow: visible;
     will-change: transform;
     transform: translateZ(0);
+    z-index: 2;
 }
 
 .book-spread {
@@ -157,6 +158,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    z-index: 1;
 }
 
 .page-count {
