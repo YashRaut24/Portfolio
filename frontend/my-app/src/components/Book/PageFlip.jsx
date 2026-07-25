@@ -110,10 +110,10 @@ const handleDragEnd = (_, info) => {
       onDragEnd={handleDragEnd}
     >
       <div className="page-leaf-face page-leaf-front">
-        <Page content={displayFront} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
+        <Page content={displayFront} pageSide={side} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
       </div>
       <div className="page-leaf-face page-leaf-back">
-        <Page content={displayBack} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
+        <Page content={displayBack} pageSide={isRight ? 'left' : 'right'} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
       </div>
     </motion.div>
   );
