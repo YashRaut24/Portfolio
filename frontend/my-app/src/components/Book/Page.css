@@ -536,6 +536,109 @@
     cursor: pointer;
 }
 
+.page-type-quick-facts {
+    background-color: #FBF8F1;
+    justify-content: flex-start;
+    padding-top: 6rem;
+}
+
+.page-quick-facts-content {
+    width: 100%;
+}
+.page-focus-block {
+    margin-top: 1.6rem;
+}
+
+.page-focus-label {
+    display: block;
+    font-family: 'Kalam', cursive;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--book-text-secondary);
+    opacity: 0.7;
+    margin-bottom: 0.6rem;
+}
+
+.page-currently-exploring {
+    margin-top: 2rem;
+    font-family: 'Kalam', cursive;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: var(--color-accent);
+    opacity: 0.85;
+    transform: rotate(-1deg);
+}
+
+@media (max-width: 768px) {
+    .page-focus-block {
+        margin-top: 1.2rem;
+    }
+
+    .page-focus-label {
+        font-size: 0.8rem;
+    }
+
+    .page-currently-exploring {
+        margin-top: 1.4rem;
+        font-size: 0.9rem;
+    }
+}
+.page-quick-facts-title {
+    font-family: 'Kalam', cursive;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--book-text);
+    line-height: 34px;
+    margin: 0 0 35px;
+    transform: rotate(-1deg);
+}
+
+.page-quick-facts-list {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-quick-facts-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    font-family: var(--font-book);
+    font-size: 1rem;
+    color: var(--book-text-secondary);
+    line-height: 34px;
+}
+
+.page-quick-facts-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: var(--book-text-secondary);
+    opacity: 0.85;
+    margin-top: 7px;
+}
+
+.page-quick-facts-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width: 768px) {
+    .page-quick-facts-title {
+        font-size: 1.05rem;
+    }
+
+    .page-quick-facts-item {
+        font-size: 0.92rem;
+    }
+
+    .page-quick-facts-icon {
+        width: 18px;
+        height: 18px;
+    }
+}
+
 @keyframes title-write {
     from {
         clip-path: inset(0 100% 0 0);

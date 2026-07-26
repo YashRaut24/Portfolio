@@ -16,13 +16,28 @@ export const bookSpreads = [
   },
   {
     id: 1,
-    left: { type: 'placeholder', pageNumber: 2 },
-    right: {
-      type: 'intro',
-      pageNumber: 3,
-      quote: 'Building scalable solutions, one line at a time.',
-      description: 'A short line about who I am and what drives me goes here.',
-    },
+    left: {
+    type: 'quick-facts',
+    pageNumber: 2,
+    title: 'Quick Facts',
+  facts: [
+    { icon: 'pin', text: 'Based in India' },
+    { icon: 'code', text: 'Currently building AI-powered apps' },
+    { icon: 'clock', text: '2+ years of coding experience' },
+    { icon: 'spark', text: 'Fun fact: debugs better with chai in hand' },
+    { icon: 'rocket', text: 'Loves shipping side projects fast' },
+    { icon: 'book', text: 'Always picking up something new to learn' },
+    { icon: 'gamepad', text: 'Unwinds with a bit of gaming after long coding sessions' },
+  ],
+},
+right: {
+  type: 'intro',
+  pageNumber: 3,
+  quote: 'Still learning. Still shipping.',
+  description: "I'm an AI Engineer and Full-Stack Developer who likes picking things apart to understand how they work, then building something new with that knowledge.",
+  focusAreas: ['AI/ML', 'Full-Stack Dev', 'System Design'],
+  currentlyExploring: 'Currently exploring: LLM agents & RAG pipelines',
+},
   },
   {
     id: 2,
