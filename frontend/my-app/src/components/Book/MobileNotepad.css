@@ -6,10 +6,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Change from center to flex-start with a fixed top offset */
     justify-content: flex-start;
     padding-top: 8vh;
-    /* Locks the notepad at a consistent distance from the top */
     padding-left: 16px;
     padding-right: 16px;
     box-sizing: border-box;
@@ -27,13 +25,16 @@
     z-index: 40;
     pointer-events: none;
 }
+
 .mobile-notepad-open .notepad-fixed-header {
     display: none !important;
 }
+
 .mobile-notepad-closed,
 .mobile-notepad-open {
     position: relative;
 }
+
 .notepad-page {
     position: relative;
     width: 82%;
@@ -45,14 +46,15 @@
     border-top-right-radius: 0;
     border-bottom-left-radius: 14px;
     border-bottom-right-radius: 14px;
-
-    background: #fbf8f1;
+    background: #FFFFFF;
+    /* Changed to white */
     box-shadow:
         0 12px 32px rgba(0, 0, 0, 0.12),
         inset 0 2px 0 rgba(255, 255, 255, 0.8);
     transition: box-shadow 0.28s ease, transform 0.28s ease;
     margin-top: 6rem;
 }
+
 .notepad-page-cover-moving,
 .notepad-page-turning {
     box-shadow:
@@ -75,7 +77,6 @@
     perspective-origin: 50% 0%;
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
-    
 }
 
 .notepad-base-page {
@@ -85,9 +86,7 @@
     left: 0;
     right: 0;
     height: calc(100% - 45px);
-
     z-index: 2;
-    
 }
 
 .notepad-base-page .page {
@@ -97,13 +96,14 @@
     box-shadow: none;
 }
 
-/* Stack slivers */
+/* Stack slivers - All changed to white, relying on their box-shadows for 3D depth */
 .notepad-stack-sliver {
     position: absolute;
     left: 6px;
     right: 6px;
     bottom: 0;
-    background: #f5f1e6;
+    background: #FFFFFF;
+    /* Changed to white */
     border-radius: 0 0 8px 8px;
     z-index: 0;
 }
@@ -121,7 +121,8 @@
     left: 3px;
     right: 3px;
     bottom: -6px;
-    background: #f0ebdd;
+    background: #FFFFFF;
+    /* Changed to white */
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.07);
 }
 
@@ -130,19 +131,17 @@
     left: 1px;
     right: 1px;
     bottom: -9px;
-    background: #e9e1cb;
+    background: #FFFFFF;
+    /* Changed to white */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Clean Navigation Bar */
 .mobile-nav {
     width: 100%;
     margin-top: 24px;
     display: flex;
     justify-content: center;
-    /* Pulls buttons inward */
     gap: 1.5rem;
-    /* Creates exact, consistent spacing between items */
     align-items: center;
     box-sizing: border-box;
     flex-shrink: 0;
@@ -158,16 +157,13 @@
     border: none;
     background: #ffffff;
     color: #2b2b2b;
-    /* Explicit dark text color for visibility */
     font-weight: 600;
-    /* Makes the text bolder and easier to read */
     padding: 12px 20px;
     border-radius: 10px;
     font-family: var(--font-book);
     font-size: 1rem;
     cursor: pointer;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-    /* Slightly stronger shadow to lift off background */
     transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.2s ease;
 }
 
@@ -177,10 +173,8 @@
 
 .mobile-nav button:disabled {
     opacity: 0.45;
-    /* Keeps disabled state clear but visible */
     cursor: not-allowed;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    /* Flattens the button when disabled */
 }
 
 .mobile-nav span {
@@ -190,23 +184,15 @@
     color: #333;
     text-align: center;
     min-width: 45px;
-    /* Prevents layout jumping when page numbers change */
-}
-.closed-layer {
-    position: absolute;
-    inset: 0;
 }
 
+.closed-layer,
 .opened-layer {
     position: absolute;
     inset: 0;
 }
 
-.closed-layer.hidden {
-    pointer-events: none;
-    opacity: 0;
-}
-
+.closed-layer.hidden,
 .opened-layer.hidden {
     pointer-events: none;
     opacity: 0;
