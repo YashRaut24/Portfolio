@@ -22,7 +22,8 @@
 }
 
 .page-leaf-front {
-    background-color: var(--book-bg-secondary);
+    background-color: #FFFFFF;
+    /* Changed to white */
     transform: translateZ(0.1px);
 }
 
@@ -63,11 +64,13 @@
     }
 
     .page-leaf-front {
-        background: #FBF8F1;
+        background: #FFFFFF;
+        /* Changed to white */
     }
 
     .page-leaf-back {
-        background: #FBF8F1;
+        background: #FFFFFF;
+        /* Changed to white */
     }
 
     .book-spread-closing .page-leaf-closing-cover {
