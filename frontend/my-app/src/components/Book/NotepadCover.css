@@ -112,17 +112,16 @@
     rotateX) has already brought the element to this exact 30px size -
     so only color/shadow are left to settle here, never height/position. */
 
-    /* STATE 2: Page 2/7+ (Turned pages stacked above) - LIGHT CREAM PAPER SCROLL */
-    .notepad-cover-open-strip[data-has-turned-pages="true"] .notepad-cover-face,
-    .notepad-cover-open-strip.has-turned-pages .notepad-cover-face {
-        height: 45px !important;
-        max-height: 45px !important;
-
-        background: linear-gradient(to bottom,
-                #ffffff 0%,
-                #faf6eb 28%,
-                #e2d6c3 70%,
-                #c2b098 100%) !important;
+/* STATE 2: Page 2/7+ (Turned pages stacked above) - LIGHT CREAM PAPER SCROLL */
+.notepad-cover-open-strip[data-has-turned-pages="true"] .notepad-cover-face,
+.notepad-cover-open-strip.has-turned-pages .notepad-cover-face {
+    height: 45px !important;
+    max-height: 45px !important;
+    background: linear-gradient(to bottom,
+            #ffffff 0%,
+            #f5f5f5 28%,
+            #e0e0e0 70%,
+            #cccccc 100%) !important;
         border-radius: 4px 4px 5px 5px !important;
         box-shadow:
             0 6px 12px -1px rgba(0, 0, 0, 0.22),
