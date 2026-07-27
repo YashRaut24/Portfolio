@@ -46,11 +46,15 @@
 
 .page-timeline-description {
     line-height: 34px !important;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin-top: 34px;
+    /* Added gap above the text */
+    margin-bottom: 34px;
+    /* Added gap below the text to separate it from skills */
     font-size: 1rem;
     max-width: 90%;
 }
+
+
 
 .page-type-timeline .page-year {
     margin-bottom: 0;
@@ -58,11 +62,12 @@
 
 .page-type-timeline .page-title {
     margin-bottom: 34px;
-    /* one blank ruled line before the description */
+    /* Changed from 0 to skip exactly one notebook line */
 }
-
 .page-type-timeline .page-keywords {
-    margin-top: 34px;
+    margin-top: 0;
+    /* Gap is now handled by the description's bottom margin */
+    margin-bottom: 34px;
 }
 
 .page-type-timeline .page-keyword {
@@ -151,21 +156,23 @@
 }
 
 .explore-btn {
-    margin-top: 2rem;
-    font-family: var(--font-hub);
+    background-color: #2b2b2b;
+    /* Changes the purple to a dark notebook ink color */
+    color: #FFFFFF;
+    font-family: var(--font-hub, sans-serif);
     font-weight: 700;
     font-size: 1rem;
-    color: #FFFFFF;
-    background-color: var(--color-primary);
     border: none;
     padding: 0.8rem 1.8rem;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .explore-btn:hover {
-    background-color: var(--color-accent);
+    background-color: #444444;
+    /* Slightly lighter on hover */
+    transform: translateY(-2px);
 }
 
 .explore-btn-wrap {
@@ -299,11 +306,19 @@
 }
 
 .page-cta-text {
-    font-family: var(--font-book);
+    font-family: 'Kalam', cursive;
     font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--book-text);
-    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    color: #2b2b2b;
+    margin-top: 2rem;
+    /* Exact same space above the text... */
+    margin-bottom: 2rem;
+    /* ...as there is below the text */
+}
+
+.explore-btn-wrap.cta-btn-shifted {
+    margin-top: 0;
+    /* Ensures the button doesn't add any extra uneven space */
 }
 
 .page-easter-egg {
@@ -551,6 +566,42 @@
     /* Changed to white */
 }
 
+.page-doodle-cluster {
+    position: absolute;
+    inset: 1.6rem 1.2rem 2.6rem 1.2rem;
+    color: var(--book-text-secondary);
+    opacity: 0.55;
+    transform: rotate(-1.4deg);
+    pointer-events: none;
+}
+
+.page-doodle-cluster svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.page-doodle-cluster .doodle-accent {
+    color: var(--book-accent);
+}
+
+.page-doodle-cluster .doodle-faint {
+    opacity: 0.45;
+}
+
+.page-doodle-cluster .doodle-line {
+    opacity: 0.5;
+    stroke-dasharray: 1 5;
+    stroke-linecap: round;
+}
+
+@media (max-width: 768px) {
+    .page-doodle-cluster {
+        inset: 1.1rem 0.8rem 2rem 0.8rem;
+        opacity: 0.5;
+    }
+}
+
 /* ---------------------------------- */
 /* Quick Facts                        */
 /* ---------------------------------- */
@@ -681,6 +732,114 @@
     transform: rotate(-1.5deg);
     line-height: 34px;
     margin-top: 0;
+}
+
+/* ---------------------------------- */
+/* CTA Page & Insta Cards             */
+/* ---------------------------------- */
+
+.page-type-cta {
+    /* Keep the original page centering */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.cta-cards-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 4%;
+    width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    /* Removed bottom margin so it doesn't double up with the text margin */
+    position: relative;
+    z-index: 2;
+}
+
+.insta-card {
+    background-color: #FFFFFF;
+    border: 1.5px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+    /* Forces each card to take up exactly slightly less than half */
+    min-width: 0;
+    /* Crucial: Prevents text from forcing the card to widen */
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.insta-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08);
+}
+
+.insta-card-image-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #fafafa;
+    border-bottom: 1.5px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.insta-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.insta-card-footer {
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.insta-card-title {
+    font-family: 'Kalam', cursive;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: #2b2b2b;
+    display: block;
+    margin-bottom: 0.15rem;
+    white-space: nowrap;
+    /* Prevents title from wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Adds '...' if title is too long for the box */
+}
+
+.insta-card-caption {
+    font-family: 'Kalam', cursive;
+    font-size: 0.65rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.2;
+    /* Allow caption to wrap, but keep it constrained inside the card */
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+/* ---------------------------------- */
+/* CTA Button Wrapper Adjustment      */
+/* ---------------------------------- */
+.explore-btn-wrap.cta-btn-shifted {
+    margin-top: 0;
+    /* Removes any extra top margin pushing the button down */
+}
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .cta-cards-container {
+        width: 85%;
+        /* Keeps them slightly tucked in on mobile */
+    }
 }
 
 /* ---------------------------------- */
