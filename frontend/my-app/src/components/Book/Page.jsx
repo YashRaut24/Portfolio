@@ -196,6 +196,9 @@ if (content.type === 'intro') {
               </svg>
             </span>
           </h2>
+          {content.description && (
+            <p className="page-description page-timeline-description">{content.description}</p>
+          )}
           <ul className="page-keywords">
             {content.keywords.map((item, index) => (
               <li key={index} className="page-keyword">{item}</li>
