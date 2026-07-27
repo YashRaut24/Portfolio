@@ -46,16 +46,18 @@ right: {
       pageNumber: 4,
       year: '2023 - 2024',
       title: 'First Year',
-      keywords: ['C', 'C++', 'Java'],
-      annotation: "still fixing this page at 2am lol",
-      annotationPosition: "bottom-left", // or "top-right" (default)
+      description: "Spent this year exploring different languages and fields, a bit of everything before figuring out what clicked.",
+      keywords: ['C', 'HTML', 'CSS', 'JavaScript', 'Java (Certified)', 'Python Basics'],
     },
     right: {
       type: 'timeline',
       pageNumber: 5,
       year: '2024 - 2025',
       title: 'Second Year',
-      keywords: ['MERN Stack', 'DSA Basics'],
+      description: "Moved from exploring to building, started real projects in Java and Python, and went deep into the MERN stack.",
+      keywords: ['Java', 'Python', 'MongoDB', 'Express', 'React', 'Node.js', 'Basic DSA'],
+      annotation: "tried learning DSA, still a work in progress lol",
+      annotationPosition: "bottom-left", 
     },
   },
   {
