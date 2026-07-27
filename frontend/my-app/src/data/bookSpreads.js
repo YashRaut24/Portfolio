@@ -46,7 +46,7 @@ right: {
       pageNumber: 4,
       year: '2023 - 2024',
       title: 'First Year',
-      description: "Spent this year exploring different languages and fields, a bit of everything before figuring out what clicked.",
+      description: "Spent this year exploring different languages and fields — a bit of everything before figuring out what clicked.",
       keywords: ['C', 'HTML', 'CSS', 'JavaScript', 'Java (Certified)', 'Python Basics'],
     },
     right: {
@@ -54,10 +54,10 @@ right: {
       pageNumber: 5,
       year: '2024 - 2025',
       title: 'Second Year',
-      description: "Moved from exploring to building, started real projects in Java and Python, and went deep into the MERN stack.",
+      description: "Moved from exploring to building — started real projects in Java and Python, and went deep into the MERN stack.",
       keywords: ['Java', 'Python', 'MongoDB', 'Express', 'React', 'Node.js', 'Basic DSA'],
-      annotation: "tried learning DSA, still a work in progress lol",
-      annotationPosition: "bottom-left", 
+      annotation: "tried learning DSA — still a work in progress lol",
+      annotationPosition: "bottom-left", // or "top-right" (default)
     },
   },
   {
@@ -67,14 +67,16 @@ right: {
       pageNumber: 6,
       year: '2025 - 2026',
       title: 'Third Year',
-      keywords: ['AI Engineering', 'FastAPI', 'React'],
+      description: "Dove into hackathons, tech meetups, and freelancing — shipped MERN projects and picked up ML & NLP basics. Placed 2nd at Elevator 300 (pitch) and 1st in AI Art at Watumull.",
+      keywords: ['ML', 'NLP (Basics)', 'C++'],
     },
     right: {
       type: 'timeline',
       pageNumber: 7,
-      year: '2026 - Ongoing',
+      year: '2026 - 2027 (ongoing)',
       title: 'Fourth Year',
-      keywords: ['Placeholder'],
+      description: "Still early days — exploring meetups and networking, and diving into MCP, Socket.io, and RAG. Agentic AI is next on the list.",
+      keywords: ['MCP', 'Socket.io', 'RAG', 'Agentic AI (next)'],
     },
   },
   {
