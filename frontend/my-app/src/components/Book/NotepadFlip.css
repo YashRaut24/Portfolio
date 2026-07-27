@@ -1,12 +1,10 @@
 .notepad-flip {
     position: absolute;
-
     top: 45px !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
     height: calc(100% - 45px) !important;
-
     touch-action: none;
     cursor: grab;
     perspective: 1400px;
@@ -20,26 +18,21 @@
     border-bottom-right-radius: 14px;
     z-index: 80;
     overflow: visible !important;
-
-    /* ADD THESE LINES TO FIX TEXT BLURRINESS */
     -webkit-font-smoothing: subpixel-antialiased;
     -moz-osx-font-smoothing: auto;
 }
+
 .notepad-flip:active {
     cursor: grabbing;
 }
 
 .notepad-flip-front-layer {
-    /* Change this from 34 to 60 */
     z-index: 80;
     filter: drop-shadow(0 16px 30px rgba(0, 0, 0, calc(var(--shadow-opacity, 0.1) * 1.2)));
     transition: filter 0.2s linear;
 }
+
 .notepad-flip-behind {
-    /* Must render BELOW .notepad-base-page (z-index: 2) so that once a
-       turned leaf settles "behind", the base page's already-updated
-       content is what the user actually sees — not this leaf still
-       sitting on top of it. */
     z-index: 65;
     filter: drop-shadow(0 -5px 14px rgba(0, 0, 0, 0.12));
 }
@@ -49,11 +42,8 @@
     inset: 0;
     backface-visibility: hidden !important;
     -webkit-backface-visibility: hidden !important;
-
-    /* CHANGE THIS FROM translateZ(0) TO FORCE CRISP TEXT RENDERING */
     transform: translateZ(0.5px);
     -webkit-transform: translateZ(0.5px);
-
     overflow: hidden;
     border-radius: 0;
     border-bottom-left-radius: 14px !important;
@@ -63,8 +53,6 @@
     -webkit-transform-style: preserve-3d !important;
     will-change: transform !important;
     clip-path: inset(0 round 0 0 14px 14px);
-
-    /* ADD TEXT SMOOTHING */
     -webkit-font-smoothing: subpixel-antialiased;
 }
 
@@ -81,8 +69,8 @@
 /* Front Leaf Canvas */
 .notepad-flip-front {
     transform: translateZ(1px);
-    background: #fbf8f1;
-    
+    background: #FFFFFF;
+    /* Changed to white */
 }
 
 .notepad-flip-front .page {
@@ -93,11 +81,11 @@
     user-select: none !important;
 }
 
-/* Back Leaf Canvas (Clean cream underside) */
+/* Back Leaf Canvas */
 .notepad-flip-back {
     transform: rotateX(180deg) translateZ(1px);
-    background: #f8f4e8;
-    
+    background: #FFFFFF;
+    /* Changed to white */
 }
 
 /* Paper Curl Shading Overlay */
@@ -116,7 +104,7 @@
     mix-blend-mode: multiply;
     will-change: opacity;
 }
-/* Add inside the existing mobile media query in NotepadFlip.css */
+
 @media (max-width: 768px) {
     .notepad-flip {
         position: absolute;
@@ -125,7 +113,6 @@
         left: 0 !important;
         right: 0 !important;
         height: calc(100% - 45px) !important;
-
         border-top-left-radius: 0 !important;
         border-top-right-radius: 0 !important;
         border-bottom-left-radius: 14px !important;
