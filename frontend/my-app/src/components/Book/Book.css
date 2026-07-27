@@ -44,7 +44,8 @@
     position: relative;
     display: flex;
     height: 70vh;
-    background-color: var(--book-bg-secondary);
+    background-color: #FFFFFF;
+    /* Changed to white */
     border-radius: 8px;
     perspective: 1800px;
     perspective-origin: center center;
@@ -65,7 +66,8 @@
 }
 
 .book-spread-closing .page-flip-wrapper:last-child {
-    background-color: var(--book-bg-secondary);
+    background-color: #FFFFFF;
+    /* Changed to white */
     box-shadow: 10px 10px 30px var(--book-shadow);
 }
 
@@ -91,8 +93,6 @@
     z-index: 2;
     transition: opacity 0.3s ease;
 }
-
-
 
 .page-flip-wrapper:first-child::after {
     right: 0;
@@ -129,7 +129,8 @@
     position: absolute;
     inset: 0;
     z-index: 10;
-    background-color: var(--book-bg-secondary);
+    background-color: #FFFFFF;
+    /* Changed to white */
 }
 
 .book-spine {
@@ -174,6 +175,7 @@
     font-size: 0.9rem;
     color: var(--book-text);
     background-color: var(--book-bg-secondary);
+    /* Left nav buttons unchanged */
     border: 1px solid var(--book-border);
     padding: 0.6rem 1.4rem;
     border-radius: 6px;
@@ -192,6 +194,7 @@
 .nav-btn:active:not(:disabled) {
     transform: scale(0.96);
 }
+
 .nav-arrow {
     width: 20px;
     height: 10px;
@@ -325,7 +328,7 @@
         animation: none;
         opacity: 0;
     }
-}   
+}
 
 @media (max-width: 768px) {
 
