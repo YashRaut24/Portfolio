@@ -89,7 +89,7 @@ function Cover({ onOpen, onOpenStart }) {
         </motion.div>
         
         <motion.a 
-          href="https://linkedin.com/in/your-profile" 
+          href="https://linkedin.com/in/yash-raut-240505-yr30" 
           target="_blank" 
           rel="noopener noreferrer"
           className="cover-social"
