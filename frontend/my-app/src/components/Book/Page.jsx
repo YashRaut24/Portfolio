@@ -392,12 +392,14 @@ if (content.type === 'cover-face') {
           <span>Aspiring AIML Engineer</span>
         </div>
         
-        <a 
-          href="https://linkedin.com/in/your-profile" 
+<a 
+          href="https://www.linkedin.com/in/yash-raut-240505-yr30" 
           target="_blank" 
           rel="noopener noreferrer"
           className="cover-social"
           onPointerDown={(e) => e.stopPropagation()} 
+          onPointerUp={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
@@ -510,10 +512,10 @@ if (content.type === 'cta') {
           
           <div className="cta-cards-container">
             {/* GitHub Instagram-Style Card */}
-            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="insta-card">
+            <a href="https://github.com/YashRaut24" target="_blank" rel="noopener noreferrer" className="insta-card">
               <div className="insta-card-image-wrap">
                 {/* Replace src with a screenshot of your GitHub or a relevant graphic */}
-                <img src="/assets/images/github-preview.jpg" alt="GitHub Profile" className="insta-card-img" />
+                <img src="/assets/images/GitHub.jpg" alt="GitHub Profile" className="insta-card-img" />
               </div>
               <div className="insta-card-footer">
                 <span className="insta-card-title">github.com/yourusername</span>
@@ -522,14 +524,14 @@ if (content.type === 'cta') {
             </a>
 
             {/* Resume Instagram-Style Card */}
-            <a href="https://drive.google.com/file/d/YOUR_FILE_ID/view" target="_blank" rel="noopener noreferrer" className="insta-card">
+            <a href="https://drive.google.com/file/d/1-OrBoy4DUnNzyjTSTsX26KAoA424KdgH/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="insta-card">
               <div className="insta-card-image-wrap">
                 {/* Replace src with a thumbnail image of your Resume */}
-                <img src="/assets/images/resume-preview.jpg" alt="Resume Thumbnail" className="insta-card-img" />
+                <img src="/assets/images/Resume.png" alt="Resume Thumbnail" className="insta-card-img" />
               </div>
               <div className="insta-card-footer">
                 <span className="insta-card-title">My Resume.pdf</span>
-                <p className="insta-card-caption">View my full experience and hackathon history 📄</p>
+                <p className="insta-card-caption">View my full experience and education📄</p>
               </div>
             </a>
           </div>
