@@ -156,23 +156,33 @@
 }
 
 .explore-btn {
-    background-color: #2b2b2b;
-    /* Changes the purple to a dark notebook ink color */
-    color: #FFFFFF;
-    font-family: var(--font-hub, sans-serif);
+    background-color: transparent;
+    /* Replaces the solid fill */
+    color: #2b2b2b;
+    /* Ink color for text */
+    font-family: 'Kalam', cursive;
+    /* Switches to your handwriting font */
     font-weight: 700;
-    font-size: 1rem;
-    border: none;
-    padding: 0.8rem 1.8rem;
-    border-radius: 6px;
+    font-size: 1.2rem;
+    border: 2px solid #2b2b2b;
+    /* Thick ink border */
+    /* Applies the same sketchy box shape */
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    padding: 0.6rem 1.8rem;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition: all 0.2s ease;
+    box-shadow: none;
 }
 
 .explore-btn:hover {
-    background-color: #444444;
-    /* Slightly lighter on hover */
-    transform: translateY(-2px);
+    background-color: #2b2b2b;
+    /* Fills in with ink on hover */
+    color: #FFFFFF;
+    /* Text turns white */
+    transform: translateY(-2px) rotate(2deg);
+    /* Tilts the other way */
+    box-shadow: 4px 4px 0px rgba(43, 43, 43, 0.2);
+    /* Sketchy shadow */
 }
 
 .explore-btn-wrap {
@@ -759,32 +769,41 @@
 }
 
 .insta-card {
-    background-color: #FFFFFF;
-    border: 1.5px solid rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
+    background-color: transparent;
+    /* Lets the notebook lines show through */
+    border: 1.5px solid #2b2b2b;
+    /* Dark ink color */
+    border-radius: 4px;
+    /* Clean, straight corners instead of the scribbled shape */
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
     width: 48%;
-    /* Forces each card to take up exactly slightly less than half */
     min-width: 0;
-    /* Crucial: Prevents text from forcing the card to widen */
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    box-shadow: none;
+    /* Flat ink look */
 }
 
 .insta-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+    /* Simple lift, removed the crooked tilt */
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Fills with white to pop out */
+    box-shadow: 4px 4px 0px rgba(43, 43, 43, 0.15);
+    /* Clean offset shadow */
 }
 
 .insta-card-image-wrap {
     width: 100%;
     aspect-ratio: 1 / 1;
-    background-color: #fafafa;
-    border-bottom: 1.5px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.02);
+    border-bottom: 1.5px solid #2b2b2b;
+    /* Straight ink divider */
+    border-radius: 0;
+    /* Removed the irregular curve here too */
     display: flex;
     align-items: center;
     justify-content: center;
