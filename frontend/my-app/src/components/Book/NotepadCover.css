@@ -205,7 +205,8 @@
     box-shadow:
         0 4px 14px rgba(0, 0, 0, 0.4),
         0 0 0 1px rgba(255, 255, 255, 0.08);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
+    /* <-- Reduced from 1.5rem */
 }
 
 .notepad-cover-name {
@@ -239,18 +240,94 @@
         margin-bottom: 0.7rem;
     }
 
+ .notepad-cover-name {
+     font-family: 'Fredoka', var(--font-hub);
+     font-weight: 700;
+     font-size: 2rem;
+     color: #FFFFFF;
+     text-align: center;
+     line-height: 1.1;
+     margin-bottom: 0.2rem;
+ }
+
+ .notepad-cover-edu {
+     font-family: var(--font-hub);
+     font-weight: 600;
+     font-size: 1.05rem;
+     color: #FFFFFF;
+     opacity: 0.95;
+     margin-bottom: 0.1rem;
+ }
+
+ .notepad-cover-year {
+     font-family: var(--font-hub);
+     font-weight: 500;
+     font-size: 0.85rem;
+     color: #FFFFFF;
+     opacity: 0.6;
+     margin-bottom: 1rem;
+     letter-spacing: 0.05em;
+ }
+
+ .notepad-cover-role-stack {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     font-family: 'Fredoka', var(--font-hub);
+     font-weight: 500;
+     font-size: 1rem;
+     color: #FFFFFF;
+     opacity: 0.9;
+     margin-bottom: 1.5rem;
+ }
+
+ .notepad-cover-ampersand {
+     font-size: 1.1rem;
+     opacity: 0.5;
+     margin: 0.15rem 0;
+ }
+
+ .notepad-cover-social {
+     color: #FFFFFF;
+     opacity: 0.7;
+     margin-bottom: 1.5rem;
+     transition: opacity 0.2s ease, color 0.2s ease;
+     display: inline-flex;
+     position: relative;
+     z-index: 20;
+ }
+
+ .notepad-cover-social:active {
+     opacity: 1;
+     color: #0a66c2;
+ }
+
     .notepad-cover-role {
         font-family: 'Fredoka', var(--font-hub);
         font-weight: 500;
         font-size: 1rem;
         color: #FFFFFF;
         opacity: 0.9;
-        line-height: 1.45;
+        line-height: 1.35;
         text-align: center;
-        max-width: 240px;
-        margin-bottom: 2rem;
+        max-width: 250px;
+        margin-bottom: 1.25rem;
+        /* Adjusted down from 2rem to fit logo */
+    }
+    .notepad-cover-social {
+        color: #FFFFFF;
+        opacity: 0.7;
+        margin-bottom: 1.5rem;
+        transition: opacity 0.2s ease, color 0.2s ease;
+        display: inline-flex;
+        position: relative;
+        z-index: 20;
     }
 
+    .notepad-cover-social:active {
+        opacity: 1;
+        color: #0a66c2;
+    }
     .notepad-cover-hint {
         font-family: var(--font-hub);
         font-size: 0.8rem;
