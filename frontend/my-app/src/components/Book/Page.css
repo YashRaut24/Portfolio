@@ -620,7 +620,7 @@
     background-color: #FFFFFF;
     /* Changed to white */
     justify-content: flex-start;
-    padding-top: 6rem;
+    padding-top: 6.6rem;
 }
 
 .page-quick-facts-content {
@@ -675,7 +675,7 @@
 .page-type-intro {
     background-color: transparent;
     justify-content: flex-start;
-    padding-top: 74px;
+    padding-top: 86px;
     overflow: hidden;
 }
 
