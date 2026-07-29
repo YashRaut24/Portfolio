@@ -38,6 +38,57 @@
     color: var(--color-text-secondary);
     line-height: 1.6;
 }
+/* --- New Styles for the Status Box & CTA --- */
+
+.about-status-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.status-item {
+    font-family: var(--font-hub);
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+}
+
+.status-label {
+    font-weight: 700;
+    color: var(--color-primary);
+    /* Uses the accent color of the active tab */
+    margin-right: 0.5rem;
+    display: inline-block;
+    min-width: 80px;
+    /* Aligns the text cleanly */
+}
+
+.about-cta-text {
+    display: block;
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+    color: var(--color-text);
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Adjust mobile layout for the status box */
+@media (max-width: 768px) {
+    .about-status-box {
+        text-align: left;
+        /* Keep text readable even when center-aligned on mobile */
+        padding: 1rem;
+    }
+
+    .status-label {
+        min-width: 70px;
+    }
+}
 
 @media (max-width: 768px) {
     .about-section {
