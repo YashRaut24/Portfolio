@@ -1,6 +1,6 @@
 .content-panel {
     flex: 1;
-    padding: 2.5rem;
+    /* padding: 2.5rem; */
 
     /* Transparent background, no border, no shadow */
     background-color: transparent;
