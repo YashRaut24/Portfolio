@@ -16,15 +16,16 @@ function Skills() {
               <li
                 key={index}
                 className="skills-tag stagger-item"
-                style={{ '--stagger-index': groupIndex + index * 0.4 }}
+                style={{ '--stagger-index': groupIndex + index * 0.1 }}
               >
-                {skill}
+                <img src={skill.icon} alt={skill.name} className="skill-icon" />
+                <span className="skill-name">{skill.name}</span>
               </li>
             ))}
           </ul>
         </div>
       ))}
-</div>
+    </div>
   );
 }
 
