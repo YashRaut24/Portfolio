@@ -3,18 +3,25 @@ import './Achievements.css';
 
 function Achievements() {
   return (
-    <ul className="achievements-list">
+    <div className="achievements-list">
       {achievementsData.map((item, index) => (
-        <li
+        <div
           key={index}
           className="achievement-item stagger-item"
           style={{ '--stagger-index': index }}
         >
-          <h4 className="achievement-title">{item.title}</h4>
+          <div className="achievement-header">
+            <h4 className="achievement-title">{item.title}</h4>
+          </div>
+          
+          <div className="achievement-org">
+            <span className="org-name">{item.organization}</span>
+          </div>
+          
           <p className="achievement-desc">{item.description}</p>
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
 
