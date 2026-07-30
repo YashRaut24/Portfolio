@@ -1,19 +1,25 @@
-const API_BASE_URL = 'http://localhost:5000/api';
 
-export const submitContactForm = async (formData) => {
-  const response = await fetch(`${API_BASE_URL}/contact`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData),
-  });
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-  const data = await response.json();
+export const sendContactMessage = async (formData) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/contact`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData), 
+    });
 
-  if (!response.ok) {
-    throw new Error(data.message || 'Something went wrong');
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || data.errors?.[0]?.msg || 'Failed to send message');
+    }
+
+    return data;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
   }
-
-  return data;
 };
