@@ -12,8 +12,8 @@
         0 10px 25px rgba(0, 0, 0, 0.6),
         0 4px 10px rgba(0, 0, 0, 0.4); */
     /* Restricts the panel's height and enables internal scrolling */
-    max-height: 75vh;
-    overflow-y: auto;
+    /* max-height: 75vh;
+    overflow-y: auto; */
 
     /* HIDE SCROLLBAR (Firefox & Edge) */
     scrollbar-width: none;
