@@ -1,54 +1,130 @@
-.contact-details {
+/* Main Wrapper for the whole section */
+.contact-section {
     display: flex;
     flex-direction: column;
-    gap: .8rem;
+    width: 100%;
 }
 
-.contact-detail {
+/* Container for the row of icons */
+.contact-links-row {
     display: flex;
-    align-items: center;
-    gap: .7rem;
-    position: relative;
-    font-family: var(--font-hub);
+    flex-wrap: wrap;
+    /* Allows safe wrapping only on small mobile screens */
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    /* REMOVED max-width so it has full breathing room on hover */
 }
 
-.copy-btn {
-    margin-left: auto;
-    background: none;
-    border: none;
-    color: var(--color-text-secondary);
+/* -------------------------------------------
+   STATIC PILLS (Email & Phone - Always Open)
+--------------------------------------------- */
+.static-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 44px;
+    width: max-content;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 22px;
     cursor: pointer;
+    padding: 0;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.static-pill:hover,
+.static-pill:active {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.static-pill:hover .pill-icon,
+.static-pill:active .pill-icon {
+    transform: scale(1.1);
+}
+
+.pill-text-open {
+    font-family: var(--font-hub, sans-serif);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-text, #ffffff);
+    white-space: nowrap;
+    padding-right: 1.2rem;
+}
+
+/* -------------------------------------------
+   EXPANDABLE PILLS (GitHub & LinkedIn - Sliding)
+--------------------------------------------- */
+.expandable-pill {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 22px;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0;
+    overflow: hidden;
+    /* Ensures the pill stays perfectly rounded */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Common Icon Container Styling */
+.pill-icon {
+    min-width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
-    transition: color .2s;
+    justify-content: center;
+    color: var(--color-primary, #8b5cf6);
+    transition: transform 0.3s ease;
 }
 
-.copy-btn:hover {
-    color: var(--color-primary);
+/* Animate the text, not the container */
+.pill-text {
+    font-family: var(--font-hub, sans-serif);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-text, #ffffff);
+    white-space: nowrap;
+
+    /* Start completely hidden with 0 width */
+    max-width: 0;
+    opacity: 0;
+    padding-right: 0;
+    transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s ease,
+        padding-right 0.4s ease;
 }
 
-.copy-tooltip {
-    position: absolute;
-    right: -70px;
-    font-size: .75rem;
-    color: var(--color-primary);
-    animation: fadeCopy .25s ease;
+.pill-text .arrow {
+    color: var(--color-primary, #8b5cf6);
+    font-weight: bold;
+    margin-left: 4px;
 }
 
-.contact-socials a {
-    display: flex;
-    align-items: center;
-    gap: .45rem;
+/* Hover & Mobile Active States for Sliding Pills */
+.expandable-pill:hover,
+.expandable-pill:active {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(139, 92, 246, 0.4);
 }
 
-@keyframes fadeCopy {
-    from {
-        opacity: 0;
-        transform: translateY(4px);
-    }
+.expandable-pill:hover .pill-text,
+.expandable-pill:active .pill-text {
+    max-width: 130px;
+    /* Exact width needed to fit "LinkedIn ->" */
+    opacity: 1;
+    padding-right: 1.2rem;
+    /* Adds breathing room to the right edge */
+}
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.expandable-pill:hover .pill-icon,
+.expandable-pill:active .pill-icon {
+    transform: scale(1.1);
+    /* Slight pop on the icon */
 }

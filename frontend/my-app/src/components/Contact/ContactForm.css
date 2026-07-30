@@ -1,73 +1,111 @@
+/* Container for the form */
 .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+    /* Takes full width of the Content Panel */
+
+    /* If the form itself scrolls, this hides the scrollbar */
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+}
+
+/* Hides scrollbar for Chrome, Safari, and Opera */
+.contact-form::-webkit-scrollbar {
+    display: none;
+}
+
+/* Form Groups (Wrappers for Label + Input) */
+.form-group {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
 }
-
-.form-label {
-    font-family: var(--font-hub);
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: var(--color-text);
-    margin-top: 0.8rem;
+/* Labels */
+.form-group label {
+    font-family: var(--font-hub, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-secondary, #a8b2d1);
 }
 
-.form-input,
-.form-textarea {
-    font-family: var(--font-hub);
-    font-weight: 400;
-    font-size: 0.9rem;
-    color: var(--color-text);
-    background-color: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    padding: 0.6rem 0.8rem;
+/* Inputs and Textarea Base Styles */
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    font-family: var(--font-hub, sans-serif);
+    font-size: 1rem;
+    color: var(--color-text, #ffffff);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+/* Focus States (When user clicks inside to type) */
+.form-group input:focus,
+.form-group textarea:focus {
     outline: none;
-    transition: border-color 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--color-primary, #8b5cf6);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
 }
 
-.form-input:focus,
-.form-textarea:focus {
-    border-color: var(--color-primary);
-}
-
-.form-textarea {
+/* Specific Textarea tweaks */
+.form-group textarea {
     resize: vertical;
+    min-height: 120px;
 }
 
-.form-submit-btn {
-    margin-top: 1.2rem;
-    font-family: var(--font-hub);
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: #FFFFFF;
-    background-color: var(--color-primary);
+/* Submit Button */
+.contact-form button[type="submit"] {
+    background-color: var(--color-primary, #8b5cf6);
+    color: #ffffff;
     border: none;
-    padding: 0.7rem 1.4rem;
-    border-radius: 6px;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: var(--font-hub, sans-serif);
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.form-submit-btn:hover:not(:disabled) {
-    background-color: var(--color-accent);
-}
-
-.form-submit-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.form-success-msg {
-    color: #16A34A;
-    font-family: var(--font-hub);
-    font-size: 0.85rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     margin-top: 0.5rem;
 }
 
-.form-error-msg {
-    color: #DC2626;
-    font-family: var(--font-hub);
-    font-size: 0.85rem;
+/* Submit Button Hover */
+.contact-form button[type="submit"]:hover:not(:disabled) {
+    background-color: #7c3aed;
+    /* Slightly darker primary color */
+    transform: translateY(-2px);
+}
+
+/* Submit Button Disabled State (While sending) */
+.contact-form button[type="submit"]:disabled {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.4);
+    cursor: not-allowed;
+    transform: none;
+    /* Prevents the hover float effect while disabled */
+}
+
+/* Status Messages */
+.success-message {
+    color: #10b981;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
     margin-top: 0.5rem;
 }

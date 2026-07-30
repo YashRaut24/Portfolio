@@ -1,76 +1,85 @@
+// frontend/my-app/src/components/Contact/ContactForm.jsx
 import { useState } from 'react';
-import { submitContactForm } from '../../services/api';
+import { sendContactMessage } from '../../services/api';
 import './ContactForm.css';
 
 function ContactForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-  const [status, setStatus] = useState('idle');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState({ loading: false, error: null, success: false });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus('submitting');
-    setErrorMsg('');
+    
+    // Reset status to loading state
+    setStatus({ loading: true, error: null, success: false });
 
     try {
-      await submitContactForm(formData);
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+      await sendContactMessage(formData);
+      
+      // On success: clear the form and show success message
+      setStatus({ loading: false, error: null, success: true });
+      setFormData({ name: '', email: '', message: '' }); 
+      
+      // Optional: Hide success message after 5 seconds
+      setTimeout(() => setStatus(prev => ({ ...prev, success: false })), 5000);
+      
     } catch (error) {
-      setStatus('error');
-      setErrorMsg(error.message);
+      // On fail: show the error message from the backend
+      setStatus({ loading: false, error: error.message, success: false });
     }
   };
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit}>
-      <label className="form-label" htmlFor="name">Name</label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        className="form-input"
-        required
-      />
+    <form onSubmit={handleSubmit} className="contact-form">
+      <div className="form-group">
+        <label htmlFor="name">Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          value={formData.name} 
+          onChange={handleChange} 
+          required 
+        />
+      </div>
 
-      <label className="form-label" htmlFor="email">Email</label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        className="form-input"
-        required
-      />
+      <div className="form-group">
+        <label htmlFor="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          value={formData.email} 
+          onChange={handleChange} 
+          required 
+        />
+      </div>
 
-      <label className="form-label" htmlFor="message">Message</label>
-      <textarea
-        id="message"
-        name="message"
-        value={formData.message}
-        onChange={handleChange}
-        className="form-textarea"
-        rows="5"
-        required
-      />
+      <div className="form-group">
+        <label htmlFor="message">Message</label>
+        <textarea 
+          id="message" 
+          name="message" 
+          value={formData.message} 
+          onChange={handleChange} 
+          required 
+        ></textarea>
+      </div>
 
-      <button type="submit" className="form-submit-btn" disabled={status === 'submitting'}>
-        {status === 'submitting' ? 'Sending...' : 'Send Message'}
+      <button type="submit" disabled={status.loading}>
+        {status.loading ? 'Sending...' : 'Send Message'}
       </button>
 
-      {status === 'success' && <p className="form-success-msg">Message sent successfully!</p>}
-      {status === 'error' && <p className="form-error-msg">{errorMsg}</p>}
+      {/* Feedback Messages */}
+      {status.success && <p className="success-message">Message sent successfully! I'll be in touch soon.</p>}
+      {status.error && <p className="error-message">Error: {status.error}</p>}
     </form>
   );
 }
