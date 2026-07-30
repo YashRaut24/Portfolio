@@ -1,4 +1,4 @@
-/* 1. Category Layout (2 Columns) */
+/* 1. Category Layout */
 .skills-section {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -15,59 +15,75 @@
     letter-spacing: 0.05em;
 }
 
-/* 2. Skills Layout - STRICTLY 3 PER ROW */
+/* 2. Skills Grid */
 .skills-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /* minmax(0, 1fr) is the magic here: it prevents columns from shifting when pills expand */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem;
     align-items: center;
-    justify-items: start;
+    justify-items: center;
+    /* Keeps expanding pills perfectly centered */
 }
 
-/* 3. Base Pill - Initially a Black Circle */
+/* 3. Base Pill - Initially a Circle */
 .skills-tag {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 76px;
-    /* Increased for larger footprint */
+
+    /* Expands dynamically to text width without stretching */
+    width: max-content;
     min-width: 76px;
-    /* Increased for larger footprint */
-    background-color: var(--node-bg, #0f1117);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 38px;
-    /* Perfect circle */
+    max-width: 76px;
+
     padding: 0;
+    background-color: var(--node-bg, #0f1117);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 38px;
     cursor: default;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Hides text completely when collapsed */
+
+    transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+    z-index: 1;
 }
 
-/* Icons are now much larger, taking up most of the circle */
+/* 4. Icon */
 .skill-icon {
     width: 54px;
     height: 54px;
     position: absolute;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Text stays hidden initially */
+/* 5. Text */
 .skill-name {
     font-family: var(--font-hub);
     font-weight: 600;
     color: var(--color-bg, #0f1117);
-    opacity: 0;
-    font-size: 0;
+    font-size: 1.05rem;
     white-space: nowrap;
-    transition: all 0.3s ease;
+    /* Forces text into one line so pill width calculates correctly */
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-/* 4. HOVER: Becomes a White Box with Dark Text */
+/* 6. HOVER: Pill expands precisely to fit the text size */
 .skills-tag:hover {
-    padding: 0 1.5rem;
+    max-width: 450px;
+    /* High ceiling limit so max-content takes over smoothly */
+    padding: 0 1.8rem;
     background-color: var(--color-text, #ffffff);
     border-color: var(--color-text, #ffffff);
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .skills-tag:hover .skill-icon {
@@ -77,27 +93,26 @@
 
 .skills-tag:hover .skill-name {
     opacity: 1;
-    font-size: 1.2rem;
-    /* Slightly larger text to match the bigger container */
+    transition-delay: 0.1s;
+    /* Tiny delay for smooth reveal */
 }
 
-/* 5. Mobile Responsiveness */
+/* 7. Mobile Responsiveness */
 @media (max-width: 768px) {
     .skills-section {
         grid-template-columns: 1fr;
-        /* Stack categories vertically on mobile */
         gap: 2rem;
     }
 
     .skills-list {
-        grid-template-columns: repeat(3, 1fr);
-        /* Keeps 3 per row on mobile too */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1.2rem;
     }
 
     .skills-tag {
         height: 56px;
         min-width: 56px;
+        max-width: 56px;
         border-radius: 28px;
     }
 
@@ -106,7 +121,12 @@
         height: 38px;
     }
 
-    .skills-tag:hover .skill-name {
-        font-size: 1.05rem;
+    .skill-name {
+        font-size: 0.85rem;
+    }
+
+    .skills-tag:hover {
+        padding: 0 1.2rem;
+        max-width: 300px;
     }
 }
