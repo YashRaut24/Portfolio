@@ -10,6 +10,7 @@
     border: none;
     box-shadow: none;
     z-index: 90;
+    width: 13%;
 }
 
 .header-name {
