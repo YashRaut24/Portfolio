@@ -6,7 +6,7 @@ import PageFlip from './PageFlip';
 import Page from './Page';
 import { bookSpreads, hiddenSpread } from '../../data/bookSpreads';
 import './Book.css';
-import { playSound, preloadSounds, SOUNDS } from '../../utils/sound';
+import { playSound, SOUNDS } from '../../utils/sound';
 
 function PrevArrowIcon() {
   return (
@@ -109,10 +109,6 @@ function DesktopBook() {
         return () => clearTimeout(timer);
       }
     }, [isOpen, secretUnlocked, currentSpread, totalSpreads]);
-    
-  useEffect(() => {
-        preloadSounds();
-  }, []);
       
   useEffect(() => {
     const handleKeyDown = (e) => {
