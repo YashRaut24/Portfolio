@@ -3,6 +3,7 @@ let soundEnabled = true;
 const cache = {};
 const lastPlayed = {};
 let audioUnlocked = false;
+let soundsPreloaded = false; // Synchronous lock for idempotency
 
 function getAudio(src) {
   if (!cache[src]) {
@@ -12,7 +13,6 @@ function getAudio(src) {
 }
 
 export function playSound(src, volume = 0.5, startOffset = 0) {
-
   const now = performance.now();
 
   if (lastPlayed[src] && now - lastPlayed[src] < 80) {
@@ -39,6 +39,9 @@ export const SOUNDS = {
 };
 
 export function preloadSounds() {
+  if (soundsPreloaded) return;
+  soundsPreloaded = true;
+
   Object.values(SOUNDS).forEach((src) => {
     const audio = getAudio(src);
     audio.preload = 'auto';
@@ -65,4 +68,3 @@ export function unlockAudio() {
       .catch(() => {});
   });
 }
-
