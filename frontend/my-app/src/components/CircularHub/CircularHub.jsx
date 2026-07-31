@@ -6,7 +6,7 @@ import { hubNodesData } from '../../data/hubNodes';
 import './CircularHub.css';
 import HubDoodles from './HubDoodles';
 import OrbitRing from './OrbitRing';
-import { playSound, SOUNDS, unlockAudio, preloadSounds } from '../../utils/sound'; // Added preloadSounds
+import { playSound, SOUNDS, unlockAudio } from '../../utils/sound';
 import { prefersReducedMotion } from '../../utils/motionPrefs';
 import HubRail from './HubRail';
 import AmbientWash from './AmbientWash';
@@ -58,11 +58,6 @@ function CircularHub({ starFieldRef }) {
 
   const [rotationOffset, setRotationOffset] = useState(ACTIVE_ARC_ANGLE);
   const [transitionDirection, setTransitionDirection] = useState(1);
-
-  // Preload sounds on mount so they are instantly ready for scrolling
-  useEffect(() => {
-    preloadSounds();
-  }, []);
 
   useEffect(() => {
     const updateLayout = () => {
