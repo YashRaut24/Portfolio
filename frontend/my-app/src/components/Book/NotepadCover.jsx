@@ -22,6 +22,11 @@ export default function NotepadCover({
   const [isBehind, setIsBehind] = useState(openStrip);
   const [isOpenComplete, setIsOpenComplete] = useState(openStrip);
   const [isDraggingNow, setIsDraggingNow] = useState(false);
+  
+  // Synchronous Interaction Locks
+  const isAnimatingRef = useRef(false);
+  const activePointerIdRef = useRef(null);
+  
   const pointerStartY = useRef(0);
   const pointerStartAngle = useRef(0);
   const coverRef = useRef(null);
@@ -77,7 +82,10 @@ export default function NotepadCover({
   }, [rotateX, openStrip]);
 
   const settleTo = (targetAngle, info = null) => {
-    if (isAnimating || openStrip) return;
+    if (isAnimatingRef.current || openStrip) return;
+    
+    // Synchronously lock interactions
+    isAnimatingRef.current = true;
     setIsAnimating(true);
     setIsDraggingNow(false);
     onMotionStart && onMotionStart();
@@ -94,6 +102,8 @@ export default function NotepadCover({
       velocity: degreeVelocity,
       restDelta: 0.001,
       onComplete: () => {
+        // Safely release locks
+        isAnimatingRef.current = false;
         const nowOpen = targetAngle >= 180;
         setIsOpenComplete(nowOpen);
         setIsAnimating(false);
@@ -104,8 +114,11 @@ export default function NotepadCover({
   };
 
   const handlePointerDown = (e) => {
-    if (isAnimating || openStrip) return;
+    if (isAnimatingRef.current || openStrip) return;
+    // Prevent second finger from hijacking an active drag
+    if (activePointerIdRef.current !== null) return;
 
+    activePointerIdRef.current = e.pointerId;
     e.currentTarget.setPointerCapture(e.pointerId);
     pointerStartY.current = e.clientY;
     pointerStartAngle.current = rotateX.get();
@@ -117,7 +130,9 @@ export default function NotepadCover({
   };
 
   const handlePointerMove = (e) => {
-    if (!isDraggingNow || isAnimating || openStrip) return;
+    if (isAnimatingRef.current || openStrip) return;
+    // Ignore events from fingers that don't own the drag transaction
+    if (activePointerIdRef.current !== e.pointerId) return;
 
     const deltaY = e.clientY - pointerStartY.current;
 
@@ -133,11 +148,18 @@ export default function NotepadCover({
   };
 
   const handlePointerUp = (e) => {
-    if (!isDraggingNow) return;
-
-    e.currentTarget.releasePointerCapture(e.pointerId);
+    // Ignore events from unrecognized pointers
+    if (activePointerIdRef.current !== e.pointerId) return;
     
-    if (isAnimating || openStrip) return;
+    activePointerIdRef.current = null;
+
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch (err) {
+      // Safely ignore if the browser already implicitly lost capture
+    }
+    
+    if (isAnimatingRef.current || openStrip) return;
 
     setIsDraggingNow(false);
 
@@ -165,7 +187,7 @@ export default function NotepadCover({
           ? "" 
           : "notepad-cover-front-layer"
       }`}
-transformTemplate={({ rotateX, scaleY, z }) => {
+      transformTemplate={({ rotateX, scaleY, z }) => {
         return `perspective(2500px) translateZ(${z || "0px"}) translateY(${isStrip ? "-3px" : "0px"}) rotateX(${rotateX || "0deg"}) scaleY(${scaleY !== undefined ? scaleY : 1})`;
       }}
       style={{
