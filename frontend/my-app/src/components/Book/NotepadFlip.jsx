@@ -27,6 +27,11 @@ const NotepadFlip = forwardRef(function NotepadFlip(
   ref
 ) {
   const rotateX = useMotionValue(0);
+  
+  // Synchronous Transaction Locks
+  const isAnimatingRef = useRef(false);
+  const activePointerIdRef = useRef(null);
+  
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState(null); 
   const dragDirRef = useRef(null);
@@ -59,8 +64,8 @@ const NotepadFlip = forwardRef(function NotepadFlip(
   useEffect(() => {
     const unsubscribe = rotateX.on("change", (latest) => {
       setIsBehind((prev) => {
-        if (latest >= 90 && !prev) return true;   // try bumping 90 → ~160
-        if (latest < 90 && prev) return false;    // and this too, to match
+        if (latest >= 90 && !prev) return true;
+        if (latest < 90 && prev) return false;
         return prev;
       });
     });
@@ -74,14 +79,17 @@ const NotepadFlip = forwardRef(function NotepadFlip(
   const perspectiveOriginY = useTransform(progress, [0, 0.5, 1], ["0%", "15%", "0%"]);
   const shadowOpacityCurve = useTransform(progress, [0, 0.15, 0.5, 0.85, 1], [0, 0.72, 1, 0.5, 0]);
   const shadowOpacity = useTransform(rotateX, [180, 90, 0], [0.1, 0.4, 0.1]);
+  
   const resetIdle = () => {
     dragDirRef.current = null;
     setDirection(null);
     setIsAnimating(false);
     setIsDragging(false);
+    isAnimatingRef.current = false;
   };
 
-const commit = (dir, pixelVelocityY = 0) => {
+  const commit = (dir, pixelVelocityY = 0) => {
+    isAnimatingRef.current = true;
     setIsAnimating(true);
     const degreeVelocity = -(pixelVelocityY / DRAG_DISTANCE) * 180;
 
@@ -92,7 +100,7 @@ const commit = (dir, pixelVelocityY = 0) => {
       damping: 26,
       mass: 0.45,
       velocity: degreeVelocity,
-      restDelta: 0.01, // Settles cleanly and immediately
+      restDelta: 0.01,
     };
 
     if (dir === "next") {
@@ -117,6 +125,7 @@ const commit = (dir, pixelVelocityY = 0) => {
   };
 
   const cancel = (dir, pixelVelocityY = 0, startAngle = 0) => {
+    isAnimatingRef.current = true;
     setIsAnimating(true);
     const degreeVelocity = -(pixelVelocityY / DRAG_DISTANCE) * 180;
 
@@ -136,7 +145,11 @@ const commit = (dir, pixelVelocityY = 0) => {
 
   useImperativeHandle(ref, () => ({
     triggerNext: () => {
-      if (isAnimating || !hasNext) return;
+      // Synchronously reject if animating, physically dragging, or out of bounds
+      if (isAnimatingRef.current || activePointerIdRef.current !== null || !hasNext) return;
+      
+      isAnimatingRef.current = true;
+      setIsAnimating(true);
       setDirection("next");
       dragDirRef.current = "next";
       rotateX.set(0);
@@ -144,7 +157,11 @@ const commit = (dir, pixelVelocityY = 0) => {
       commit("next");
     },
     triggerPrev: () => {
-      if (isAnimating || !hasPrev) return;
+      // Synchronously reject if animating, physically dragging, or out of bounds
+      if (isAnimatingRef.current || activePointerIdRef.current !== null || !hasPrev) return;
+      
+      isAnimatingRef.current = true;
+      setIsAnimating(true);
       setDirection("prev");
       dragDirRef.current = "prev";
       rotateX.set(180);
@@ -154,8 +171,10 @@ const commit = (dir, pixelVelocityY = 0) => {
   }));
 
   const handlePointerDown = (e) => {
-    if (isAnimating) return;
+    if (isAnimatingRef.current) return;
+    if (activePointerIdRef.current !== null) return;
     
+    activePointerIdRef.current = e.pointerId;
     e.currentTarget.setPointerCapture(e.pointerId);
     
     pointerStartY.current = e.clientY;
@@ -169,7 +188,8 @@ const commit = (dir, pixelVelocityY = 0) => {
   };
 
   const handlePointerMove = (e) => {
-    if (!isDragging || isAnimating) return;
+    if (!isDragging || isAnimatingRef.current) return;
+    if (activePointerIdRef.current !== e.pointerId) return;
 
     const now = performance.now();
     const dt = now - lastPointerTime.current;
@@ -208,13 +228,19 @@ const commit = (dir, pixelVelocityY = 0) => {
   };
 
   const handlePointerUp = (e) => {
-    if (!isDragging) return;
-    
-    e.currentTarget.releasePointerCapture(e.pointerId);
+    if (activePointerIdRef.current !== e.pointerId) return;
+    activePointerIdRef.current = null;
+
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch (err) {
+      // Safely ignore if pointer capture was already implicitly lost by the browser
+    }
+
     setIsDragging(false);
 
     const dir = dragDirRef.current;
-    if (isAnimating || !dir) return;
+    if (isAnimatingRef.current || !dir) return;
 
     const startAngle = dragStartAngleRef.current;
     const current = rotateX.get();
@@ -222,10 +248,6 @@ const commit = (dir, pixelVelocityY = 0) => {
     
     const velocityY = pointerVelocity.current;
 
-    // A flick should only shortcut the commit distance once the page has
-    // already traveled a meaningful amount. Otherwise a fast-but-tiny swipe
-    // (barely nudging the page) would instantly flip it instead of
-    // following the finger up to a proper height first.
     const MIN_FLICK_DISTANCE = commitDistance * 0.35;
 
     if (dir === "next") {
@@ -250,21 +272,18 @@ const commit = (dir, pixelVelocityY = 0) => {
   };
 
   const frontLeafContent = direction === "prev" ? prevContent : currentContent;
-// Replace the old translateZ and translateY with these tighter values:
-const translateZ = useTransform(rotateX, [0, 20, 60, 120, 180], [0, -12, -42, -18, 0]);
-const translateY = useTransform(rotateX, [0, 25, 90, 180], [0, -11, 22, 0]);  // const translateY = useTransform(
-  //     rotateX,
-  //     [0, 25, 90, 180],
-  //     [0, 10, 22, 0]
-  // );
-return (
+
+  const translateZ = useTransform(rotateX, [0, 20, 60, 120, 180], [0, -12, -42, -18, 0]);
+  const translateY = useTransform(rotateX, [0, 25, 90, 180], [0, -11, 22, 0]);  
+  
+  return (
     <motion.div
       ref={flipRefElement}
       className={`notepad-flip ${
         isBehind ? "notepad-flip-behind" : "notepad-flip-front-layer"
       }`}
       style={{
-        rotateX: rotateX, // Direct rotation for instant responsiveness
+        rotateX: rotateX,
         scaleY,
         translateZ,
         translateY,
