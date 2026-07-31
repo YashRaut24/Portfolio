@@ -4,7 +4,7 @@ import NotepadCover from "./NotepadCover";
 import Page from "./Page";
 import NotepadFlip from "./NotepadFlip";
 import { bookSpreads, hiddenSpread } from "../../data/bookSpreads";
-import { playSound, preloadSounds, SOUNDS } from "../../utils/sound"; // Imported sound utilities
+import { playSound, SOUNDS } from "../../utils/sound"; // Imported sound utilities
 import "./MobileNotepad.css";
 
 export default function MobileNotepad() {
@@ -16,11 +16,6 @@ export default function MobileNotepad() {
   const [coverMoving, setCoverMoving] = useState(false);
 
   const flipRef = useRef(null);
-
-  // Preload sounds when the mobile component mounts to prevent latency
-  useEffect(() => {
-    preloadSounds();
-  }, []);
 
   const spreads = useMemo(
     () => (secretUnlocked ? [...bookSpreads, hiddenSpread] : bookSpreads),
