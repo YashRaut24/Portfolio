@@ -70,7 +70,6 @@ const NotepadFlip = forwardRef(function NotepadFlip(
   const stripProgress = useTransform(rotateX, [STRIP_COLLAPSE_START, 180], [0, 1], { clamp: true });
   const scaleY = useTransform(stripProgress, [0, 1], [1, stripScale]);
   
-  const backContentOpacity = useTransform(rotateX, [90, STRIP_COLLAPSE_START], [1, 0]);
   const progress = useTransform(rotateX, [0, 180], [0, 1]);
   const perspectiveOriginY = useTransform(progress, [0, 0.5, 1], ["0%", "15%", "0%"]);
   const shadowOpacityCurve = useTransform(progress, [0, 0.15, 0.5, 0.85, 1], [0, 0.72, 1, 0.5, 0]);
@@ -222,11 +221,17 @@ const commit = (dir, pixelVelocityY = 0) => {
     const commitDistance = 180 * COMMIT_RATIO;
     
     const velocityY = pointerVelocity.current;
-    const isFlickNext = dir === "next" && velocityY < -300;
-    const isFlickPrev = dir === "prev" && velocityY > 300;
+
+    // A flick should only shortcut the commit distance once the page has
+    // already traveled a meaningful amount. Otherwise a fast-but-tiny swipe
+    // (barely nudging the page) would instantly flip it instead of
+    // following the finger up to a proper height first.
+    const MIN_FLICK_DISTANCE = commitDistance * 0.35;
 
     if (dir === "next") {
       const traveledTowardOpen = current - startAngle;
+      const isFlickNext =
+        velocityY < -300 && traveledTowardOpen > MIN_FLICK_DISTANCE;
       if (traveledTowardOpen > commitDistance || isFlickNext) {
         commit("next", velocityY);
       } else {
@@ -234,6 +239,8 @@ const commit = (dir, pixelVelocityY = 0) => {
       }
     } else {
       const traveledTowardPrev = startAngle - current;
+      const isFlickPrev =
+        velocityY > 300 && traveledTowardPrev > MIN_FLICK_DISTANCE;
       if (traveledTowardPrev > commitDistance || isFlickPrev) {
         commit("prev", velocityY);
       } else {
@@ -243,7 +250,6 @@ const commit = (dir, pixelVelocityY = 0) => {
   };
 
   const frontLeafContent = direction === "prev" ? prevContent : currentContent;
-  const backLeafContent = direction === "next" ? currentContent : prevContent;
 // Replace the old translateZ and translateY with these tighter values:
 const translateZ = useTransform(rotateX, [0, 20, 60, 120, 180], [0, -12, -42, -18, 0]);
 const translateY = useTransform(rotateX, [0, 25, 90, 180], [0, -11, 22, 0]);  // const translateY = useTransform(
@@ -289,16 +295,7 @@ return (
       </div>
 
       <div className="notepad-flip-face notepad-flip-back">
-        <div className="notepad-flip-back-content">
-          <motion.div style={{ opacity: backContentOpacity, width: "100%", height: "100%" }}>
-            <Page
-              content={backLeafContent}
-              onExplore={onExplore}
-              onNavigate={onNavigate}
-              onUnlock={onUnlock}
-            />
-          </motion.div>
-        </div>
+        <div className="notepad-flip-back-blank" />
       </div>
     </motion.div>
   );

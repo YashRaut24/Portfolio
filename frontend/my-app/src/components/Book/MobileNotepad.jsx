@@ -140,7 +140,9 @@ export default function MobileNotepad() {
     );
   }
 
-  const baseContent = pages[pageIndex];
+  const baseContent = previewDirection === 'next' && hasNext 
+    ? pages[pageIndex + 1] 
+    : pages[pageIndex];
 
   return (
     <div className="mobile-notepad mobile-notepad-open">

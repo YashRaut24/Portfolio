@@ -28,13 +28,17 @@
 
 .notepad-flip-front-layer {
     z-index: 80;
-    filter: drop-shadow(0 16px 30px rgba(0, 0, 0, calc(var(--shadow-opacity, 0.1) * 1.2)));
-    transition: filter 0.2s linear;
+    /* box-shadow instead of filter: drop-shadow — filter on an element that
+    also has transform-style: preserve-3d breaks backface-visibility on its
+    children in WebKit/Blink, letting page content bleed through (mirrored)
+    onto what should be a hidden/blank face during the flip. */
+    box-shadow: 0 16px 30px rgba(0, 0, 0, calc(var(--shadow-opacity, 0.1) * 1.2));
+    transition: box-shadow 0.2s linear;
 }
 
 .notepad-flip-behind {
     z-index: 65;
-    filter: drop-shadow(0 -5px 14px rgba(0, 0, 0, 0.12));
+    box-shadow: 0 -5px 14px rgba(0, 0, 0, 0.12);
 }
 
 .notepad-flip-face {
@@ -52,7 +56,6 @@
     transform-style: preserve-3d !important;
     -webkit-transform-style: preserve-3d !important;
     will-change: transform !important;
-    clip-path: inset(0 round 0 0 14px 14px);
     -webkit-font-smoothing: subpixel-antialiased;
 }
 
@@ -86,6 +89,13 @@
     transform: rotateX(180deg) translateZ(1px);
     background: #FFFFFF;
     /* Changed to white */
+}
+
+/* Blank paper shown on the underside of the page while it's turning */
+.notepad-flip-back-blank {
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
 }
 
 /* Paper Curl Shading Overlay */
