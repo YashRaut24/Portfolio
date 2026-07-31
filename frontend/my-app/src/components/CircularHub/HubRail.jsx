@@ -8,6 +8,7 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
     const total = nodes.length;
     const shouldReduceMotion = useReducedMotion();
 
+    const activePointerIdRef = useRef(null);
     const scrollAccum = useRef(0);
     const dragStartY = useRef(0);
     const isDragging = useRef(false);
@@ -58,17 +59,17 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
     // --- DESKTOP MOUSE DRAG EVENTS ---
     const handlePointerDown = (e) => {
         if (e.pointerType === 'touch') return; // Let touch events handle mobile
+        if (activePointerIdRef.current !== null) return;
+        
+        activePointerIdRef.current = e.pointerId;
         isDragging.current = true;
         dragStartY.current = e.clientY;
-        
-        // currentTarget ensures we capture on the container, not the inner SVG
-        if (e.currentTarget.setPointerCapture) {
-            e.currentTarget.setPointerCapture(e.pointerId);
-        }
     };
 
     const handlePointerMove = (e) => {
         if (!isDragging.current || e.pointerType === 'touch') return;
+        if (activePointerIdRef.current !== e.pointerId) return;
+        
         const deltaY = e.clientY - dragStartY.current;
         
         if (deltaY > 40) {
@@ -82,11 +83,10 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
 
     const handlePointerUp = (e) => {
         if (e.pointerType === 'touch') return;
-        isDragging.current = false;
+        if (activePointerIdRef.current !== e.pointerId) return;
         
-        if (e.currentTarget.hasPointerCapture && e.currentTarget.hasPointerCapture(e.pointerId)) {
-            e.currentTarget.releasePointerCapture(e.pointerId);
-        }
+        activePointerIdRef.current = null;
+        isDragging.current = false;
     };
 
     return (
@@ -101,6 +101,7 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
+            onPointerLeave={handlePointerUp}
         >
             {nodes.map((node, index) => {
                 const Icon = node.icon;

@@ -23,6 +23,10 @@ const STEP_ANIM_MS = 350;
 const TRAIL_FADE_MS = 500;               
 
 function CircularHub({ starFieldRef }) {
+  const isMounted = useRef(true);
+  const activePointerIdRef = useRef(null);
+  const unlockTimeoutRef = useRef(null);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [radius, setRadius] = useState(270);
   const scrollAccum = useRef(0);
@@ -60,6 +64,7 @@ function CircularHub({ starFieldRef }) {
   const [transitionDirection, setTransitionDirection] = useState(1);
 
   useEffect(() => {
+    isMounted.current = true;
     const updateLayout = () => {
       const width = window.innerWidth;
       const isTablet = width <= 1024 && width > 768;
@@ -79,7 +84,10 @@ function CircularHub({ starFieldRef }) {
 
     updateLayout();
     window.addEventListener('resize', updateLayout);
-    return () => window.removeEventListener('resize', updateLayout);
+    return () => {
+      isMounted.current = false;
+      window.removeEventListener('resize', updateLayout);
+    };
   }, []);
 
   useEffect(() => {
@@ -87,6 +95,7 @@ function CircularHub({ starFieldRef }) {
       clearInertia();
       trailTimeouts.current.forEach(clearTimeout);
       trailTimeouts.current.clear();
+      if (unlockTimeoutRef.current) clearTimeout(unlockTimeoutRef.current);
     };
   }, []);
 
@@ -97,6 +106,7 @@ function CircularHub({ starFieldRef }) {
   };
 
   const addTrail = (index) => {
+    if (!isMounted.current) return;
     setTrailingSet((prev) => {
       const next = new Set(prev);
       next.add(index);
@@ -107,6 +117,7 @@ function CircularHub({ starFieldRef }) {
       clearTimeout(trailTimeouts.current.get(index));
     }
     const timeoutId = setTimeout(() => {
+      if (!isMounted.current) return;
       setTrailingSet((prev) => {
         const next = new Set(prev);
         next.delete(index);
@@ -126,7 +137,7 @@ function CircularHub({ starFieldRef }) {
   }, [activeIndex]);
 
   const trackChallenge = (from, to, direction) => {
-    if (labUnlocked) return;
+    if (!isMounted.current || labUnlocked) return;
 
     const state = challenge.current;
     const now = performance.now();
@@ -166,11 +177,11 @@ function CircularHub({ starFieldRef }) {
   };
 
   const goToIndex = (newIndex, direction = null) => {
+    if (!isMounted.current) return;
     const wrapped = ((newIndex % totalNodes) + totalNodes) % totalNodes;
 
     if (wrapped === activeIndex) return;
 
-    // Increased volume from 0.18 to 0.4 to prevent it being inaudible on rapid scroll
     playSound(SOUNDS.hubTransition, 0.4);
 
     if (direction !== null) {
@@ -194,12 +205,16 @@ function CircularHub({ starFieldRef }) {
     if (isAnimating.current) return;
     isAnimating.current = true;
     goToIndex(activeIndex + direction, direction);
-    setTimeout(() => { isAnimating.current = false; }, STEP_ANIM_MS);
+    
+    if (unlockTimeoutRef.current) clearTimeout(unlockTimeoutRef.current);
+    unlockTimeoutRef.current = setTimeout(() => {
+      isAnimating.current = false; 
+    }, STEP_ANIM_MS);
   };
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      unlockAudio(); // Kept here: Keydown is a valid gesture for browser audio unlock
+      unlockAudio(); 
       
       const tag = document.activeElement?.tagName;
       const isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable;
@@ -207,9 +222,11 @@ function CircularHub({ starFieldRef }) {
 
       if (event.key === 'ArrowDown') {
         event.preventDefault();
+        clearInertia();
         advance(window.innerWidth <= 1024 ? 1 : -1);
       } else if (event.key === 'ArrowUp') {
         event.preventDefault();
+        clearInertia();
         advance(window.innerWidth <= 1024 ? -1 : 1);
       }
     };
@@ -222,9 +239,6 @@ function CircularHub({ starFieldRef }) {
     if (!el) return;
 
     const handleWheelNative = (event) => {
-      // Removed unlockAudio() from here because 'wheel' events cannot unlock audio
-      // and can throw errors in strict browser environments, silently breaking the scroll.
-      
       if (event.cancelable) event.preventDefault();
       if (isAnimating.current) return;
 
@@ -247,7 +261,10 @@ function CircularHub({ starFieldRef }) {
   }, [activeIndex]);
 
  const handlePointerDown = (event) => {
-    unlockAudio(); // Kept here: Clicks and touches are valid gestures for browser audio unlock
+    if (activePointerIdRef.current !== null) return;
+    activePointerIdRef.current = event.pointerId;
+
+    unlockAudio(); 
     clearInertia();
     isDragging.current = true;
     dragStartY.current = event.clientY;
@@ -255,6 +272,7 @@ function CircularHub({ starFieldRef }) {
   };
 
   const handlePointerMove = (event) => {
+    if (activePointerIdRef.current !== event.pointerId) return;
     if (!isDragging.current || isAnimating.current) return;
     const deltaY = event.clientY - dragStartY.current;
     const threshold = 50;
@@ -290,7 +308,10 @@ function CircularHub({ starFieldRef }) {
     return (last.y - ref.y) / dt; 
   };
 
-  const handlePointerUp = () => {
+  const handlePointerUp = (event) => {
+    if (activePointerIdRef.current !== event.pointerId) return;
+    activePointerIdRef.current = null;
+    
     if (!isDragging.current) return;
     isDragging.current = false;
 
@@ -332,7 +353,6 @@ function CircularHub({ starFieldRef }) {
     inertiaTimeouts.current.push(stopCoastingId);
   };
   
-
   return (
     <motion.div
       className="hub-container"
@@ -372,7 +392,7 @@ function CircularHub({ starFieldRef }) {
                 radius={radius}
                 isActive={index === activeIndex}
                 isTrailing={trailingSet.has(index)}
-                onClick={() => goToIndex(index)}
+                onClick={() => { clearInertia(); goToIndex(index); }}
                 accent={node.accent}
                 planet={node.planet}
               />
@@ -385,7 +405,7 @@ function CircularHub({ starFieldRef }) {
               nodes={visibleNodes}
               activeIndex={activeIndex}
               direction={transitionDirection}
-              onSelect={goToIndex}
+              onSelect={(idx) => { clearInertia(); goToIndex(idx); }}
           />
         <AnimatePresence mode="wait" custom={transitionDirection}>
           <motion.div
