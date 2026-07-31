@@ -1,4 +1,4 @@
-import { useState,useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Cover from './Cover';
@@ -32,9 +32,12 @@ function DesktopBook() {
   const [currentSpread, setCurrentSpread] = useState(0);
   const [rightPreview, setRightPreview] = useState(false);
   const [leftPreview, setLeftPreview] = useState(false);
-  const [nextTrigger, setNextTrigger] = useState(0);
-  const [prevTrigger, setPrevTrigger] = useState(0);
   const [isTurning, setIsTurning] = useState(false);
+  
+  const turnLockRef = useRef(false);
+  const leftFlipRef = useRef(null);
+  const rightFlipRef = useRef(null);
+  
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -43,6 +46,7 @@ function DesktopBook() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  
   const effectiveSpreads = useMemo(
     () => (secretUnlocked ? [...bookSpreads, hiddenSpread] : bookSpreads),
     [secretUnlocked]
@@ -51,26 +55,52 @@ function DesktopBook() {
   const spread = effectiveSpreads[currentSpread];
 
   const handleExplore = useCallback(() => navigate('/explore'), [navigate]);
+  
   const handleOpen = useCallback(() => {
       setIsOpen(true);
-    }, []);
-  const handleLeftPreview = useCallback(() => setLeftPreview(true), []);
-  const handleLeftPreviewCancel = useCallback(() => setLeftPreview(false), []);
-  const handleRightPreview = useCallback(() => setRightPreview(true), []);
-const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
+  }, []);
+
+  const handleLeftPreview = useCallback(() => {
+    turnLockRef.current = true;
+    setIsTurning(true);
+    setLeftPreview(true);
+  }, []);
+
+  const handleLeftPreviewCancel = useCallback(() => {
+    turnLockRef.current = false;
+    setIsTurning(false);
+    setLeftPreview(false);
+  }, []);
+
+  const handleRightPreview = useCallback(() => {
+    turnLockRef.current = true;
+    setIsTurning(true);
+    setRightPreview(true);
+  }, []);
+
+  const handleRightPreviewCancel = useCallback(() => {
+    turnLockRef.current = false;
+    setIsTurning(false);
+    setRightPreview(false);
+  }, []);
+
   const [endBurst, setEndBurst] = useState(false);
 
   const handleNextClick = useCallback(() => {
-    if (isTurning || currentSpread >= totalSpreads - 1) return;
+    if (turnLockRef.current || currentSpread >= totalSpreads - 1 || !isOpen) return;
+    if (!rightFlipRef.current) return;
+    turnLockRef.current = true;
     setIsTurning(true);
-    setNextTrigger((n) => n + 1);
-  }, [isTurning, currentSpread, totalSpreads]);
+    rightFlipRef.current.doFlip();
+  }, [currentSpread, totalSpreads, isOpen]);
 
   const handlePrevClick = useCallback(() => {
-    if (isTurning) return;
+    if (turnLockRef.current || !isOpen) return;
+    if (!leftFlipRef.current) return;
+    turnLockRef.current = true;
     setIsTurning(true);
-    setPrevTrigger((n) => n + 1);
-  }, [isTurning]);
+    leftFlipRef.current.doFlip();
+  }, [isOpen]);
 
   useEffect(() => {
       if (isOpen && !secretUnlocked && currentSpread === totalSpreads - 1) {
@@ -79,9 +109,11 @@ const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
         return () => clearTimeout(timer);
       }
     }, [isOpen, secretUnlocked, currentSpread, totalSpreads]);
-    useEffect(() => {
+    
+  useEffect(() => {
         preloadSounds();
-      }, []);
+  }, []);
+      
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!isOpen) return;
@@ -91,8 +123,6 @@ const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, handleNextClick, handlePrevClick]);
-
-
 
   const handleUnlock = useCallback(() => {
     setSecretUnlocked(true);
@@ -107,32 +137,35 @@ const handleRightPreviewCancel = useCallback(() => setRightPreview(false), []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secretUnlocked]);
 
-const handleJumpTo = useCallback((index) => {
-    if (isTurning || index === currentSpread) return;
+  const handleJumpTo = useCallback((index) => {
+    if (turnLockRef.current || index === currentSpread) return;
     setCurrentSpread(Math.max(0, Math.min(index, totalSpreads - 1)));
     setRightPreview(false);
     setLeftPreview(false);
-  }, [isTurning, currentSpread, totalSpreads]);
+  }, [currentSpread, totalSpreads]);
 
-  const handleNextComplete = () => {
+  const handleNextComplete = useCallback(() => {
     setCurrentSpread((c) => Math.min(c + 1, totalSpreads - 1));
     setRightPreview(false);
+    turnLockRef.current = false;
     setIsTurning(false);
-  };
+  }, [totalSpreads]);
 
-  const handlePrevComplete = () => {
+  const handlePrevComplete = useCallback(() => {
     if (currentSpread === 0) {
       setIsOpen(false);
       setLeftPreview(false);
+      turnLockRef.current = false;
       setIsTurning(false);
       return;
     }
     setCurrentSpread((c) => Math.max(c - 1, 0));
     setLeftPreview(false);
+    turnLockRef.current = false;
     setIsTurning(false);
-  };
+  }, [currentSpread]);
 
-const rightBaseContent = useMemo(() => (
+  const rightBaseContent = useMemo(() => (
     rightPreview && currentSpread < totalSpreads - 1
       ? effectiveSpreads[currentSpread + 1].right
       : spread.right
@@ -146,7 +179,7 @@ const rightBaseContent = useMemo(() => (
 
   return (
     <div className="book-container">
-      <div   className={`book-frame ${isTurning ? 'book-frame-turning' : ''}`}>
+      <div className={`book-frame ${isTurning ? 'book-frame-turning' : ''}`}>
         <div className="book-stage">
           <div
             className={`book-spread ${
@@ -162,6 +195,7 @@ const rightBaseContent = useMemo(() => (
                 <Page content={leftBaseContent} pageSide="left" onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
                   {isOpen && (
                     <PageFlip
+                      ref={leftFlipRef}
                       side="left"
                       frontContent={spread.left}
                       backContent={currentSpread > 0 ? effectiveSpreads[currentSpread - 1].right : { type: 'cover-face' }}
@@ -169,7 +203,6 @@ const rightBaseContent = useMemo(() => (
                       onPreviewCancel={handleLeftPreviewCancel}
                       onComplete={handlePrevComplete}
                       disabled={false}
-                      triggerCount={prevTrigger}
                       onExplore={handleExplore}
                       onNavigate={handleJumpTo}
                       onUnlock={handleUnlock}
@@ -184,6 +217,7 @@ const rightBaseContent = useMemo(() => (
             <Page content={rightBaseContent} pageSide="right" onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
               {isOpen && (
                 <PageFlip
+                  ref={rightFlipRef}
                   side="right"  
                   frontContent={spread.right}
                   backContent={currentSpread < totalSpreads - 1 ? effectiveSpreads[currentSpread + 1].left : null}
@@ -191,7 +225,6 @@ const rightBaseContent = useMemo(() => (
                   onPreviewCancel={handleRightPreviewCancel}
                   onComplete={handleNextComplete}
                   disabled={currentSpread >= totalSpreads - 1}
-                  triggerCount={nextTrigger}
                   onExplore={handleExplore}
                   onNavigate={handleJumpTo}
                   onUnlock={handleUnlock}
