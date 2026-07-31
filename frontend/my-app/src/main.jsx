@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.jsx'
 import '@fontsource/kalam/400.css';
 import '@fontsource/kalam/700.css';
 import '@fontsource/comfortaa/400.css';
@@ -12,6 +13,8 @@ import './styles/global.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-        <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>
 )

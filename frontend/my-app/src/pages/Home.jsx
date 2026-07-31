@@ -6,6 +6,7 @@ import FloatingDoodles from '../components/Book/FloatingDoodles';
 import './Home.css';
 
 function Home() {
+  
   return (
     <div className="home-page">
       <SEO title="Yash | Portfolio" description="AI Engineer and Full-Stack Developer portfolio." />
