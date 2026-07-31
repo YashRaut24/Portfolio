@@ -8,10 +8,12 @@ function random(min, max) {
 }
 
 const StarField = forwardRef(({ isDarkMode }, ref) => {
-
-    const target = useRef({ x: 0, y: 0 });
-    const current = useRef({ x: 0, y: 0 });
-    const burstTimeout = useRef(null);
+  const targetRef = useRef({ x: 0, y: 0 });
+  const currentRef = useRef({ x: 0, y: 0 });
+  const burstTimeout = useRef(null);
+  
+  const starRefs = useRef([]);
+  const constellationsRef = useRef(null);
 
   const stars = useMemo(() => {
     return Array.from({ length: STAR_COUNT }, (_, i) => {
@@ -85,8 +87,9 @@ const StarField = forwardRef(({ isDarkMode }, ref) => {
     }, [stars]);
 
   const [shootingStars, setShootingStars] = useState([]);
-    const [burstStars, setBurstStars] = useState(new Set());
-const triggerStarBurst = () => {
+  const [burstStars, setBurstStars] = useState(new Set());
+  
+  const triggerStarBurst = () => {
     const total = stars.length;
     const picked = new Set();
 
@@ -103,8 +106,9 @@ const triggerStarBurst = () => {
     burstTimeout.current = setTimeout(() => {
         setBurstStars(new Set());
     }, 500);
-};
-    useEffect(() => {
+  };
+
+  useEffect(() => {
     const createShootingStar = () => {
         const id = Date.now();
 
@@ -130,18 +134,12 @@ const triggerStarBurst = () => {
     let timer = setTimeout(createShootingStar, 6000);
 
     return () => clearTimeout(timer);
-    }, []);
+  }, []);
 
-    useEffect(() => {
-    const wrappers = () =>
-        document.querySelectorAll(".star-wrapper");
-
-    const target = { x: 0, y: 0 };
-    const current = { x: 0, y: 0 };
-
+  useEffect(() => {
     const onMove = (e) => {
-        target.x = (e.clientX / window.innerWidth - 0.5) * 2;
-        target.y = (e.clientY / window.innerHeight - 0.5) * 2;
+        targetRef.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
+        targetRef.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
     };
 
     window.addEventListener("mousemove", onMove);
@@ -149,22 +147,27 @@ const triggerStarBurst = () => {
     let frame;
 
     const animate = () => {
-        current.x += (target.x - current.x) * 0.06;
-        current.y += (target.y - current.y) * 0.06;
+        currentRef.current.x += (targetRef.current.x - currentRef.current.x) * 0.06;
+        currentRef.current.y += (targetRef.current.y - currentRef.current.y) * 0.06;
 
-        wrappers().forEach((star) => {
-        const svg = document.querySelector(".constellations");
-        if (svg) {
-        svg.style.transform = `translate(${-current.x * 8}px, ${-current.y * 8}px)`;
+        if (constellationsRef.current) {
+            constellationsRef.current.style.transform = `translate(${-currentRef.current.x * 8}px, ${-currentRef.current.y * 8}px)`;
         }
-        if (star.classList.contains("small")) {
-            star.style.transform = `translate(${-current.x * 15}px, ${-current.y * 3}px)`;
-        } else if (star.classList.contains("medium")) {
-            star.style.transform = `translate(${-current.x * 20}px, ${-current.y * 6}px)`;
-        } else {
-            star.style.transform = `translate(${-current.x * 25}px, ${-current.y * 10}px)`;
+
+        // Iterate securely through the stored refs array instead of querying the DOM
+        for (let i = 0; i < stars.length; i++) {
+            const el = starRefs.current[i];
+            if (!el) continue;
+
+            const layer = stars[i].layer;
+            if (layer === "small") {
+                el.style.transform = `translate(${-currentRef.current.x * 15}px, ${-currentRef.current.y * 3}px)`;
+            } else if (layer === "medium") {
+                el.style.transform = `translate(${-currentRef.current.x * 20}px, ${-currentRef.current.y * 6}px)`;
+            } else {
+                el.style.transform = `translate(${-currentRef.current.x * 25}px, ${-currentRef.current.y * 10}px)`;
+            }
         }
-        });
 
         frame = requestAnimationFrame(animate);
     };
@@ -175,19 +178,23 @@ const triggerStarBurst = () => {
         cancelAnimationFrame(frame);
         window.removeEventListener("mousemove", onMove);
     };
-    }, []);
-    useEffect(() => {
+  }, [stars]); // Re-bind if stars array reference changes
+
+  useEffect(() => {
     return () => {
         clearTimeout(burstTimeout.current);
     };
-}, []);
-    useImperativeHandle(ref, () => ({
-        triggerStarBurst,
-    }));
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+      triggerStarBurst,
+  }));
+  
   return (
     <div className={`starfield ${isDarkMode ? "dark" : "light"}`}>
       <svg
         className="constellations"
+        ref={constellationsRef}
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
         >
@@ -201,9 +208,10 @@ const triggerStarBurst = () => {
             />
         ))}
       </svg>
-    {stars.map((star) => (
+    {stars.map((star, i) => (
     <div
         key={star.id}
+        ref={(el) => (starRefs.current[i] = el)}
         className={`star-wrapper ${star.layer}`}
         style={{
         left: `${star.x}%`,
