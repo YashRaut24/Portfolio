@@ -1,9 +1,24 @@
 :root {
     --font-book: 'Patrick Hand', cursive;
     --font-hub: 'Comfortaa', sans-serif;
+
+    /* Softened Focus Rings */
     --focus-ring-width: 3px;
-    --focus-ring-color: var(--color-accent);
-    --focus-ring-shadow: 0 0 0 var(--focus-ring-width) color-mix(in srgb, var(--color-accent) 28%, transparent);
+    --focus-ring-color: color-mix(in srgb, var(--color-accent) 80%, transparent);
+    --focus-ring-shadow: 0 0 0 var(--focus-ring-width) color-mix(in srgb, var(--color-accent) 20%, transparent);
+
+    /* Premium Multi-layered Shadows */
+    --shadow-soft:
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 2px 4px rgba(0, 0, 0, 0.04),
+        0 4px 8px rgba(0, 0, 0, 0.04),
+        0 8px 16px rgba(0, 0, 0, 0.04);
+
+    --shadow-elevated:
+        0 2px 4px rgba(0, 0, 0, 0.06),
+        0 4px 8px rgba(0, 0, 0, 0.06),
+        0 8px 16px rgba(0, 0, 0, 0.06),
+        0 16px 32px rgba(0, 0, 0, 0.06);
 }
 
 :where(button,
@@ -40,20 +55,19 @@
 
     --color-card-bg: #0F1117;
 
-    --color-shadow: rgba(0, 0, 0, .45);
+    --color-shadow: var(--shadow-soft);
 
     --hub-glow-opacity: .22;
 
     --book-bg: #FAFAFA;
     --book-bg-secondary: #FFFFFF;
-    
-    /* Renamed to avoid overriding the purple space theme accent */
-    --book-accent: #F59E0B; 
-    
+
+    --book-accent: #F59E0B;
+
     --book-text: #1A1A1A;
     --book-text-secondary: #555555;
 
     --book-border: #E5E5E5;
 
-    --book-shadow: rgba(0, 0, 0, .08);
+    --book-shadow: var(--shadow-soft);
 }
