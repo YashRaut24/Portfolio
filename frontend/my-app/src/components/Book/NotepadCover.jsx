@@ -11,16 +11,21 @@ export default function NotepadCover({
   onOpen,
   pageIndex = 0,
   openStrip = false,
+  isClosing = false,          // NEW: Tells the cover to animate shut
+  onCloseComplete,            // NEW: Callback for when it finishes closing
   onMotionStart,
   onMotionEnd,
-  onStripInteract, // New interactive prop
+  onStripInteract,
 }) {
   const hasTurnedPages = pageIndex > 0;
   const turnedPagesAttr = hasTurnedPages ? "true" : "false";
 
-  const rotateX = useMotionValue(openStrip ? 180 : 0);
+  // If closing, we must start at 180 degrees so we can animate down
+  const rotateX = useMotionValue(openStrip || isClosing ? 180 : 0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isBehind, setIsBehind] = useState(openStrip);
+  const [isBehind, setIsBehind] = useState(openStrip || isClosing);
+  
+  // If we are actively closing, it is NOT complete
   const [isOpenComplete, setIsOpenComplete] = useState(openStrip);
   const [isDraggingNow, setIsDraggingNow] = useState(false);
   
@@ -109,10 +114,23 @@ export default function NotepadCover({
         setIsOpenComplete(nowOpen);
         setIsAnimating(false);
         onMotionEnd && onMotionEnd();
+        
         if (nowOpen) onOpen && onOpen();
+        if (!nowOpen && isClosing) onCloseComplete && onCloseComplete();
       },
     });
   };
+
+  // REVERSE ENGINE: If instructed to close, wait 30ms for mount, then fire the physics downwards
+  useEffect(() => {
+    if (isClosing) {
+      const timer = setTimeout(() => {
+        settleTo(0);
+      }, 30);
+      return () => clearTimeout(timer);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isClosing]);
 
   const handlePointerDown = (e) => {
     if (isAnimatingRef.current) return;
