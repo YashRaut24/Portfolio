@@ -10,6 +10,8 @@ import "./MobileNotepad.css";
 export default function MobileNotepad() {
   const navigate = useNavigate();
   const [opened, setOpened] = useState(false);
+  const [isClosing, setIsClosing] = useState(false); // NEW: Tracks the physical closing animation
+  
   const [secretUnlocked, setSecretUnlocked] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [previewDirection, setPreviewDirection] = useState(null); 
@@ -99,6 +101,13 @@ export default function MobileNotepad() {
     },
     [spreadIndexToPageIndex, pages.length, pageIndex]
   );
+  
+  // NEW: Triggers the physical closing animation
+  const handleCoverClose = useCallback(() => {
+    setCoverMoving(true);
+    setIsClosing(true);
+    setOpened(false); // Unmounts the "Open" DOM block, mounts the "Closed" DOM block
+  }, []);
 
   // The Sequential Rapid-Flip Engine with a 30ms paint window
   useEffect(() => {
@@ -125,8 +134,6 @@ export default function MobileNotepad() {
     setOpened(true);
   }, []);
 
-  // CRITICAL FIX: All hooks must be declared before any conditional early returns
-  // Strictly sequential content evaluation
   const baseContent = useMemo(() => {
     return previewDirection === 'next' && hasNext 
       ? pages[pageIndex + 1] 
@@ -154,6 +161,8 @@ export default function MobileNotepad() {
 
             <NotepadCover
               onOpen={handleCoverOpen}
+              isClosing={isClosing}
+              onCloseComplete={() => setIsClosing(false)}
               onMotionStart={() => {
                 setCoverMoving(true);
                 playSound(SOUNDS.coverOpen, 0.6, 1.45);
@@ -178,10 +187,13 @@ export default function MobileNotepad() {
             openStrip 
             onOpen={handleCoverOpen} 
             pageIndex={pageIndex} 
-            // Connect physical touch interaction on the top binding to the "Prev" function
             onStripInteract={() => {
+              // If there are turned pages, flip them back.
+              // If there are NO turned pages, shut the cover completely.
               if (hasPrev && targetPageIndex === null) {
                 handlePrevClick();
+              } else if (!hasPrev && targetPageIndex === null) {
+                handleCoverClose();
               }
             }}
           />
