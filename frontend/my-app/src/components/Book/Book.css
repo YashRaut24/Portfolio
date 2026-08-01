@@ -45,7 +45,6 @@
     display: flex;
     height: 70vh;
     background-color: #FFFFFF;
-    /* Changed to white */
     border-radius: 8px;
     perspective: 1800px;
     perspective-origin: center center;
@@ -67,8 +66,7 @@
 
 .book-spread-closing .page-flip-wrapper:last-child {
     background-color: #FFFFFF;
-    /* Changed to white */
-    box-shadow: 10px 10px 30px var(--book-shadow);
+    box-shadow: var(--shadow-elevated);
 }
 
 .book-spread-closing .book-spine {
@@ -130,7 +128,6 @@
     inset: 0;
     z-index: 10;
     background-color: #FFFFFF;
-    /* Changed to white */
 }
 
 .book-spine {
@@ -175,12 +172,15 @@
     font-size: 0.9rem;
     color: var(--book-text);
     background-color: var(--book-bg-secondary);
-    /* Left nav buttons unchanged */
     border: 1px solid var(--book-border);
     padding: 0.6rem 1.4rem;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+
+    /* PREMIUM POLISH: Smooth, snappy transition for physical compression */
+    transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: var(--shadow-soft);
+
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -191,8 +191,15 @@
     outline-offset: 2px;
 }
 
+.nav-btn:hover:not(:disabled) {
+    background-color: var(--book-bg);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-elevated);
+}
+
 .nav-btn:active:not(:disabled) {
-    transform: scale(0.96);
+    transform: scale(0.97) translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .nav-arrow {
@@ -201,19 +208,18 @@
     flex-shrink: 0;
 }
 
-.nav-btn:hover:not(:disabled) {
-    background-color: var(--book-border);
-}
-
 .nav-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
 }
 
 .nav-btn-end:disabled {
     opacity: 1;
     background-color: transparent;
     border-color: transparent;
+    box-shadow: none;
     color: var(--color-accent);
     font-family: 'Patrick Hand', cursive;
     font-size: 1.05rem;
@@ -328,10 +334,18 @@
         animation: none;
         opacity: 0;
     }
+
+    .nav-btn {
+        transition: none;
+    }
+
+    .nav-btn:hover:not(:disabled),
+    .nav-btn:active:not(:disabled) {
+        transform: none;
+    }
 }
 
 @media (max-width: 768px) {
-
     .book-container {
         width: 100%;
         height: 100dvh;
