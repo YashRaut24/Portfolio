@@ -17,11 +17,13 @@ function Node({ label, Icon, angle, radius, isActive, onClick, accent }) {
 
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     rafRef.current = requestAnimationFrame(() => {
+      // PREMIUM POLISH: Significantly reduced aggressive magnetic values.
+      // Tension feels physical and constrained, not loose or bouncy.
       setMagnetic({
-        dx: normX * 8,
-        dy: normY * 8,
-        tilt: normX * 6,
-        scale: 1.06,
+        dx: normX * 3, // Was 8
+        dy: normY * 3, // Was 8
+        tilt: normX * 3, // Was 6
+        scale: 1.02, // Was 1.06
       });
     });
   };
