@@ -1,11 +1,11 @@
-// frontend/my-app/src/components/Contact/ContactForm.jsx
 import { useState } from 'react';
 import { sendContactMessage } from '../../services/api';
 import './ContactForm.css';
 
 function ContactForm() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '', website: '' });
   const [status, setStatus] = useState({ loading: false, error: null, success: false });
+  const [startTime, setStartTime] = useState(Date.now());
 
   const handleChange = (e) => {
     setFormData({
@@ -20,12 +20,17 @@ function ContactForm() {
     // Reset status to loading state
     setStatus({ loading: true, error: null, success: false });
 
+    // Calculate how long it took to fill out the form
+    const timeToComplete = Date.now() - startTime;
+    const payload = { ...formData, timeToComplete };
+
     try {
-      await sendContactMessage(formData);
+      await sendContactMessage(payload);
       
       // On success: clear the form and show success message
       setStatus({ loading: false, error: null, success: true });
-      setFormData({ name: '', email: '', message: '' }); 
+      setFormData({ name: '', email: '', message: '', website: '' }); 
+      setStartTime(Date.now()); // Reset the timer for the next potential submission
       
       // Optional: Hide success message after 5 seconds
       setTimeout(() => setStatus(prev => ({ ...prev, success: false })), 5000);
@@ -38,6 +43,20 @@ function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="contact-form">
+      {/* Invisible Honeypot Field for Bot Detection */}
+      <div className="form-group" style={{ display: 'none' }} aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input 
+          type="text" 
+          id="website" 
+          name="website" 
+          value={formData.website} 
+          onChange={handleChange} 
+          tabIndex="-1"
+          autoComplete="off"
+        />
+      </div>
+
       <div className="form-group">
         <label htmlFor="name">Name</label>
         <input 
