@@ -13,6 +13,7 @@ export default function NotepadCover({
   openStrip = false,
   onMotionStart,
   onMotionEnd,
+  onStripInteract, // New interactive prop
 }) {
   const hasTurnedPages = pageIndex > 0;
   const turnedPagesAttr = hasTurnedPages ? "true" : "false";
@@ -114,14 +115,16 @@ export default function NotepadCover({
   };
 
   const handlePointerDown = (e) => {
-    if (isAnimatingRef.current || openStrip) return;
-    // Prevent second finger from hijacking an active drag
+    if (isAnimatingRef.current) return;
     if (activePointerIdRef.current !== null) return;
 
     activePointerIdRef.current = e.pointerId;
     e.currentTarget.setPointerCapture(e.pointerId);
     pointerStartY.current = e.clientY;
     pointerStartAngle.current = rotateX.get();
+
+    // If it's the open strip, record the initial touch but do not animate the cover physics
+    if (openStrip) return;
 
     setIsOpenComplete(false);
     setIsDraggingNow(true);
@@ -131,7 +134,6 @@ export default function NotepadCover({
 
   const handlePointerMove = (e) => {
     if (isAnimatingRef.current || openStrip) return;
-    // Ignore events from fingers that don't own the drag transaction
     if (activePointerIdRef.current !== e.pointerId) return;
 
     const deltaY = e.clientY - pointerStartY.current;
@@ -148,18 +150,20 @@ export default function NotepadCover({
   };
 
   const handlePointerUp = (e) => {
-    // Ignore events from unrecognized pointers
     if (activePointerIdRef.current !== e.pointerId) return;
-    
     activePointerIdRef.current = null;
 
     try {
       e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch (err) {
-      // Safely ignore if the browser already implicitly lost capture
-    }
+    } catch (err) {}
     
-    if (isAnimatingRef.current || openStrip) return;
+    if (isAnimatingRef.current) return;
+
+    // Trigger physical pull-down if interacting with the open binding strip
+    if (openStrip) {
+      onStripInteract && onStripInteract();
+      return;
+    }
 
     setIsDraggingNow(false);
 
