@@ -4,7 +4,7 @@ import NotepadCover from "./NotepadCover";
 import Page from "./Page";
 import NotepadFlip from "./NotepadFlip";
 import { bookSpreads, hiddenSpread } from "../../data/bookSpreads";
-import { playSound, SOUNDS } from "../../utils/sound"; // Imported sound utilities
+import { playSound, SOUNDS } from "../../utils/sound";
 import "./MobileNotepad.css";
 
 export default function MobileNotepad() {
@@ -12,8 +12,12 @@ export default function MobileNotepad() {
   const [opened, setOpened] = useState(false);
   const [secretUnlocked, setSecretUnlocked] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
-  const [previewDirection, setPreviewDirection] = useState(null); // 'next' | 'prev' | null
+  const [previewDirection, setPreviewDirection] = useState(null); 
   const [coverMoving, setCoverMoving] = useState(false);
+  
+  // Orchestrator for sequential rapid-flipping
+  const [targetPageIndex, setTargetPageIndex] = useState(null);
+  const isTurningRef = useRef(false);
 
   const flipRef = useRef(null);
 
@@ -50,7 +54,6 @@ export default function MobileNotepad() {
   const hasNext = pageIndex < pages.length - 1;
   const hasPrev = pageIndex > 0;
 
-  // Added sound to swipe gestures
   const handlePreviewNext = useCallback(() => {
     setPreviewDirection("next");
     playSound(SOUNDS.pageFlip, 0.4);
@@ -66,33 +69,54 @@ export default function MobileNotepad() {
   const handleCommitNext = useCallback(() => {
     setPageIndex((p) => Math.min(p + 1, pages.length - 1));
     setPreviewDirection(null);
+    isTurningRef.current = false;
   }, [pages.length]);
 
   const handleCommitPrev = useCallback(() => {
     setPageIndex((p) => Math.max(p - 1, 0));
     setPreviewDirection(null);
+    isTurningRef.current = false;
   }, []);
 
-  // Added sound to button clicks
   const handleNextClick = useCallback(() => {
-    playSound(SOUNDS.pageFlip, 0.4);
+    if (isTurningRef.current) return;
+    isTurningRef.current = true;
     flipRef.current?.triggerNext();
   }, []);
 
   const handlePrevClick = useCallback(() => {
-    playSound(SOUNDS.pageFlip, 0.4);
+    if (isTurningRef.current) return;
+    isTurningRef.current = true;
     flipRef.current?.triggerPrev();
   }, []);
 
   const handleNavigate = useCallback(
     (spreadIndex) => {
       const target = spreadIndexToPageIndex[spreadIndex];
-      if (target === undefined) return;
+      if (target === undefined || target === pageIndex) return;
       setPreviewDirection(null);
-      setPageIndex(Math.max(0, Math.min(target, pages.length - 1)));
+      setTargetPageIndex(Math.max(0, Math.min(target, pages.length - 1)));
     },
-    [spreadIndexToPageIndex, pages.length]
+    [spreadIndexToPageIndex, pages.length, pageIndex]
   );
+
+  // The Sequential Rapid-Flip Engine with a 30ms paint window
+  useEffect(() => {
+    if (targetPageIndex !== null && !previewDirection && !coverMoving) {
+      if (!isTurningRef.current) {
+        const timer = setTimeout(() => {
+          if (pageIndex < targetPageIndex) {
+            handleNextClick();
+          } else if (pageIndex > targetPageIndex) {
+            handlePrevClick();
+          } else {
+            setTargetPageIndex(null);
+          }
+        }, 30);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [pageIndex, targetPageIndex, previewDirection, coverMoving, handleNextClick, handlePrevClick]);
 
   const handleExplore = useCallback(() => navigate("/explore"), [navigate]);
   const handleUnlock = useCallback(() => setSecretUnlocked(true), []);
@@ -100,6 +124,14 @@ export default function MobileNotepad() {
     setCoverMoving(false);
     setOpened(true);
   }, []);
+
+  // CRITICAL FIX: All hooks must be declared before any conditional early returns
+  // Strictly sequential content evaluation
+  const baseContent = useMemo(() => {
+    return previewDirection === 'next' && hasNext 
+      ? pages[pageIndex + 1] 
+      : pages[pageIndex];
+  }, [pageIndex, previewDirection, hasNext, pages]);
 
   if (!opened) {
     return (
@@ -124,7 +156,7 @@ export default function MobileNotepad() {
               onOpen={handleCoverOpen}
               onMotionStart={() => {
                 setCoverMoving(true);
-                playSound(SOUNDS.coverOpen, 0.6, 1.45); // Added cover sound here
+                playSound(SOUNDS.coverOpen, 0.6, 1.45);
               }}
               onMotionEnd={() => setCoverMoving(false)}
               pageIndex={pageIndex}
@@ -134,10 +166,6 @@ export default function MobileNotepad() {
       </div>
     );
   }
-
-  const baseContent = previewDirection === 'next' && hasNext 
-    ? pages[pageIndex + 1] 
-    : pages[pageIndex];
 
   return (
     <div className="mobile-notepad mobile-notepad-open">
@@ -181,7 +209,7 @@ export default function MobileNotepad() {
       </div>
 
       <div className="mobile-nav">
-        <button onClick={handlePrevClick} disabled={!hasPrev}>
+        <button onClick={handlePrevClick} disabled={!hasPrev && targetPageIndex === null}>
           ← Prev
         </button>
 
@@ -189,7 +217,7 @@ export default function MobileNotepad() {
           {pageIndex + 1}/{pages.length}
         </span>
 
-        <button onClick={handleNextClick} disabled={!hasNext}>
+        <button onClick={handleNextClick} disabled={!hasNext && targetPageIndex === null}>
           Next →
         </button>
       </div>
