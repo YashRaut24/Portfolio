@@ -117,6 +117,7 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
                         type="button"
                         tabIndex={0}
                         aria-label={node.label}
+                        aria-current={index === activeIndex ? "true" : undefined}
                         key={node.id}
                         className={`hub-rail-item ${index === activeIndex ? 'active' : ''}`}
                         style={{
