@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef, useState, useEffect, useMemo, useCallback } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState, useMemo, useCallback } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import Page from './Page';
 import './PageFlip.css';
@@ -27,16 +27,6 @@ const PageFlip = forwardRef(({ side, frontContent, backContent, onPreview, onPre
   const [isAnimating, setIsAnimating] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
-  const [displayFront, setDisplayFront] = useState(frontContent);
-  const [displayBack, setDisplayBack] = useState(backContent);
-
-  useEffect(() => {
-    if (!isAnimating && !previewedRef.current) {
-      setDisplayFront(frontContent);
-      setDisplayBack(backContent);
-    }
-  }, [frontContent, backContent, isAnimating]);
-
   const finishFlip = useCallback(() => {
     onComplete();
     if (!isClosingFlip) {
@@ -61,8 +51,6 @@ const PageFlip = forwardRef(({ side, frontContent, backContent, onPreview, onPre
       animate(dragX, target, { type: 'spring', stiffness: 220, damping: 24, onComplete: finishFlip });
     }
   }));
-
-  const transitionOptions = useMemo(() => ({ duration: 0.35, ease: 'easeInOut' }), []);
 
   const handleDrag = (_, info) => {
     if (isAnimatingRef.current || disabled) return;
@@ -126,10 +114,10 @@ const PageFlip = forwardRef(({ side, frontContent, backContent, onPreview, onPre
       onDragEnd={handleDragEnd}
     >
       <div className="page-leaf-face page-leaf-front">
-        <Page content={displayFront} pageSide={side} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
+        <Page content={frontContent} pageSide={side} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
       </div>
       <div className="page-leaf-face page-leaf-back">
-        <Page content={displayBack} pageSide={isRight ? 'left' : 'right'} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
+        <Page content={backContent} pageSide={isRight ? 'left' : 'right'} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
       </div>
     </motion.div>
   );

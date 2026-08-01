@@ -37,7 +37,7 @@ function Page({ content, onExplore, onNavigate, onUnlock, pageSide }) {
     ),
     rocket: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 15C15 15 18 12.5 18.5 6.5C12.5 7 10 10 10 13C10 13.8 10.1 14.4 10.3 15" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+        <path d="M12 15C15 15 18 12.5 18.5 6.5C12.5 7 10 10 13C10 13.8 10.1 14.4 10.3 15" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
         <path d="M10.3 15L7 15.5L6 18.5L9 17.5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
         <path d="M12 15L11.5 18.5L14.5 17.5L15 14" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
         <circle cx="14.5" cy="9.5" r="1.3" stroke="currentColor" strokeWidth="1.3" />
@@ -379,8 +379,11 @@ if (content.type === 'cover-face') {
       <div className="page page-cover-face">
         <img
           src="/assets/images/YashPhoto_.jpg"
-          alt="Profile"
+          alt="Portrait of Yash Raut"
           className="cover-photo"
+          loading="lazy"
+          decoding="async"
+          onError={(e) => e.target.style.display = 'none'}
         />
         <h1 className="cover-name">Yash Raut</h1>
         <p className="cover-edu">B.E Computer Engineering</p>
@@ -515,7 +518,14 @@ if (content.type === 'cta') {
             <a href="https://github.com/YashRaut24" target="_blank" rel="noopener noreferrer" className="insta-card">
               <div className="insta-card-image-wrap">
                 {/* Replace src with a screenshot of your GitHub or a relevant graphic */}
-                <img src="/assets/images/GitHub.jpg" alt="GitHub Profile" className="insta-card-img" />
+                <img 
+                  src="/assets/images/GitHub.jpg" 
+                  alt="GitHub Profile Repository Preview" 
+                  className="insta-card-img" 
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => e.target.style.display = 'none'}
+                />
               </div>
               <div className="insta-card-footer">
                 <span className="insta-card-title">github.com/yourusername</span>
@@ -527,7 +537,14 @@ if (content.type === 'cta') {
             <a href="https://drive.google.com/file/d/1-OrBoy4DUnNzyjTSTsX26KAoA424KdgH/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="insta-card">
               <div className="insta-card-image-wrap">
                 {/* Replace src with a thumbnail image of your Resume */}
-                <img src="/assets/images/Resume.png" alt="Resume Thumbnail" className="insta-card-img" />
+                <img 
+                  src="/assets/images/Resume.png" 
+                  alt="Resume Document Preview" 
+                  className="insta-card-img" 
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => e.target.style.display = 'none'}
+                />
               </div>
               <div className="insta-card-footer">
                 <span className="insta-card-title">My Resume.pdf</span>

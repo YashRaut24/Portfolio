@@ -260,8 +260,12 @@ export default function NotepadCover({
         >
           <img
             src="/assets/images/YashPhoto_.jpg"
-            alt="Profile"
+            alt="Portrait of Yash Raut"
             className="notepad-cover-photo"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
+            onError={(e) => e.target.style.display = 'none'}
           />
           <h1 className="notepad-cover-name">Yash Raut</h1>
           <p className="notepad-cover-edu">BE Comps</p>

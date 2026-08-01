@@ -1,4 +1,4 @@
-export const bookSpreads = [
+const spreads = [
   {
     id: 0,
     left: { type: 'inside-cover' },
@@ -6,38 +6,33 @@ export const bookSpreads = [
       type: 'toc',
       pageNumber: 1,
       title: 'Contents',
-      entries: [
-        { label: 'First Year', spreadIndex: 2, pageNumber: 4 },
-        { label: 'Second Year', spreadIndex: 2, pageNumber: 5 },
-        { label: 'Projects', spreadIndex: 3, pageNumber: 6 },
-        { label: "Let's Talk", spreadIndex: 4, pageNumber: 9 },
-      ],
+      entries: [], // Automatically populated below
     },
   },
   {
     id: 1,
     left: {
-    type: 'quick-facts',
-    pageNumber: 2,
-    title: 'Quick Facts',
-  facts: [
-    { icon: 'pin', text: 'Based in India' },
-    { icon: 'code', text: 'Currently building AI-powered apps' },
-    { icon: 'clock', text: '2+ years of coding experience' },
-    { icon: 'spark', text: 'Fun fact: debugs better with chai in hand' },
-    { icon: 'rocket', text: 'Loves shipping side projects fast' },
-    { icon: 'book', text: 'Always picking up something new to learn' },
-    { icon: 'gamepad', text: 'Unwinds with a bit of gaming after long coding sessions' },
-  ],
-},
-right: {
-  type: 'intro',
-  pageNumber: 3,
-  quote: 'Still learning. Still shipping.',
-  description: "I'm an AI Engineer and Full-Stack Developer who likes picking things apart to understand how they work, then building something new with that knowledge.",
-  focusAreas: ['AI/ML', 'Full-Stack Dev', 'System Design'],
-  currentlyExploring: 'Currently exploring: LLM agents & RAG pipelines',
-},
+      type: 'quick-facts',
+      pageNumber: 2,
+      title: 'Quick Facts',
+      facts: [
+        { icon: 'pin', text: 'Based in India' },
+        { icon: 'code', text: 'Currently building AI-powered apps' },
+        { icon: 'clock', text: '2+ years of coding experience' },
+        { icon: 'spark', text: 'Fun fact: debugs better with chai in hand' },
+        { icon: 'rocket', text: 'Loves shipping side projects fast' },
+        { icon: 'book', text: 'Always picking up something new to learn' },
+        { icon: 'gamepad', text: 'Unwinds with a bit of gaming after long coding sessions' },
+      ],
+    },
+    right: {
+      type: 'intro',
+      pageNumber: 3,
+      quote: 'Still learning. Still shipping.',
+      description: "I'm an AI Engineer and Full-Stack Developer who likes picking things apart to understand how they work, then building something new with that knowledge.",
+      focusAreas: ['AI/ML', 'Full-Stack Dev', 'System Design'],
+      currentlyExploring: 'Currently exploring: LLM agents & RAG pipelines',
+    },
   },
   {
     id: 2,
@@ -57,7 +52,7 @@ right: {
       description: "Moved from exploring to building, started real projects in Java and Python, and went deep into the MERN stack.",
       keywords: ['Java', 'Python', 'MongoDB', 'Express', 'React', 'Node.js', 'Basic DSA'],
       annotation: "tried learning DSA, still a work in progress lol",
-      annotationPosition: "bottom-left", // or "top-right" (default)
+      annotationPosition: "bottom-left",
     },
   },
   {
@@ -82,9 +77,38 @@ right: {
   {
     id: 4,
     left: { type: 'placeholder', pageNumber: 8 },
-    right: { type: 'cta', pageNumber: 9 },
+    right: { type: 'cta', pageNumber: 9 }, // Will be labeled "Connect" below
   },
 ];
+
+// Automatically generate Table of Contents from page titles
+const generatedTocEntries = [];
+
+spreads.forEach((spread, spreadIndex) => {
+  ['left', 'right'].forEach((side) => {
+    const page = spread[side];
+    if (page && page.type !== 'toc') {
+      let label = page.title;
+      // Provide a fallback label for the CTA page since it uses a graphical layout
+      if (page.type === 'cta') label = 'Connect'; 
+      
+      if (label) {
+        generatedTocEntries.push({
+          label,
+          spreadIndex,
+          pageNumber: page.pageNumber,
+        });
+      }
+    }
+  });
+});
+
+// Inject generated entries safely into the TOC
+if (spreads[0].right.type === 'toc') {
+  spreads[0].right.entries = generatedTocEntries;
+}
+
+export const bookSpreads = spreads;
 
 export const hiddenSpread = {
   id: 'secret',

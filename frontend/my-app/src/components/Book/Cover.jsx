@@ -69,8 +69,12 @@ function Cover({ onOpen, onOpenStart }) {
         <motion.img
           src="/assets/images/YashPhoto_.jpg"
           style={{ opacity: contentOpacity }}
-          alt="Profile"
+          alt="Portrait of Yash Raut"
           className="cover-photo"
+          loading="eager"
+          fetchPriority="high"
+          decoding="sync"
+          onError={(e) => e.target.style.display = 'none'}
         />
         <motion.h1 className="cover-name" style={{ opacity: contentOpacity }}>
           Yash Raut

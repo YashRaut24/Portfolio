@@ -2,9 +2,27 @@ import { useEffect } from 'react';
 
 function SEO({ title, description, image = '/assets/images/YashPhoto_.jpg' }) {
   useEffect(() => {
-    document.title = title;
-    const currentUrl = window.location.href;
-    const absoluteImage = `${window.location.origin}${image}`;
+    // Derive dynamic identity based on the current pathname or passed title
+    const path = window.location.pathname;
+    let enhancedTitle = title;
+    let themeColor = '#121212';
+    let faviconHref = '/favicon.svg';
+
+    if (path === '/' || title.includes('Yash | Portfolio')) {
+      enhancedTitle = '📖 Yash Raut • Portfolio';
+      themeColor = '#FAFAFA'; // Warm notebook background (--book-bg)
+      faviconHref = '/favicon-book.svg';
+    } else if (path.includes('/explore') || title.includes('Explore')) {
+      enhancedTitle = '🌌 Explore • Yash Raut';
+      themeColor = '#0A0B10'; // Deep space background color (--color-bg)
+      faviconHref = '/favicon-explore.svg';
+    } else {
+      enhancedTitle = '404 • Yash Raut';
+      themeColor = '#121212'; // Neutral dark
+      faviconHref = '/favicon.svg';
+    }
+
+    document.title = enhancedTitle;
 
     const setMetaTag = (attr, key, content) => {
       if (!content) return;
@@ -28,11 +46,21 @@ function SEO({ title, description, image = '/assets/images/YashPhoto_.jpg' }) {
       element.setAttribute('href', href);
     };
 
+    // Update Browser Chrome & Theme Colors
+    setMetaTag('name', 'theme-color', themeColor);
+    
+    // Update Dynamic Favicon
+    setLinkTag('icon', faviconHref);
+    setLinkTag('apple-touch-icon', faviconHref);
+
     // Standard meta
     setMetaTag('name', 'description', description);
 
     // Open Graph
-    setMetaTag('property', 'og:title', title);
+    const absoluteImage = `${window.location.origin}${image}`;
+    const currentUrl = window.location.href;
+    
+    setMetaTag('property', 'og:title', enhancedTitle);
     setMetaTag('property', 'og:description', description);
     setMetaTag('property', 'og:image', absoluteImage);
     setMetaTag('property', 'og:url', currentUrl);
@@ -40,7 +68,7 @@ function SEO({ title, description, image = '/assets/images/YashPhoto_.jpg' }) {
 
     // Twitter Card
     setMetaTag('name', 'twitter:card', 'summary_large_image');
-    setMetaTag('name', 'twitter:title', title);
+    setMetaTag('name', 'twitter:title', enhancedTitle);
     setMetaTag('name', 'twitter:description', description);
     setMetaTag('name', 'twitter:image', absoluteImage);
 

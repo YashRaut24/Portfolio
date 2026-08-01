@@ -34,6 +34,9 @@ function DesktopBook() {
   const [leftPreview, setLeftPreview] = useState(false);
   const [isTurning, setIsTurning] = useState(false);
   
+  // Orchestrator for sequential rapid-flipping
+  const [targetSpread, setTargetSpread] = useState(null);
+  
   const turnLockRef = useRef(false);
   const leftFlipRef = useRef(null);
   const rightFlipRef = useRef(null);
@@ -130,15 +133,28 @@ function DesktopBook() {
       setRightPreview(false);
       setLeftPreview(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [secretUnlocked]);
+  }, [secretUnlocked, effectiveSpreads.length]);
 
   const handleJumpTo = useCallback((index) => {
     if (turnLockRef.current || index === currentSpread) return;
-    setCurrentSpread(Math.max(0, Math.min(index, totalSpreads - 1)));
-    setRightPreview(false);
-    setLeftPreview(false);
+    setTargetSpread(Math.max(0, Math.min(index, totalSpreads - 1)));
   }, [currentSpread, totalSpreads]);
+
+  // The Sequential Rapid-Flip Engine with a 30ms paint window
+  useEffect(() => {
+    if (targetSpread !== null && !isTurning) {
+      const timer = setTimeout(() => {
+        if (currentSpread < targetSpread) {
+          handleNextClick();
+        } else if (currentSpread > targetSpread) {
+          handlePrevClick();
+        } else {
+          setTargetSpread(null); // Destination reached
+        }
+      }, 30);
+      return () => clearTimeout(timer);
+    }
+  }, [currentSpread, targetSpread, isTurning, handleNextClick, handlePrevClick]);
 
   const handleNextComplete = useCallback(() => {
     setCurrentSpread((c) => Math.min(c + 1, totalSpreads - 1));
