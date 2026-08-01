@@ -19,9 +19,17 @@ function Explore() {
     <div className="explore-page">
       <SEO title="Explore | Yash's Portfolio" description="Skills, projects, achievements, and contact." />
       <StarField ref={starFieldRef} isDarkMode={true}/>
+      
       <Header />
-      <OrbitMenu onExit={handleReturnToBook}/>
-      <CircularHub starFieldRef={starFieldRef} />
+      
+      <nav aria-label="Global Options">
+        <OrbitMenu onExit={handleReturnToBook}/>
+      </nav>
+
+      <main role="main" aria-label="Interactive Portfolio Hub">
+        <CircularHub starFieldRef={starFieldRef} />
+      </main>
+
       <GrainOverlay />
     </div>
   );
