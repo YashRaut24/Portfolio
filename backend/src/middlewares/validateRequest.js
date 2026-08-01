@@ -8,10 +8,31 @@ const blockedPersonalDomains = [
 ];
 
 const contactValidationRules = [
+  // Anti-Bot: Honeypot check
+  body('website')
+    .trim()
+    .custom((value) => {
+      if (value) {
+        throw new Error('Automated submission detected.');
+      }
+      return true;
+    }),
+    
+  // Anti-Bot: Minimum interaction time check
+  body('timeToComplete')
+    .custom((value) => {
+      const time = parseInt(value, 10);
+      if (!time || time < 2500) {
+        throw new Error('Form submitted too quickly. Please read the form carefully.');
+      }
+      return true;
+    }),
+
   body('name')
     .trim()
     .notEmpty().withMessage('Name is required')
-    .isLength({ max: 100 })
+    .isString().withMessage('Name must be valid text')
+    .isLength({ max: 100 }).withMessage('Name must be under 100 characters')
     .escape(),
     
   body('email')
@@ -60,14 +81,19 @@ const contactValidationRules = [
   body('message')
     .trim()
     .notEmpty().withMessage('Message is required')
-    .isLength({ max: 1000 })
+    .isString().withMessage('Message must be valid text')
+    .isLength({ max: 1000 }).withMessage('Message is too long')
     .escape(),
 ];
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    // Return a flat, safe message instead of exposing the entire validation array
+    return res.status(400).json({ 
+      message: errors.array()[0].msg,
+      errors: errors.array() 
+    });
   }
   next();
 };
