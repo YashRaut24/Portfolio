@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import './Node.css';
 
-function Node({ label,Icon, angle, radius, isActive, onClick, accent }) {
+function Node({ label, Icon, angle, radius, isActive, onClick, accent }) {
   const x = radius * Math.cos(angle);
   const y = radius * Math.sin(angle);
   const [ripples, setRipples] = useState([]);
@@ -50,6 +50,7 @@ function Node({ label,Icon, angle, radius, isActive, onClick, accent }) {
       type="button"
       tabIndex={0}
       aria-label={label}
+      aria-current={isActive ? "true" : undefined}
       className={`hub-node ${isActive ? "hub-node-active" : ""}`}
       style={{
         transform: `translate(${x + magnetic.dx}px, ${y + magnetic.dy}px) rotate(${magnetic.tilt}deg) scale(${magnetic.scale})`,
