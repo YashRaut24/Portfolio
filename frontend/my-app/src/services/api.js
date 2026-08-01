@@ -1,4 +1,3 @@
-
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const sendContactMessage = async (formData) => {
@@ -11,7 +10,7 @@ export const sendContactMessage = async (formData) => {
       body: JSON.stringify(formData), 
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
       throw new Error(data.message || data.errors?.[0]?.msg || 'Failed to send message');
@@ -20,6 +19,12 @@ export const sendContactMessage = async (formData) => {
     return data;
   } catch (error) {
     console.error("API Error:", error);
+    
+    // Intercept complete network failures (e.g. offline)
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      throw new Error("You appear to be offline. Please check your internet connection.");
+    }
+    
     throw error;
   }
 };
