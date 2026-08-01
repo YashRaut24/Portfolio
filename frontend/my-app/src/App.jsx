@@ -3,8 +3,10 @@ import { lazy, Suspense, useEffect } from "react";
 import { preloadSounds } from './utils/sound';
 import LoadingFallback from './components/LoadingFallback/LoadingFallback';
 
-// Lazy load top-level routes to split the bundle
-const Home = lazy(() => import('./pages/Home'));
+// 1. Eagerly load the Home route so the cinematic loader starts instantly
+import Home from './pages/Home';
+
+// 2. Lazy load the heavy secondary routes (CircularHub, StarField, etc.)
 const Explore = lazy(() => import('./pages/Explore'));
 const NotFound = lazy(() => import('./components/NotFound/NotFound'));
 
