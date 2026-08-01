@@ -178,6 +178,12 @@ export default function MobileNotepad() {
             openStrip 
             onOpen={handleCoverOpen} 
             pageIndex={pageIndex} 
+            // Connect physical touch interaction on the top binding to the "Prev" function
+            onStripInteract={() => {
+              if (hasPrev && targetPageIndex === null) {
+                handlePrevClick();
+              }
+            }}
           />
 
           <div className="notepad-base-page">
