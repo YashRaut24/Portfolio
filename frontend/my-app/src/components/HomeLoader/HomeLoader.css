@@ -1,0 +1,153 @@
+.home-loader-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: radial-gradient(circle at center, var(--book-bg) 0%, #e0dfd8 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Subtle floating dust particles */
+.loader-particle {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: dustDrift 8s linear infinite;
+}
+
+@keyframes dustDrift {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-40px) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+/* Notebook Container */
+.loader-book-container {
+    position: relative;
+    width: 260px;
+    height: 360px;
+    perspective: 1800px;
+}
+
+/* Mobile scaling */
+@media (max-width: 768px) {
+    .loader-book-container {
+        width: 190px;
+        height: 270px;
+    }
+}
+
+/* Base structural styles */
+.loader-base,
+.loader-cover,
+.loader-page {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px 12px 12px 4px;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Bottom cover & exposed page */
+.loader-base {
+    background: var(--book-bg-secondary);
+    box-shadow:
+        20px 20px 40px rgba(0, 0, 0, 0.12),
+        inset -2px 0 5px rgba(0, 0, 0, 0.03);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Signature text */
+.loader-signature {
+    font-family: 'Kalam', cursive;
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--book-text);
+    /* Set up for the write-on clip-path animation */
+    clip-path: inset(0 100% 0 0);
+}
+
+/* Flipping pages */
+.loader-page {
+    background: var(--book-bg-secondary);
+    box-shadow: inset -1px 0 3px rgba(0, 0, 0, 0.02);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.loader-page-1 {
+    z-index: 2;
+}
+
+.loader-page-2 {
+    z-index: 3;
+}
+
+/* Top Leather Cover */
+.loader-cover {
+    background: #1a1a1a;
+    z-index: 5;
+    box-shadow:
+        inset 4px 0 10px rgba(0, 0, 0, 0.5),
+        inset -1px 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Bookmark Ribbon */
+.loader-ribbon {
+    position: absolute;
+    bottom: -20px;
+    left: 40px;
+    width: 14px;
+    height: 40px;
+    background: #7a1b1b;
+    z-index: 4;
+    border-radius: 0 0 2px 2px;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Elastic Strap */
+.loader-elastic {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 20px;
+    width: 12px;
+    background: var(--color-accent);
+    z-index: 6;
+    box-shadow:
+        -2px 0 4px rgba(0, 0, 0, 0.2),
+        2px 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Text status indicator */
+.loader-status-text {
+    position: absolute;
+    bottom: 40px;
+    font-family: var(--font-hub);
+    font-size: 0.9rem;
+    color: var(--book-text-secondary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
