@@ -11,10 +11,26 @@ function ProjectCard({
 }) {
     const [flipped, setFlipped] = useState(false);
 
+    const handleToggleFlip = () => {
+        setFlipped((prev) => !prev);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleToggleFlip();
+        }
+    };
+
     return (
         <div
             className="project-card-container"
-            onClick={() => setFlipped((prev) => !prev)}
+            role="button"
+            tabIndex={0}
+            aria-expanded={flipped}
+            aria-label={`Project: ${title}. Press Enter to flip for details.`}
+            onClick={handleToggleFlip}
+            onKeyDown={handleKeyDown}
         >
             <motion.div
                 className="project-card-inner"
@@ -26,7 +42,7 @@ function ProjectCard({
             >
                 {/* FRONT */}
 
-                <div className="project-card project-front">
+                <div className="project-card project-front" aria-hidden={flipped}>
                     <h3 className="project-title">{title}</h3>
 
                     <p className="project-description">
@@ -40,13 +56,13 @@ function ProjectCard({
 
                 {/* BACK */}
 
-                <div className="project-card project-back">
+                <div className="project-card project-back" aria-hidden={!flipped}>
 
                     <h4 className="project-back-heading">
                         Tech Stack
                     </h4>
 
-                    <ul className="project-tech">
+                    <ul className="project-tech" aria-label="Technologies used">
                         {techStack.map((tech, index) => (
                             <li
                                 key={index}
@@ -65,6 +81,8 @@ function ProjectCard({
                                 rel="noreferrer"
                                 className="project-link"
                                 onClick={(e) => e.stopPropagation()}
+                                onKeyDown={(e) => e.stopPropagation()}
+                                tabIndex={flipped ? 0 : -1}
                             >
                                 Live Demo
                             </a>
@@ -77,6 +95,8 @@ function ProjectCard({
                                 rel="noreferrer"
                                 className="project-link"
                                 onClick={(e) => e.stopPropagation()}
+                                onKeyDown={(e) => e.stopPropagation()}
+                                tabIndex={flipped ? 0 : -1}
                             >
                                 GitHub
                             </a>
