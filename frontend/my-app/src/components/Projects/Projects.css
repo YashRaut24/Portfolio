@@ -1,4 +1,18 @@
+/* 
+  Upgraded from Flex column to a responsive CSS Grid.
+  This ensures perfect row alignment and equal heights across all cards. 
+*/
 .projects-section {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    /* Mobile: 1 card per row */
+    gap: 2rem;
+    width: 100%;
+}
+
+/* Tablet & Desktop: 2 cards per row */
+@media (min-width: 768px) {
+    .projects-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
