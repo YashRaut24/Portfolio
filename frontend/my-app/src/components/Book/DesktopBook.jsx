@@ -135,7 +135,9 @@ function DesktopBook() {
     }
   }, [secretUnlocked, effectiveSpreads.length]);
 
-  const handleJumpTo = useCallback((index) => {
+  // NEW: Receives payload from Page.jsx and extracts the desktop spreadIndex naturally
+  const handleJumpTo = useCallback((payload) => {
+    const index = typeof payload === 'object' ? payload.spreadIndex : payload;
     if (turnLockRef.current || index === currentSpread) return;
     setTargetSpread(Math.max(0, Math.min(index, totalSpreads - 1)));
   }, [currentSpread, totalSpreads]);

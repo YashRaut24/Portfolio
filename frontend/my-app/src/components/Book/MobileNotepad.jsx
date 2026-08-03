@@ -10,14 +10,13 @@ import "./MobileNotepad.css";
 export default function MobileNotepad() {
   const navigate = useNavigate();
   const [opened, setOpened] = useState(false);
-  const [isClosing, setIsClosing] = useState(false); // NEW: Tracks the physical closing animation
+  const [isClosing, setIsClosing] = useState(false);
   
   const [secretUnlocked, setSecretUnlocked] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [previewDirection, setPreviewDirection] = useState(null); 
   const [coverMoving, setCoverMoving] = useState(false);
   
-  // Orchestrator for sequential rapid-flipping
   const [targetPageIndex, setTargetPageIndex] = useState(null);
   const isTurningRef = useRef(false);
 
@@ -37,13 +36,12 @@ export default function MobileNotepad() {
 
       if (
         spread.left &&
-        spread.left.type !== "placeholder" &&
         spread.left.type !== "inside-cover"
       ) {
         arr.push(spread.left);
       }
 
-      if (spread.right && spread.right.type !== "placeholder") {
+      if (spread.right) {
         arr.push(spread.right);
       }
 
@@ -92,24 +90,34 @@ export default function MobileNotepad() {
     flipRef.current?.triggerPrev();
   }, []);
 
+  // NEW: Extracts the exact pageNumber payload to find the specific page index inside the mobile array
   const handleNavigate = useCallback(
-    (spreadIndex) => {
-      const target = spreadIndexToPageIndex[spreadIndex];
-      if (target === undefined || target === pageIndex) return;
+    (payload) => {
+      let target;
+      
+      // If we received the new rich object from Page.jsx, find the exact page matching that pageNumber
+      if (typeof payload === 'object' && payload.pageNumber) {
+        target = pages.findIndex(p => p.pageNumber === payload.pageNumber);
+      } else {
+        // Fallback for any old logic sending just the raw spreadIndex
+        target = spreadIndexToPageIndex[payload];
+      }
+
+      // Safeguard against missing indexes
+      if (target === undefined || target === -1 || target === pageIndex) return;
+      
       setPreviewDirection(null);
       setTargetPageIndex(Math.max(0, Math.min(target, pages.length - 1)));
     },
-    [spreadIndexToPageIndex, pages.length, pageIndex]
+    [spreadIndexToPageIndex, pages, pageIndex]
   );
   
-  // NEW: Triggers the physical closing animation
   const handleCoverClose = useCallback(() => {
     setCoverMoving(true);
     setIsClosing(true);
-    setOpened(false); // Unmounts the "Open" DOM block, mounts the "Closed" DOM block
+    setOpened(false); 
   }, []);
 
-  // The Sequential Rapid-Flip Engine with a 30ms paint window
   useEffect(() => {
     if (targetPageIndex !== null && !previewDirection && !coverMoving) {
       if (!isTurningRef.current) {
@@ -188,8 +196,6 @@ export default function MobileNotepad() {
             onOpen={handleCoverOpen} 
             pageIndex={pageIndex} 
             onStripInteract={() => {
-              // If there are turned pages, flip them back.
-              // If there are NO turned pages, shut the cover completely.
               if (hasPrev && targetPageIndex === null) {
                 handlePrevClick();
               } else if (!hasPrev && targetPageIndex === null) {
