@@ -342,7 +342,7 @@ if (content.type === 'cover-face') {
     return (
       <div className="page page-cover-face">
         <img
-          src="/assets/images/YashPhoto_.jpg"
+          src="/assets/images/YashPhoto_.webp"
           alt="Portrait of Yash Raut"
           className="cover-photo"
           loading="lazy"
@@ -480,7 +480,7 @@ if (content.type === 'cta') {
             <a href="https://github.com/YashRaut24" target="_blank" rel="noopener noreferrer" className="insta-card">
               <div className="insta-card-image-wrap">
                 <img 
-                  src="/assets/images/GitHub.jpg" 
+                  src="/assets/images/GitHub.webp" 
                   alt="GitHub Profile Repository Preview" 
                   className="insta-card-img" 
                   loading="lazy"
@@ -497,7 +497,7 @@ if (content.type === 'cta') {
             <a href="https://drive.google.com/file/d/1-OrBoy4DUnNzyjTSTsX26KAoA424KdgH/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="insta-card">
               <div className="insta-card-image-wrap">
                 <img 
-                  src="/assets/images/Resume.png" 
+                  src="/assets/images/Resume.webp" 
                   alt="Resume Document Preview" 
                   className="insta-card-img" 
                   loading="lazy"

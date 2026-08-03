@@ -28,27 +28,39 @@ function ProjectCard({
     githubLink,
     image, 
 }) {
-    // Track if the image fails to load so we can show the clean placeholder instead
     const [imageError, setImageError] = useState(false);
+
+    // Determines if we have a valid live link to use
+    const hasLiveLink = liveLink && liveLink.trim() !== "";
+
+    // The core image element to be rendered
+    const imageContent = image && !imageError ? (
+        <img 
+          src={image} 
+          alt={`Preview of ${title}`} 
+          className="project-image" 
+          loading="lazy" 
+          decoding="async"
+          onError={() => setImageError(true)}
+        />
+    ) : (
+        <div className="project-image-placeholder">
+            <span>No Preview Available</span>
+        </div>
+    );
 
     return (
         <div className="premium-project-card">
             
             {/* HERO IMAGE SECTION */}
             <div className="project-image-wrapper">
-                {image && !imageError ? (
-                    <img 
-                      src={image} 
-                      alt={`Preview of ${title}`} 
-                      className="project-image" 
-                      loading="lazy" 
-                      decoding="async"
-                      onError={() => setImageError(true)}
-                    />
+                {/* If a live link exists, wrap the image in a clickable anchor tag */}
+                {hasLiveLink ? (
+                    <a href={liveLink} target="_blank" rel="noreferrer" className="project-image-link" aria-label={`View live demo of ${title}`}>
+                        {imageContent}
+                    </a>
                 ) : (
-                    <div className="project-image-placeholder">
-                        <span>No Preview Available</span>
-                    </div>
+                    imageContent
                 )}
             </div>
 
@@ -65,7 +77,7 @@ function ProjectCard({
                 <p className="project-description">{description}</p>
             </div>
 
-            {/* BOTTOM ACTIONS ROW (Outside content padding for flush edges) */}
+            {/* BOTTOM ACTIONS ROW */}
             <div className="project-actions">
                 <a 
                     href={githubLink || '#'} 
@@ -80,18 +92,19 @@ function ProjectCard({
                     <span>GitHub</span>
                 </a>
                 
-                <a 
-                    href={liveLink || '#'} 
-                    target={liveLink ? "_blank" : "_self"} 
-                    rel="noreferrer" 
-                    className="btn-project btn-filled"
-                    aria-disabled={!liveLink}
-                    aria-label={`View live demo of ${title}`}
-                    onClick={(e) => !liveLink && e.preventDefault()}
-                >
-                    <ExternalLinkIcon />
-                    <span>Live Demo</span>
-                </a>
+                {/* ONLY render the Live Demo button if the project actually has a live link */}
+                {hasLiveLink && (
+                    <a 
+                        href={liveLink} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="btn-project btn-filled"
+                        aria-label={`View live demo of ${title}`}
+                    >
+                        <ExternalLinkIcon />
+                        <span>Live Demo</span>
+                    </a>
+                )}
             </div>
 
         </div>

@@ -4,7 +4,7 @@ function ResumeIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="header-btn-icon" aria-hidden="true">
       <path d="M12 3V15M12 15L7 10M12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M4 17V19C4 20 5 21 6 21H18C19 21 20 20 20 19V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 17V19C4 20 5 21 6 21H18C19 21 20 20 19V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -28,12 +28,12 @@ function LinkedInIcon() {
 }
 
 function Header() {
-
-
-
   return (
     <header className="site-header">
-      <div className="header-name">Yash Raut</div>
+      <div className="header-name">
+        Y<span className="hide-on-mobile">ash </span>
+        R<span className="hide-on-mobile">aut</span>
+      </div>
     </header>
   );
 }

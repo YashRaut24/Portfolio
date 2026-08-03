@@ -86,14 +86,20 @@
         width: 14px;
         height: 14px;
     }
-}
 
-@media (max-width: 768px) {
     .site-header {
-        flex-direction: column;
-        margin-left: -2.8rem !important;
-        margin-top: -0.5rem;
-        gap: 0.8rem;
+        flex-direction: row;
+        /* Ensure it stays in a row if items are added later */
+        margin-left: -0.8rem;
+        /* Adjust positioning for mobile */
+        margin-top: -0.8rem;
+        width: auto;
+        /* Allow the container to size naturally on mobile */
+    }
+
+    /* Dynamically hide the full name on mobile to save space */
+    .hide-on-mobile {
+        display: none;
     }
 
     .header-btn {

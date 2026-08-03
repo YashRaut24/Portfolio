@@ -281,7 +281,7 @@ export default function NotepadCover({
           }}
         >
           <img
-            src="/assets/images/YashPhoto_.jpg"
+            src="/assets/images/YashPhoto_.webp"
             alt="Portrait of Yash Raut"
             className="notepad-cover-photo"
             loading="eager"

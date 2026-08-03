@@ -101,4 +101,9 @@
         width: 110px;
         height: 110px;
     }
+    
+    /* Ensure the final line of text (CGPA) isn't cropped by mobile nav/bezels */
+    .about-text {
+        padding-bottom: 9rem;
+    }
 }

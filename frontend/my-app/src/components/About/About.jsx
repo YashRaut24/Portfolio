@@ -4,7 +4,7 @@ function About() {
   return (
     <div className="about-section">
       <img
-        src="/assets/images/YashPhoto_.jpg"
+        src="/assets/images/YashPhoto_.webp"
         alt="Profile"
         className="about-photo"
       />
