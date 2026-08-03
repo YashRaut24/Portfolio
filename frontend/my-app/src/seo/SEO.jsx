@@ -9,11 +9,11 @@ function SEO({ title, description, image = '/assets/images/YashPhoto_.jpg' }) {
     let faviconHref = '/favicon.svg';
 
     if (path === '/' || title.includes('Yash | Portfolio')) {
-      enhancedTitle = '📖 Yash Raut • Portfolio';
+      enhancedTitle = 'Yash Raut • Portfolio';
       themeColor = '#FAFAFA'; // Warm notebook background (--book-bg)
       faviconHref = '/favicon-book.svg';
     } else if (path.includes('/explore') || title.includes('Explore')) {
-      enhancedTitle = '🌌 Explore • Yash Raut';
+      enhancedTitle = 'Explore • Yash Raut';
       themeColor = '#0A0B10'; // Deep space background color (--color-bg)
       faviconHref = '/favicon-explore.svg';
     } else {
