@@ -11,6 +11,17 @@ export const experienceData = [
       "Optimized media processing workflows by integrating Cloudinary and Multer, ensuring secure and efficient handling of user-generated images with sub-2-second load times to enhance UI/UX."
     ]
   },
+  {
+    title: "Event Volunteer",
+    company: "Xzibit",
+    type: "Volunteering",
+    date: "2026",
+    bullets: [
+      "Facilitated the smooth execution of Xzibit 2026, a major inter-college technical exhibition showcasing B.E. final year projects.",
+      "Coordinated with participating students from various engineering colleges to organize project booths and manage event logistics.",
+      "Assisted attendees, faculty, and participants to ensure a seamless and engaging experience throughout the exhibition."
+    ]
+  },
   // {
   //   date: "2024 - Present",
   //   title: "Hackathon Participant & Prototyper",
