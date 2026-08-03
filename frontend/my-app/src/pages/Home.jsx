@@ -2,10 +2,8 @@ import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Book from '../components/Book/Book';
 import SEO from '../seo/SEO';
-// FIX: Explicitly add the .jsx extension to the import path
 import FloatingDoodles from '../components/Book/FloatingDoodles.jsx';
 import HomeLoader from '../components/HomeLoader/HomeLoader';
-// import InkBlots from '../components/Book/InkBlots';
 
 import './Home.css';
 
@@ -23,7 +21,6 @@ function Home() {
       </AnimatePresence>
 
       <FloatingDoodles />
-      {/* <InkBlots /> */}
       
       <Book />
     </div>
