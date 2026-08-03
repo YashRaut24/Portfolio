@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './ProjectCard.css';
 
 // Minimal inline SVG icons for the buttons
@@ -27,17 +28,22 @@ function ProjectCard({
     githubLink,
     image, 
 }) {
+    // Track if the image fails to load so we can show the clean placeholder instead
+    const [imageError, setImageError] = useState(false);
+
     return (
         <div className="premium-project-card">
             
             {/* HERO IMAGE SECTION */}
             <div className="project-image-wrapper">
-                {image ? (
+                {image && !imageError ? (
                     <img 
                       src={image} 
                       alt={`Preview of ${title}`} 
                       className="project-image" 
                       loading="lazy" 
+                      decoding="async"
+                      onError={() => setImageError(true)}
                     />
                 ) : (
                     <div className="project-image-placeholder">
