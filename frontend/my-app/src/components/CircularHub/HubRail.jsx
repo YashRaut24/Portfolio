@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import './HubRail.css';
 
@@ -12,6 +12,9 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
     const scrollAccum = useRef(0);
     const dragStartY = useRef(0);
     const isDragging = useRef(false);
+
+    // Track which item the user's cursor is currently resting on
+    const [hoveredIndex, setHoveredIndex] = useState(null);
 
     // Helper to calculate the next index circularly
     const advance = (step) => {
@@ -42,7 +45,6 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
         if (!isDragging.current) return;
         const deltaY = e.touches[0].clientY - dragStartY.current;
         
-        // Slightly more sensitive threshold (40) for mobile screens
         if (deltaY > 40) {
             advance(-1); // Swipe down
             dragStartY.current = e.touches[0].clientY;
@@ -58,7 +60,7 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
 
     // --- DESKTOP MOUSE DRAG EVENTS ---
     const handlePointerDown = (e) => {
-        if (e.pointerType === 'touch') return; // Let touch events handle mobile
+        if (e.pointerType === 'touch') return; 
         if (activePointerIdRef.current !== null) return;
         
         activePointerIdRef.current = e.pointerId;
@@ -112,21 +114,25 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
                 if (offset > total / 2) offset -= total;
                 if (offset < -total / 2) offset += total;
 
+                // Logic checks
+                const isActive = index === activeIndex;
+                const isHovered = index === hoveredIndex;
+
                 return (
                     <motion.button
                         type="button"
                         tabIndex={0}
                         aria-label={node.label}
-                        aria-current={index === activeIndex ? "true" : undefined}
+                        aria-current={isActive ? "true" : undefined}
                         key={node.id}
-                        className={`hub-rail-item ${index === activeIndex ? 'active' : ''}`}
+                        className={`hub-rail-item ${isActive ? 'active' : ''} ${isHovered && !isActive ? 'hovered' : ''}`}
                         style={{
                             '--rail-accent': node.accent,
                         }}
                         animate={{
                             y: offset * ITEM_SPACING,
-                            opacity: Math.abs(offset) > 3 ? 0 : index === activeIndex ? 1 : 0.3,
-                            scale: index === activeIndex ? 1.2 : 1,
+                            opacity: Math.abs(offset) > 3 ? 0 : (isActive || isHovered) ? 1 : 0.3,
+                            scale: isActive ? 1.2 : isHovered ? 1.1 : 1,
                         }}
                         transition={
                             shouldReduceMotion
@@ -142,6 +148,10 @@ function HubRail({ nodes, activeIndex, direction, onSelect }) {
                                 ? undefined
                                 : { scale: 0.9 }
                         }
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                        onFocus={() => setHoveredIndex(index)}
+                        onBlur={() => setHoveredIndex(null)}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter' || e.key === ' ') {
                                 e.preventDefault();

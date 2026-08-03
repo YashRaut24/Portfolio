@@ -2,12 +2,9 @@
 
 .hub-rail {
     position: fixed;
-    /* Changed from absolute */
     top: 50%;
     right: 24px;
-    /* Positioned to the right side */
     left: auto;
-    /* Removes the previous left calculation */
 
     transform: translateY(-50%);
 
@@ -49,13 +46,25 @@
 .hub-rail-item svg {
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
 }
 
+/* Active state: Heavy double-layered glow on the SVG */
 .hub-rail-item.active {
     color: var(--rail-accent);
+}
 
-    filter:
-        drop-shadow(0 0 6px var(--rail-accent)) drop-shadow(0 0 16px var(--rail-accent));
+.hub-rail-item.active svg {
+    filter: drop-shadow(0 0 6px var(--rail-accent)) drop-shadow(0 0 16px var(--rail-accent));
+}
+
+/* Hovered state: Soft single-layered glow on the SVG */
+.hub-rail-item.hovered {
+    color: var(--rail-accent);
+}
+
+.hub-rail-item.hovered svg {
+    filter: drop-shadow(0 0 5px var(--rail-accent));
 }
 
 .hub-rail-item:focus-visible {
@@ -80,7 +89,6 @@
         position: fixed;
         left: 12px;
         right: auto;
-        /* Force reset from desktop right position */
         top: 50%;
         transform: translateY(-50%);
     }
