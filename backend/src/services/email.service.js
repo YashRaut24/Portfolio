@@ -20,7 +20,8 @@ const sendContactEmail = async ({ name, email, message }) => {
     subject: `New portfolio contact from ${name}`,
     text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
   };
-
+  await transporter.verify();
+  console.log("SMTP Connected");
   await transporter.sendMail(mailOptions);
 };
 
