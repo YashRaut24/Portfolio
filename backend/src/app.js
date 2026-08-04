@@ -96,6 +96,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Handle CORS preflight requests
+app.options('/api/contact', cors(corsOptions));
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {
