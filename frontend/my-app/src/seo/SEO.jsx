@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-function SEO({ title, description, image = '/assets/images/YashPhoto_.webp' }) {
+function SEO({ title, description, image = 'https://ik.imagekit.io/y4a2wkn9e/portfolio/YashPhoto_.webp' }) {
   useEffect(() => {
     // Derive dynamic identity based on the current pathname or passed title
     const path = window.location.pathname;

@@ -59,7 +59,7 @@ export default function OrbitMenu({ onExit }) {
       {
         label: "Resume",
         icon: <ResumeIcon />,
-        action: () => window.location.href = "/assets/resume.webp",
+        action: () => window.location.href = "https://ik.imagekit.io/y4a2wkn9e/portfolio/Resume.webp",
         x: -115 * scale, 
         y: 0 * scale,    
       },

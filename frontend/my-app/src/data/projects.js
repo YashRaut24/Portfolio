@@ -8,7 +8,7 @@ export const projectsData = [
     techStack: ["React", "Vite", "Node.js", "Express", "MongoDB", "Mongoose", "Socket.IO"],
     liveLink: "https://sync-stack-nine.vercel.app",
     githubLink: "https://github.com/YashRaut24/SyncStack",
-    image: "/public/assets/images/SyncStack.webp",
+    image: "https://ik.imagekit.io/y4a2wkn9e/portfolio/SyncStack.webp",
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ export const projectsData = [
     techStack: ["Node.js", "Express", "MCP", "Cheerio", "MongoDB", "Model Context Protocol"],
     liveLink: "https://way-farer-tau.vercel.app",
     githubLink: "https://github.com/YashRaut24/WayFarer",
-    image: "/public/assets/images/WayFarer.webp",
+    image: "https://ik.imagekit.io/y4a2wkn9e/portfolio/WayFarer.webp",
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ export const projectsData = [
     techStack: ["React", "Vite", "Node.js", "Express", "MongoDB"],
     liveLink: "https://swish-frontend.onrender.com",
     githubLink: "https://github.com/YashRaut24/Swish",
-    image: "/public/assets/images/Swish.webp",
+    image: "https://ik.imagekit.io/y4a2wkn9e/portfolio/Swish.webp",
   },
   {
     id: 4,
@@ -38,7 +38,7 @@ export const projectsData = [
     techStack: ["React", "Vite", "Node.js", "Express", "MongoDB", "Socket.IO", "Flask", "Groq API"],
     liveLink: "",
     githubLink: "https://github.com/YashRaut24/VoiceScribe-360.git",
-    image: "/public/assets/images/MedScribe360.webp",
+    image: "https://ik.imagekit.io/y4a2wkn9e/portfolio/MedScribe360.webp",
   },
   {
     id: 5,
@@ -48,7 +48,7 @@ export const projectsData = [
     techStack: ["React", "JavaScript", "CSS"],
     liveLink: "",
     githubLink: "https://github.com/YashRaut24/Findly.git",
-    image: "/public/assets/images/Findly.webp",
+    image: "https://ik.imagekit.io/y4a2wkn9e/portfolio/Findly.webp",
   },
 
   {
@@ -67,7 +67,7 @@ export const projectsData = [
     ],
     liveLink: "",
     githubLink: "https://github.com/YashRaut24/Docwise",
-    image: "/assets/images/Docwise.webp",
+    image: "https://ik.imagekit.io/y4a2wkn9e/portfolio/Docwise.webp",
   },
   {
     id: 7,
@@ -77,7 +77,7 @@ export const projectsData = [
     techStack: ["VS Code Extension", "React", "Node.js", "Express", "Python", "Groq API", "MCP"],
     liveLink: "",
     githubLink: "https://github.com/YashRaut24/VoxCode-AI-Server.git",
-    image: "/public/assets/images/VoxCodeAI.webp",
+    image: "https://ik.imagekit.io/y4a2wkn9e/portfolio/VoxCodeAI.webp",
   },
   {
     id: 8,
@@ -87,7 +87,7 @@ export const projectsData = [
     techStack: ["Java", "Java Swing", "JDBC", "MySQL"],
     liveLink: "",
     githubLink: "https://github.com/YashRaut24/VaultEdge.git",
-    image: "/public/assets/images/VaultEdge.webp",
+    image: "https://ik.imagekit.io/y4a2wkn9e/portfolio/VaultEdge.webp",
   },
   
   {
@@ -98,7 +98,7 @@ export const projectsData = [
     techStack: ["Java", "Java Swing", "JDBC", "MySQL", "JavaMail", "JFreeChart"],
     liveLink: "",
     githubLink: "https://github.com/YashRaut24/JobVerse",
-    image: "/public/assets/images/JobVerse.webp",
+    image: "https://ik.imagekit.io/y4a2wkn9e/portfolio/JobVerse.webp",
   },
 
 ];

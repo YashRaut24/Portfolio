@@ -4,7 +4,7 @@ function About() {
   return (
     <div className="about-section">
       <img
-        src="/assets/images/YashPhoto_.webp"
+        src="https://ik.imagekit.io/y4a2wkn9e/portfolio/YashPhoto_.webp"
         alt="Profile"
         className="about-photo"
       />

@@ -281,7 +281,7 @@ export default function NotepadCover({
           }}
         >
           <img
-            src="/assets/images/YashPhoto_.webp"
+            src="https://ik.imagekit.io/y4a2wkn9e/portfolio/YashPhoto_.webp"
             alt="Portrait of Yash Raut"
             className="notepad-cover-photo"
             loading="eager"
