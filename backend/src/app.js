@@ -70,22 +70,34 @@ app.use((req, res, next) => {
 });
 
 // 6. CORS Configuration
-// 6. CORS Configuration
 const allowedOrigins = [
-  'https://yash-raut-portfolio.vercel.app', // Hardcoded to guarantee it works!
+  'https://yash-raut-portfolio.vercel.app',
+  'https://www.yash-raut-portfolio.vercel.app',
   process.env.CLIENT_URL,
-  'http://localhost:5173'
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
 ].filter(Boolean);
 
-// 6. CORS Configuration
-// 6. Bulletproof CORS Configuration
-app.use(cors({
-  origin: '*', // Temporarily allow all origins to test if CORS is the block
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+const corsOptions = {
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Origin not allowed by CORS: ${origin}`));
+    }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: false // Must be false if origin is '*'
-}));
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
+
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 app.use('/api/contact', contactRoutes);
 
