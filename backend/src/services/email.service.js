@@ -2,17 +2,17 @@ const nodemailer = require('nodemailer');
 const { EMAIL_USER, EMAIL_PASS } = require('../config/env');
 console.log("EMAIL_USER:", EMAIL_USER);
 console.log("EMAIL_PASS exists:", !!EMAIL_PASS);
+const nodemailer = require("nodemailer");
+
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false,
+  family: 4, // Force IPv4
   auth: {
     user: EMAIL_USER,
     pass: EMAIL_PASS,
   },
-  connectionTimeout: 30000,
-  greetingTimeout: 30000,
-  socketTimeout: 30000,
 });
 
 const sendContactEmail = async ({ name, email, message }) => {
