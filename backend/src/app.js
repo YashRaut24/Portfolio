@@ -78,12 +78,12 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 // 6. CORS Configuration
+// 6. Bulletproof CORS Configuration
 app.use(cors({
-  origin: function(origin, callback) {
-    // Temporarily allow absolutely everything to bypass strict origin checks
-    return callback(null, true);
-  },
-  credentials: true
+  origin: '*', // Temporarily allow all origins to test if CORS is the block
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false // Must be false if origin is '*'
 }));
 app.use(express.json());
 
