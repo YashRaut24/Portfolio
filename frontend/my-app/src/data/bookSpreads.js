@@ -51,7 +51,7 @@ const spreads = [
       title: 'Second Year',
       description: "Moved from exploring to building, started real projects in Java and Python, and went deep into the MERN stack.",
       keywords: ['Java', 'Python', 'MongoDB', 'Express', 'React', 'Node.js', 'Basic DSA'],
-      annotation: "tried learning DSA, still a work in progress lol",
+      annotation: "",
       annotationPosition: "bottom-left",
     },
   },
