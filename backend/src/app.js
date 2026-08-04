@@ -70,21 +70,17 @@ app.use((req, res, next) => {
 });
 
 // 6. CORS Configuration
+// 6. CORS Configuration
 const allowedOrigins = [
-  CLIENT_URL, // Your Vercel URL from env
-  'http://localhost:5173', // Vite local dev
-  'http://localhost:3000'  // CRA local dev
+  'https://yash-raut-portfolio.vercel.app', // Hardcoded to guarantee it works!
+  process.env.CLIENT_URL,
+  'http://localhost:5173'
 ].filter(Boolean);
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, Postman, or server-to-server)
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      return callback(null, true);
-    }
-    return callback(new Error('CORS policy violation'));
-  },
-  methods: ['GET', 'POST'],
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // OPTIONS is required for preflight
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 app.use(express.json());
