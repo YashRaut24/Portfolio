@@ -550,7 +550,7 @@ const iconMap = {
   backpack: BackpackIcon,
 };
 
-function FloatingDoodles() {
+function AnimatedDoodles() {
   return (
     <div className="doodles-layer">
       {doodles.map((doodle) => {
@@ -575,4 +575,4 @@ function FloatingDoodles() {
   );
 }
 
-export default FloatingDoodles;
+export default AnimatedDoodles;

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Book from '../components/Book/Book';
 import SEO from '../seo/SEO';
-import FloatingDoodles from '../components/Book/FloatingDoodles'
+
+import FloatingDoodles from '../components/Book/AnimatedDoodles.jsx';
 import HomeLoader from '../components/HomeLoader/HomeLoader';
 
 import './Home.css';
