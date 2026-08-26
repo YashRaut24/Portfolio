@@ -30,7 +30,7 @@ function Contact() {
             {copied === "email" ? <Check size={18} color="#10b981" /> : <Mail size={18} />}
           </div>
           <span className="pill-text-open">
-            {copied === "email" ? "Email Copied!" : "yashdr2405@example.com"}
+            {copied === "email" ? "Email Copied!" : "yashdr2405@gmail.com"}
           </span>
         </button>
 
