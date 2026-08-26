@@ -28,7 +28,7 @@ const createNodemailerTransporter = () => {
 const transporter = createNodemailerTransporter();
 
 const sendContactEmail = async ({ name, email, message }) => {
-  const recipientEmail = EMAIL_USER || 'yashcodezzzz24@gmail.com';
+  const recipientEmail = EMAIL_USER || 'yashdr2405@gmail.com';
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #fafafa;">
       <h2 style="color: #333; margin-top: 0;">📬 New Portfolio Contact Message</h2>
