@@ -1,30 +1,60 @@
 const nodemailer = require('nodemailer');
 const { EMAIL_USER, EMAIL_PASS } = require('../config/env');
-console.log("EMAIL_USER:", EMAIL_USER);
-console.log("EMAIL_PASS exists:", !!EMAIL_PASS);
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  family: 4, // Force IPv4
-  auth: {
-    user: EMAIL_USER,
-    pass: EMAIL_PASS,
-  },
-});
+const createTransporter = () => {
+  if (!EMAIL_USER || !EMAIL_PASS) {
+    console.warn('⚠️ Warning: EMAIL_USER or EMAIL_PASS is not configured in .env');
+  }
+
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_PASS,
+    },
+  });
+};
+
+const transporter = createTransporter();
+
+// Verify connection configuration on startup
+if (EMAIL_USER && EMAIL_PASS) {
+  transporter.verify((error) => {
+    if (error) {
+      console.error('❌ Gmail SMTP Verification Failed:', error.message);
+    } else {
+      console.log('✅ Gmail SMTP Server is ready to send emails');
+    }
+  });
+}
 
 const sendContactEmail = async ({ name, email, message }) => {
+  if (!EMAIL_USER || !EMAIL_PASS) {
+    throw new Error('Email service credentials are not configured on the backend server.');
+  }
+
   const mailOptions = {
-    from: EMAIL_USER,
+    from: `"${name}" <${EMAIL_USER}>`,
     to: EMAIL_USER,
     replyTo: email,
-    subject: `New portfolio contact from ${name}`,
-    text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+    subject: `Portfolio Contact: Message from ${name}`,
+    text: `You received a new message from your portfolio contact form:\n\n` +
+          `Name: ${name}\n` +
+          `Email: ${email}\n\n` +
+          `Message:\n${message}\n`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #fafafa;">
+        <h2 style="color: #333; margin-top: 0;">📬 New Portfolio Contact Message</h2>
+        <p style="margin-bottom: 8px;"><strong>From:</strong> ${name}</p>
+        <p style="margin-bottom: 8px;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+        <div style="margin-top: 20px; padding: 15px; background: #ffffff; border-radius: 6px; border-left: 4px solid #4f46e5;">
+          <p style="margin: 0; white-space: pre-wrap; color: #444; line-height: 1.6;">${message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+        </div>
+      </div>
+    `,
   };
-  await transporter.verify();
-  console.log("SMTP Connected");
-  await transporter.sendMail(mailOptions);
+
+  return await transporter.sendMail(mailOptions);
 };
 
 module.exports = { sendContactEmail };

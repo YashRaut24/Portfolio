@@ -71,7 +71,6 @@ app.use((req, res, next) => {
 });
 
 // 6. CORS Configuration
-// 6. CORS Configuration
 const allowedOrigins = [
   'https://yash-raut-portfolio.vercel.app',
   'https://www.yash-raut-portfolio.vercel.app',
@@ -82,12 +81,14 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function(origin, callback) {
-    // Allow tools like Postman or server-to-server requests with no origin, 
-    // or if the origin matches your Vercel domains
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+    if (
+      !origin || 
+      allowedOrigins.includes(origin) || 
+      origin.endsWith('.vercel.app') ||
+      /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+    ) {
       callback(null, true);
     } else {
-      // Instead of crashing with a new Error(), safely deny without breaking preflight headers
       callback(null, false);
     }
   },

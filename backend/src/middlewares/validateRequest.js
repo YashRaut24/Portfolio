@@ -1,14 +1,14 @@
 const { body, validationResult } = require('express-validator');
-const emailValidator = require('deep-email-validator');
 
-// Common free providers we still want to manually block (since they are real, but not company/gmail)
-const blockedPersonalDomains = [
-  'yahoo.com', 'yahoo.in', 'hotmail.com', 'outlook.com', 
-  'aol.com', 'yandex.com', 'mail.com', 'zoho.com', 'icloud.com', 'live.com'
+// Common temporary/disposable email domains to filter spam
+const disposableDomains = [
+  'mailinator.com', 'tempmail.com', '10minutemail.com', 'guerrillamail.com',
+  'throwawaymail.com', 'trashmail.com', 'yopmail.com', 'sharklasers.com',
+  'getairmail.com', 'dispostable.com', 'temp-mail.org'
 ];
 
 const contactValidationRules = [
-  // Anti-Bot: Honeypot check
+  // Anti-Bot: Honeypot check (hidden field should always be empty)
   body('website')
     .trim()
     .custom((value) => {
@@ -18,12 +18,15 @@ const contactValidationRules = [
       return true;
     }),
     
-  // Anti-Bot: Minimum interaction time check
+  // Anti-Bot: Minimum interaction time check (at least 400ms to allow browser autofill)
   body('timeToComplete')
+    .optional()
     .custom((value) => {
-      const time = parseInt(value, 10);
-      if (!time || time < 2500) {
-        throw new Error('Form submitted too quickly. Please read the form carefully.');
+      if (value !== undefined && value !== null) {
+        const time = parseInt(value, 10);
+        if (!isNaN(time) && time < 400) {
+          throw new Error('Form submitted too quickly.');
+        }
       }
       return true;
     }),
@@ -32,49 +35,18 @@ const contactValidationRules = [
     .trim()
     .notEmpty().withMessage('Name is required')
     .isString().withMessage('Name must be valid text')
-    .isLength({ max: 100 }).withMessage('Name must be under 100 characters')
-    .escape(),
+    .isLength({ min: 2, max: 100 }).withMessage('Name must be between 2 and 100 characters'),
     
   body('email')
     .trim()
     .notEmpty().withMessage('Email is required')
-    .isEmail().withMessage('Invalid email format')
+    .isEmail().withMessage('Please provide a valid email address')
     .normalizeEmail()
-    .custom(async (email) => {
-      const domain = email.split('@')[1].toLowerCase();
-
-      // 1. Explicitly allow Gmail (bypasses heavy checks to save time)
-      if (domain === 'gmail.com' || domain === 'googlemail.com') {
-        return true; 
+    .custom((email) => {
+      const domain = email.split('@')[1]?.toLowerCase();
+      if (domain && disposableDomains.includes(domain)) {
+        throw new Error('Temporary disposable email addresses are not allowed.');
       }
-
-      // 2. Block standard non-Gmail personal accounts
-      if (blockedPersonalDomains.includes(domain)) {
-        throw new Error('Please use a Gmail or official company email address.');
-      }
-
-      // 3. Deep validation for everything else (Business domains)
-      const { valid, validators } = await emailValidator.validate({
-        email: email,
-        validateRegex: true,
-        validateDisposable: true, // This blocks xmail, mailinator, temp-mail, etc.
-        validateMx: true,         // Ensures the domain actually has mail servers
-        validateTypo: false,
-        validateSMTP: false       // Kept false so your API responds quickly
-      });
-
-      // If the package flags the email as invalid, throw specific errors
-      if (!valid) {
-        if (validators.disposable && !validators.disposable.valid) {
-          throw new Error('Temporary or random email domains are not allowed.');
-        }
-        if (validators.mx && !validators.mx.valid) {
-          throw new Error('This email domain does not actually exist.');
-        }
-        throw new Error('Please provide a valid Gmail or company email address.');
-      }
-
-      // If it passes all checks, it's assumed to be a valid company email
       return true;
     }),
     
@@ -82,14 +54,12 @@ const contactValidationRules = [
     .trim()
     .notEmpty().withMessage('Message is required')
     .isString().withMessage('Message must be valid text')
-    .isLength({ max: 1000 }).withMessage('Message is too long')
-    .escape(),
+    .isLength({ min: 5, max: 3000 }).withMessage('Message must be between 5 and 3000 characters'),
 ];
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    // Return a flat, safe message instead of exposing the entire validation array
     return res.status(400).json({ 
       message: errors.array()[0].msg,
       errors: errors.array() 
@@ -98,4 +68,4 @@ const validate = (req, res, next) => {
   next();
 };
 
-module.exports = { contactValidationRules, validate };
+module.exports = { contactValidationRules, validate };

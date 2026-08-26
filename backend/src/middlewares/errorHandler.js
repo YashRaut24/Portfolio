@@ -1,6 +1,13 @@
 function errorHandler(err, req, res, next) {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong' });
+  console.error('API Error:', err.message || err);
+  if (err.stack) {
+    console.error(err.stack);
+  }
+
+  const statusCode = err.statusCode || err.status || 500;
+  const message = err.message || 'Something went wrong on the server. Please try again later.';
+
+  res.status(statusCode).json({ message });
 }
 
-module.exports = errorHandler;
+module.exports = errorHandler;
