@@ -7,11 +7,14 @@ const createTransporter = () => {
   }
 
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
       user: EMAIL_USER,
       pass: EMAIL_PASS,
     },
+    family: 4, // Strictly force IPv4 socket (prevents ENETUNREACH IPv6 connection errors on Render)
   });
 };
 
