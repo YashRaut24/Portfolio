@@ -18,6 +18,52 @@
     text-rendering: optimizeLegibility;
     transform: translateZ(0);
 }
+.page-type-toc .page-easter-egg {
+    top: 0.5rem;
+    right: 1rem;
+    bottom: auto;
+    left: auto;
+    width: 36px;
+    height: 36px;
+}
+
+.page-type-toc:hover .page-easter-egg {
+    opacity: 0.6;
+}
+.page-easter-egg {
+    position: absolute;
+    bottom: 1.2rem;
+    right: 1.5rem;
+    width: 42px;
+    height: 42px;
+    color: #c9c9c9;
+    opacity: 0.45;
+    pointer-events: none;
+    transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.page-easter-egg-rays {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.page:hover .page-easter-egg {
+    opacity: 0.7;
+}
+
+.page-easter-egg:hover {
+    color: #F5B400;
+    opacity: 1;
+}
+
+.page-easter-egg:hover .page-easter-egg-rays {
+    opacity: 1;
+}
+
+.page-easter-egg-clickable {
+    pointer-events: auto;
+    cursor: pointer;
+}
 
 .page::before {
     content: '';
@@ -867,7 +913,14 @@
                 var(--book-border) 26px);
         background-position: 0 12px;
     }
-
+        .page-type-toc .page-easter-egg {
+            width: 28px;
+            height: 28px;
+            top: auto;
+            right: auto;
+            bottom: 0.6rem;
+            left: 0.6rem;
+        }
     /* Force all major text to perfectly align with the new 26px lines */
     .page-year,
     .page-quote,

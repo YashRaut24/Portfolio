@@ -114,18 +114,6 @@
         inset -1px 0 2px rgba(255, 255, 255, 0.1);
 }
 
-/* Bookmark Ribbon */
-.loader-ribbon {
-    position: absolute;
-    bottom: -20px;
-    left: 40px;
-    width: 14px;
-    height: 40px;
-    background: #7a1b1b;
-    z-index: 4;
-    border-radius: 0 0 2px 2px;
-    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
-}
 
 /* Elastic Strap */
 .loader-elastic {
@@ -143,11 +131,14 @@
 
 /* Text status indicator */
 .loader-status-text {
-    position: absolute;
-    bottom: 40px;
+    position: relative;
+    width: 100%;
+    min-height: 1.2em;
+    margin-top: 28px;
     font-family: var(--font-hub);
     font-size: 0.9rem;
     color: var(--book-text-secondary);
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    text-align: center;
 }

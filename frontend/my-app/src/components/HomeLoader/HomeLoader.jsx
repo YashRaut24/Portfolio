@@ -95,7 +95,6 @@ export default function HomeLoader({ onComplete }) {
           <span className="loader-signature">Yash Raut</span>
         </div>
         
-        <div className="loader-ribbon" />
         <div className="loader-page loader-page-1" />
         <div className="loader-page loader-page-2" />
         
@@ -108,20 +107,20 @@ export default function HomeLoader({ onComplete }) {
       </div>
 
       {/* Rotating Status Text */}
-      <div className="loader-status-text">
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={msgIndex}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.2 }}
-            style={{ position: "absolute", transform: "translateX(-50%)", whiteSpace: "nowrap" }}
-          >
-            {MESSAGES[msgIndex]}
-          </motion.span>
-        </AnimatePresence>
-      </div>
+    <div className="loader-status-text">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={msgIndex}
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -5 }}
+          transition={{ duration: 0.2 }}
+          style={{ position: "absolute", left: "43%", transform: "translateX(-50%)", whiteSpace: "nowrap" }}
+        >
+          {MESSAGES[msgIndex]}
+        </motion.span>
+      </AnimatePresence>
+    </div>
     </motion.div>
   );
 }

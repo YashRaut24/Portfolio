@@ -399,16 +399,6 @@ if (content.type === 'intro') {
           <p className="page-currently-exploring">{content.currentlyExploring}</p>
         )}
 
-        <svg
-          className="page-easter-egg page-easter-egg-clickable"
-          viewBox="0 0 40 40"
-          fill="none"
-          aria-hidden="true"
-          onClick={handleEasterEggClick}
-        >
-          <path d="M20 8C14 8 10 13 10 19C10 23 12 26 14 29V33H26V29C28 26 30 23 30 19C30 13 26 8 20 8Z" stroke="currentColor" strokeWidth="1.2" />
-          <path d="M14 35H26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-        </svg>
         {pageNumberEl}
       </div>
     );
@@ -437,6 +427,7 @@ if (content.type === 'timeline') {
               <li key={index} className="page-keyword">{item}</li>
             ))}
           </ul>
+
           
           {pageNumberEl}
         </div>
@@ -466,6 +457,23 @@ if (content.type === 'timeline') {
               </li>
             ))}
           </ul>
+            <svg
+              className="page-easter-egg page-easter-egg-clickable"
+              viewBox="0 0 40 40"
+              fill="none"
+              aria-hidden="true"
+              onClick={handleEasterEggClick}
+            >
+              <g className="page-easter-egg-rays">
+                <line x1="20" y1="7" x2="20" y2="3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                <line x1="28.5" y1="10.5" x2="31.3" y2="7.7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                <line x1="11.5" y1="10.5" x2="8.7" y2="7.7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                <line x1="32" y1="19" x2="36" y2="19" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                <line x1="8" y1="19" x2="4" y2="19" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+              </g>
+              <path className="page-easter-egg-bulb" d="M20 8C14 8 10 13 10 19C10 23 12 26 14 29V33H26V29C28 26 30 23 30 19C30 13 26 8 20 8Z" stroke="currentColor" strokeWidth="1.2" />
+              <path className="page-easter-egg-bulb" d="M14 35H26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+            </svg>
           {pageNumberEl}
         </div>
       );
