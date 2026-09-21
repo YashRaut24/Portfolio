@@ -147,20 +147,20 @@ export default function ExploreLoader({ onComplete }) {
       </svg>
 
       {/* Dynamic Console Text */}
-      <div className="loader-status-text">
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={msgIndex}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.2 }}
-            style={{ position: "absolute", transform: "translateX(-50%)", whiteSpace: "nowrap" }}
-          >
-            {EXPLORE_MESSAGES[msgIndex]}
-          </motion.span>
-        </AnimatePresence>
-      </div>
+        <div className="loader-status-text">
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={msgIndex}
+              className="loader-status-msg"
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.2 }}
+            >
+              {EXPLORE_MESSAGES[msgIndex]}
+            </motion.span>
+          </AnimatePresence>
+        </div>
     </motion.div>
   );
 }

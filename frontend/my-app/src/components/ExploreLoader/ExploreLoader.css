@@ -77,13 +77,26 @@
 
 /* Sci-fi Typography */
 .loader-status-text {
-    position: absolute;
-    bottom: 12vh;
+    position: relative;
+    width: 100%;
+    min-height: 1.2em;
+    margin-top: 32px;
     font-family: var(--font-hub, system-ui, sans-serif);
     font-size: 0.85rem;
     letter-spacing: 0.2em;
     color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
+    text-align: center;
+    z-index: 2;
+}
+
+.loader-status-msg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    white-space: nowrap;
 }
 
 @media (max-width: 768px) {
