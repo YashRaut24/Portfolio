@@ -1,7 +1,7 @@
 .doodles-layer {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: 99;
     pointer-events: none;
     overflow: hidden;
 }
@@ -12,7 +12,15 @@
     height: 40px;
     color: #4a4d3f;
     opacity: 0.35;
+    pointer-events: none;
 }
+
+.doodle:hover {
+    color: #000000;
+    opacity: 0.7;
+}
+
+
 .doodle svg {
     animation-name: doodle-drift;
     animation-timing-function: ease-in-out;
@@ -24,6 +32,13 @@
 .doodle svg {
     width: 100%;
     height: 100%;
+    pointer-events: auto;
+    transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.doodle svg:hover {
+    color: #000000;
+    opacity: 0.7;
 }
 /* 
 .doodle-squiggle {

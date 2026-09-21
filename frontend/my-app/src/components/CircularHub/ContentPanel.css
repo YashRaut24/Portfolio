@@ -1,26 +1,16 @@
 .content-panel {
     flex: 1;
-    /* padding: 2.5rem; */
-
-    /* Transparent background, no border, no shadow */
     background-color: transparent;
     border-radius: 8px;
     min-height: 560px;
-    /* background-color: #0f1117; */
-    /* border: 1px solid color-mix(in srgb, var(--panel-accent, var(--color-primary)) 30%, transparent); */
-    /* box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.6),
-        0 4px 10px rgba(0, 0, 0, 0.4); */
-    /* Restricts the panel's height and enables internal scrolling */
-    /* max-height: 75vh;
-    overflow-y: auto; */
-
-    /* HIDE SCROLLBAR (Firefox & Edge) */
     scrollbar-width: none;
     -ms-overflow-style: none;
-
-    /* Smoothly transitions the border color when you click different nodes */
     transition: border-color 0.3s ease;
+    pointer-events: none;
+}
+
+.content-panel * {
+    pointer-events: auto;
 }
 
 /* HIDE SCROLLBAR (Chrome, Safari, Opera) */

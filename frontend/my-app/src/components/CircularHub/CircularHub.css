@@ -36,6 +36,11 @@
     touch-action: none;
     z-index: 1;
     padding-top: 4rem;
+    pointer-events: none;
+}
+
+.hub-circle-wrapper * {
+    pointer-events: auto;
 }
 
 .hub-content-wrapper {
