@@ -1,9 +1,12 @@
 import './Page.css';
 import { useState } from 'react';
+import DoodleCanvas from './Extras/DoodleCanvas';
+import ScratchReveal from './Extras/ScratchReveal';
+import VisitorCounter from './Extras/VisitorCounter';
 
 function Page({ content, onExplore, onNavigate, onUnlock, pageSide }) {
   const [burst, setBurst] = useState(false);
-  const [eggClicks, setEggClicks] = useState(0);
+  const [, setEggClicks] = useState(0);
 
   const handleExploreClick = () => {
     setBurst(true);
@@ -35,15 +38,15 @@ function Page({ content, onExplore, onNavigate, onUnlock, pageSide }) {
         <path d="M12 3L13.8 9.2L20 11L13.8 12.8L12 19L10.2 12.8L4 11L10.2 9.2L12 3Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
       </svg>
     ),
-    rocket: (
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 15C15 15 18 12.5 18.5 6.5C12.5 7 10 10 13C10 13.8 10.1 14.4 10.3 15" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
-        <path d="M10.3 15L7 15.5L6 18.5L9 17.5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
-        <path d="M12 15L11.5 18.5L14.5 17.5L15 14" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
-        <circle cx="14.5" cy="9.5" r="1.3" stroke="currentColor" strokeWidth="1.3" />
-        <path d="M6.5 18.5C5.5 19 4.5 21 4.5 21C4.5 21 6.5 20 7 19" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
+   rocket: (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 15C15 15 18 12.5 18.5 6.5C12.5 7 10 10 10 13C10 13.8 10.1 14.4 10.3 15" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+      <path d="M10.3 15L7 15.5L6 18.5L9 17.5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+      <path d="M12 15L11.5 18.5L14.5 17.5L15 14" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+      <circle cx="14.5" cy="9.5" r="1.3" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M6.5 18.5C5.5 19 4.5 21 4.5 21C4.5 21 6.5 20 7 19" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
     book: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M4 5.5C4 4.7 4.7 4 5.5 4H11V19H5.5C4.7 19 4 18.3 4 17.5V5.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
@@ -462,6 +465,7 @@ if (content.type === 'timeline') {
               viewBox="0 0 40 40"
               fill="none"
               aria-hidden="true"
+              onPointerDown={(event) => event.stopPropagation()}
               onClick={handleEasterEggClick}
             >
               <g className="page-easter-egg-rays">
@@ -536,6 +540,20 @@ if (content.type === 'cta') {
         </div>
       );
     }
+
+    if (content.type === 'secret-workshop') {
+    return (
+      <div className="page page-type-secret-workshop">
+        <div className="secret-workshop-canvas-area">
+          <DoodleCanvas />
+        </div>
+        <div className="secret-workshop-bottom-row">
+          <ScratchReveal />
+          <VisitorCounter />
+        </div>
+      </div>
+    );
+}
 
   return null;
 }

@@ -137,6 +137,14 @@ export default function MobileNotepad() {
 
   const handleExplore = useCallback(() => navigate("/explore"), [navigate]);
   const handleUnlock = useCallback(() => setSecretUnlocked(true), []);
+
+  useEffect(() => {
+    if (!secretUnlocked) return;
+    setTargetPageIndex(null);
+    setPreviewDirection(null);
+    setPageIndex(pages.length - 1);
+  }, [secretUnlocked, pages.length]);
+
   const handleCoverOpen = useCallback(() => {
     setCoverMoving(false);
     setOpened(true);

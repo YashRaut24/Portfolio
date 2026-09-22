@@ -1,5 +1,23 @@
 const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/$/, '');
 
+export const incrementVisitorCount = async (scope = 'portfolio') => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/visitor/increment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scope }),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to fetch visitor count');
+    }
+    return data;
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  }
+};
+
 export const sendContactMessage = async (formData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/contact`, {

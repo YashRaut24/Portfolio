@@ -1,0 +1,236 @@
+.doodle-canvas-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1.5px dashed rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background: repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0, 0, 0, 0.04) 25px);
+    overflow: hidden;
+}
+
+.doodle-toolbar {
+    position: absolute;
+    top: 0.5rem;
+    left: 2.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 2;
+}
+
+.doodle-rail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 5.3rem;
+    width: 2.1rem;
+    background: #171717;
+    color: #fff;
+    z-index: 2;
+}
+
+.doodle-rail span {
+    position: absolute;
+    inset: 0.5rem 0.45rem;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    font-family: 'Kalam', cursive;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.24rem;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.doodle-tool-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: #fff;
+    color: #2b2b2b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.doodle-tool-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.doodle-tool-active {
+    background: #2b2b2b;
+    color: #fff;
+}
+
+.doodle-canvas {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    display: block;
+    touch-action: none;
+    cursor: crosshair;
+}
+
+.doodle-history {
+    padding: 0.5rem 0.8rem;
+    border-top: 1px dashed rgba(0, 0, 0, 0.15);
+    flex: 0 0 auto;
+    background: rgba(255, 255, 255, 0.72);
+    z-index: 1;
+}
+
+.doodle-history-label {
+    font-family: 'Kalam', cursive;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.doodle-history-strip {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.3rem;
+    overflow-x: auto;
+}
+
+.doodle-history-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+    background: #fff;
+}
+
+.doodle-history-item {
+    position: relative;
+    flex: 0 0 52px;
+    height: 52px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    background: #fff;
+}
+
+.doodle-history-item .doodle-history-thumb {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.doodle-history-actions {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    display: flex;
+    gap: 2px;
+}
+
+.doodle-history-actions button,
+.doodle-preview-actions button {
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    border: 0;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #202020;
+    cursor: pointer;
+}
+
+.doodle-history-actions svg,
+.doodle-preview-actions svg {
+    width: 100%;
+    height: 100%;
+}
+
+.doodle-preview-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(20, 20, 20, 0.5);
+}
+
+.doodle-preview-modal {
+    position: relative;
+    width: min(90%, 420px);
+    max-height: 90%;
+    padding: 2.5rem 1rem 1rem;
+    border-radius: 8px;
+    background: #f7f5ef;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.doodle-preview-actions {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    display: flex;
+    gap: 0.35rem;
+}
+
+.doodle-preview-actions button:last-child {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.doodle-preview-image {
+    display: block;
+    width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+    .doodle-canvas-wrap {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        border: 1.5px dashed rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        background: repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0, 0, 0, 0.04) 25px);
+        overflow: hidden;
+        margin-top:-32px;
+    }
+    .doodle-toolbar {
+        top: 0.25rem;
+        left: 2.15rem;
+        gap: 0.3rem;
+    }
+
+    .doodle-rail {
+        bottom: 4.3rem;
+        width: 1.75rem;
+    }
+
+    .doodle-rail span {
+        inset: 0.35rem 0.3rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.12rem;
+    }
+
+    .doodle-tool-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 5px;
+    }
+
+    .doodle-tool-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+}

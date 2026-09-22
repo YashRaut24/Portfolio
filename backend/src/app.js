@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const { CLIENT_URL } = require('./config/env');
 const contactRoutes = require('./routes/contact.routes');
 const errorHandler = require('./middlewares/errorHandler');
+const visitorRoutes = require('./routes/visitor.routes'); // add this
 
 const app = express();
 app.set('trust proxy', 1);
@@ -101,6 +102,7 @@ app.use(cors(corsOptions));
 
 // Handle CORS preflight requests
 app.options('/api/contact', cors(corsOptions));
+app.options('/api/visitor/increment', cors(corsOptions)); // add this
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {
@@ -108,6 +110,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/contact', contactRoutes);
+app.use('/api/visitor', visitorRoutes);
 
 app.use(errorHandler);
 
