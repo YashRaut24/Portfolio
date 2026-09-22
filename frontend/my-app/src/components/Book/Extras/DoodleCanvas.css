@@ -197,7 +197,7 @@
     .doodle-canvas-wrap {
         position: relative;
         width: 100%;
-        height: 100%;
+        height: 113%;
         display: flex;
         flex-direction: column;
         border: 1.5px dashed rgba(0, 0, 0, 0.2);
@@ -211,12 +211,25 @@
         left: 2.15rem;
         gap: 0.3rem;
     }
-
+    .doodle-history {
+        padding: 0.5rem 0.5rem;
+    }
+    .doodle-history-item {
+        flex: 0 0 40px;
+        height: 40px;
+    }
+    .doodle-history-actions button,
+    .doodle-preview-actions button {
+        width: 15px;
+        height: 15px;
+    }
     .doodle-rail {
-        bottom: 4.3rem;
+        bottom: 4.25rem;
         width: 1.75rem;
     }
-
+    .doodle-history-strip {
+        margin-top: 0rem;
+    }
     .doodle-rail span {
         inset: 0.35rem 0.3rem;
         font-size: 0.68rem;
