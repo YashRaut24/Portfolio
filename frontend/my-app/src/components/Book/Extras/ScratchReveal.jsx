@@ -83,8 +83,8 @@ function ScratchReveal() {
   return (
     <div ref={revealRef} className={`scratch-reveal ${revealed ? 'scratch-reveal-done' : ''}`}>
       <div className="scratch-reveal-message">
-        <p>A little note for you...</p>
-        <span>💛</span>
+        <p>Note</p>
+        <span>...</span>
       </div>
       <canvas
         ref={canvasRef}
