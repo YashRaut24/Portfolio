@@ -840,6 +840,115 @@
     gap: 0.8rem;
     min-height: 0;
 }
+
+.page-type-sticky-thoughts {
+    justify-content: flex-start;
+    padding: 1.5rem 2.2rem 1.2rem;
+    overflow: hidden;
+}
+
+.sticky-thoughts-heading {
+    width: 100%;
+    flex: 0 0 auto;
+    z-index: 1;
+}
+
+.sticky-thoughts-heading h2 {
+    margin: 0;
+    font-family: 'Kalam', cursive;
+    font-size: clamp(1.3rem, 2.4vw, 2rem);
+    line-height: 1.15;
+    color: #181818;
+}
+
+.sticky-thoughts-underline {
+    width: 56%;
+    height: 0.35rem;
+    margin: 0.1rem 0 0.65rem;
+    border-bottom: 0.18rem solid #f3bd18;
+    transform: rotate(-1deg);
+}
+
+.sticky-thoughts-heading p {
+    margin: 0;
+    font-family: var(--font-book);
+    font-size: clamp(0.65rem, 1.25vw, 0.95rem);
+    line-height: 1.65;
+    color: #292929;
+}
+
+.sticky-thoughts-notes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 0.8rem 0 0.65rem;
+}
+
+.sticky-note {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    padding: 0.85rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #171717;
+    font-family: 'Kalam', cursive;
+    font-size: clamp(0.72rem, 1.3vw, 1rem);
+    line-height: 1.25;
+    box-shadow: 0.25rem 0.35rem 0.45rem rgba(0, 0, 0, 0.13);
+    transform: rotate(var(--note-tilt));
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+}
+
+.sticky-note::before {
+    content: '';
+    position: absolute;
+    top: -0.35rem;
+    left: 35%;
+    width: 30%;
+    height: 0.55rem;
+    background: rgba(207, 177, 112, 0.65);
+    transform: rotate(-2deg);
+}
+
+.sticky-note-yellow { background: #ffea92; }
+.sticky-note-pink { background: #f5a9c2; }
+.sticky-note-blue { background: #9ed3f2; }
+.sticky-note-mint { background: #a8dec9; }
+.sticky-note-lavender { background: #cdb7ed; }
+.sticky-note-rose { background: #f4a6b9; }
+
+.sticky-note-icon {
+    align-self: flex-end;
+    width: 1.55rem;
+    height: 1.55rem;
+    border: 0.12rem solid currentColor;
+    opacity: 0.9;
+}
+
+.sticky-note-icon-laptop { border-radius: 0.1rem; transform: skewY(-8deg); }
+.sticky-note-icon-coffee { border-radius: 0 0 45% 45%; border-top: 0.22rem solid currentColor; }
+.sticky-note-icon-books { border-width: 0.12rem 0.2rem; transform: skewX(-8deg); }
+.sticky-note-icon-bulb { border-radius: 50% 50% 42% 42%; }
+.sticky-note-icon-people { border-radius: 50%; width: 1.1rem; height: 1.1rem; box-shadow: 0.55rem 0.15rem 0 -0.08rem transparent; }
+.sticky-note-icon-rocket { border-radius: 60% 20% 60% 20%; transform: rotate(-35deg); }
+
+.sticky-thoughts-footer {
+    flex: 0 0 auto;
+    width: 100%;
+    font-family: 'Kalam', cursive;
+    font-size: clamp(0.65rem, 1.2vw, 0.9rem);
+    color: #333;
+}
+
+.sticky-thoughts-footer span { font-size: 1.1em; }
 .insta-card-footer {
     padding: 0.5rem;
     text-align: left;
@@ -1058,6 +1167,39 @@
     .page-type-secret-workshop {
         padding: 0.7rem;
         gap: 0.5rem;
+    }
+
+    .page-type-sticky-thoughts {
+        padding: 0.75rem 0.9rem 0.65rem;
+    }
+
+    .sticky-thoughts-heading h2 {
+        font-size: 1.05rem;
+    }
+
+    .sticky-thoughts-heading p {
+        font-size: 0.62rem;
+        line-height: 1.45;
+    }
+
+    .sticky-thoughts-notes {
+        gap: 0.35rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .sticky-note {
+        padding: 0.45rem;
+        font-size: 0.58rem;
+    }
+
+    .sticky-note-icon {
+        width: 0.9rem;
+        height: 0.9rem;
+    }
+
+    .sticky-thoughts-footer {
+        font-size: 0.58rem;
     }
 
     .secret-workshop-canvas-area {

@@ -1,5 +1,6 @@
 import './Page.css';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import DoodleCanvas from './Extras/DoodleCanvas';
 import ScratchReveal from './Extras/ScratchReveal';
 import VisitorCounter from './Extras/VisitorCounter';
@@ -7,6 +8,7 @@ import VisitorCounter from './Extras/VisitorCounter';
 function Page({ content, onExplore, onNavigate, onUnlock, pageSide }) {
   const [burst, setBurst] = useState(false);
   const [, setEggClicks] = useState(0);
+  const stickyNotesRef = useRef(null);
 
   const handleExploreClick = () => {
     setBurst(true);
@@ -481,6 +483,47 @@ if (content.type === 'timeline') {
           {pageNumberEl}
         </div>
       );
+  }
+
+  if (content.type === 'sticky-thoughts') {
+    const notes = [
+      { color: 'yellow', text: 'Building things > overthinking things.', icon: 'laptop', tilt: '-2deg' },
+      { color: 'pink', text: 'I turn coffee into code.', icon: 'coffee', tilt: '2deg' },
+      { color: 'blue', text: 'Always curious. Always learning.', icon: 'books', tilt: '-1deg' },
+      { color: 'mint', text: 'Good ideas happen anywhere.', icon: 'bulb', tilt: '1deg' },
+      { color: 'lavender', text: 'Open to collaborate, learn and build cool stuff!', icon: 'people', tilt: '-2deg' },
+      { color: 'rose', text: 'Still a student, but already dreaming big.', icon: 'rocket', tilt: '1deg' },
+    ];
+
+    return (
+      <div className="page page-type-sticky-thoughts">
+        <div className="sticky-thoughts-heading">
+          <h2>// Sticky Thoughts</h2>
+          <div className="sticky-thoughts-underline" />
+          <p>Drag these notes around (no right place, no wrong place) -<br />just a few bits about me.</p>
+        </div>
+        <div ref={stickyNotesRef} className="sticky-thoughts-notes">
+          {notes.map((note) => (
+            <motion.article
+              key={note.text}
+              className={`sticky-note sticky-note-${note.color}`}
+              style={{ '--note-tilt': note.tilt }}
+              drag
+              dragConstraints={stickyNotesRef}
+              dragElastic={0.12}
+              dragMomentum={false}
+              whileHover={{ scale: 1.03, zIndex: 4 }}
+              whileDrag={{ scale: 1.05, zIndex: 5, cursor: 'grabbing' }}
+            >
+              <span>{note.text}</span>
+              <span className={`sticky-note-icon sticky-note-icon-${note.icon}`} aria-hidden="true" />
+            </motion.article>
+          ))}
+        </div>
+        <div className="sticky-thoughts-footer">These little notes make a bigger story. <span>♥</span></div>
+        {pageNumberEl}
+      </div>
+    );
   }
 
 if (content.type === 'cta') {

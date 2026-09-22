@@ -112,6 +112,6 @@ export const bookSpreads = spreads;
 
 export const hiddenSpread = {
   id: 'secret',
-  left: { type: 'placeholder' },
+  left: { type: 'sticky-thoughts', pageNumber: 10 },
   right: { type: 'secret-workshop' },
 };
