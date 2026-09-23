@@ -104,6 +104,15 @@ function DoodleCanvas() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   };
 
+  const deleteDoodle = (indexToDelete) => {
+    const next = history.filter((_, i) => i !== indexToDelete);
+    setHistory(next);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    if (selectedDoodle && selectedDoodle.index === indexToDelete) {
+      setSelectedDoodle(null);
+    }
+  };
+
   const downloadDoodle = (src, index) => {
     const image = new Image();
     image.onload = () => {
@@ -169,11 +178,14 @@ function DoodleCanvas() {
               <div key={i} className="doodle-history-item">
                 <img src={src} alt={`Doodle ${i + 1}`} className="doodle-history-thumb" />
                 <div className="doodle-history-actions">
-                  <button type="button" onClick={() => setSelectedDoodle({ src, index: i })} aria-label={`View doodle ${i + 1}`}>
+                  <button type="button" onClick={() => setSelectedDoodle({ src, index: i })} aria-label={`View doodle ${i + 1}`} title="View">
                     <svg viewBox="0 0 24 24" fill="none"><path d="M2.5 12C4.8 7.8 8 5.5 12 5.5S19.2 7.8 21.5 12C19.2 16.2 16 18.5 12 18.5S4.8 16.2 2.5 12Z" stroke="currentColor" strokeWidth="1.6" /><circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.6" /></svg>
                   </button>
-                  <button type="button" onClick={() => downloadDoodle(src, i)} aria-label={`Download doodle ${i + 1}`}>
+                  <button type="button" onClick={() => downloadDoodle(src, i)} aria-label={`Download doodle ${i + 1}`} title="Download">
                     <svg viewBox="0 0 24 24" fill="none"><path d="M12 3V15M7.5 11L12 15.5L16.5 11M4 20H20" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </button>
+                  <button type="button" className="doodle-btn-delete" onClick={() => deleteDoodle(i)} aria-label={`Delete doodle ${i + 1}`} title="Delete">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M10 11V17M14 11V17M6 7L7 20H17L18 7M9 7V4H15V7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </button>
                 </div>
               </div>
@@ -186,10 +198,13 @@ function DoodleCanvas() {
         <div className="doodle-preview-backdrop" role="presentation" onClick={() => setSelectedDoodle(null)}>
           <div className="doodle-preview-modal" role="dialog" aria-modal="true" aria-label="Doodle preview" onClick={(event) => event.stopPropagation()}>
             <div className="doodle-preview-actions">
-              <button type="button" onClick={() => downloadDoodle(selectedDoodle.src, selectedDoodle.index)} aria-label="Download doodle as PNG">
+              <button type="button" onClick={() => downloadDoodle(selectedDoodle.src, selectedDoodle.index)} aria-label="Download doodle as PNG" title="Download">
                 <svg viewBox="0 0 24 24" fill="none"><path d="M12 3V15M7.5 11L12 15.5L16.5 11M4 20H20" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </button>
-              <button type="button" onClick={() => setSelectedDoodle(null)} aria-label="Close doodle preview">×</button>
+              <button type="button" className="doodle-btn-delete" onClick={() => deleteDoodle(selectedDoodle.index)} aria-label="Delete doodle" title="Delete">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M10 11V17M14 11V17M6 7L7 20H17L18 7M9 7V4H15V7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <button type="button" onClick={() => setSelectedDoodle(null)} aria-label="Close doodle preview" title="Close">×</button>
             </div>
             <img src={selectedDoodle.src} alt="Selected doodle" className="doodle-preview-image" />
           </div>

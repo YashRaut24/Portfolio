@@ -172,6 +172,7 @@ export default function MobileNotepad() {
                 onExplore={handleExplore}
                 onNavigate={handleNavigate}
                 onUnlock={handleUnlock}
+                secretFound={secretUnlocked}
               />
             </div>
 
@@ -218,6 +219,7 @@ export default function MobileNotepad() {
               onExplore={handleExplore}
               onNavigate={handleNavigate}
               onUnlock={handleUnlock}
+              secretFound={secretUnlocked}
             />
           </div>
 
@@ -236,6 +238,7 @@ export default function MobileNotepad() {
             onExplore={handleExplore}
             onNavigate={handleNavigate}
             onUnlock={handleUnlock}
+            secretFound={secretUnlocked}
           />
         </div>
       </div>

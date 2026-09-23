@@ -220,6 +220,7 @@ function DesktopBook() {
                       onExplore={handleExplore}
                       onNavigate={handleJumpTo}
                       onUnlock={handleUnlock}
+                      secretFound={secretUnlocked}
                       onFlipStart={() => playSound(currentSpread === 0 ? SOUNDS.coverOpen : SOUNDS.pageFlip, currentSpread === 0 ? 0.5 : 0.4, currentSpread === 0 ? 1.45 : 0)}
                       isClosingFlip={currentSpread === 0}
                     />
@@ -242,6 +243,7 @@ function DesktopBook() {
                   onExplore={handleExplore}
                   onNavigate={handleJumpTo}
                   onUnlock={handleUnlock}
+                  secretFound={secretUnlocked}
                   onFlipStart={() => playSound(SOUNDS.pageFlip, 0.4)}
                 />
               )}

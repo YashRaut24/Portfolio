@@ -8,6 +8,9 @@ import VisitorCounter from './Extras/VisitorCounter';
 function Page({ content, onExplore, onNavigate, onUnlock, pageSide, secretFound }) {
     const [burst, setBurst] = useState(false);
   const [eggClicks, setEggClicks] = useState(0);
+  const [showFoundMsg, setShowFoundMsg] = useState(false);
+  const [foundPopKey, setFoundPopKey] = useState(0);
+  const foundMsgTimerRef = useRef(null);
   const eggThresholdRef = useRef(Math.floor(Math.random() * 5) + 3);
   const stickyNotesRef = useRef(null);
 
@@ -68,7 +71,15 @@ function Page({ content, onExplore, onNavigate, onUnlock, pageSide, secretFound 
   };
 
   const handleEasterEggClick = () => {
-    if (secretFound) return;
+    if (secretFound) {
+      setShowFoundMsg(true);
+      setFoundPopKey((k) => k + 1);
+      if (foundMsgTimerRef.current) clearTimeout(foundMsgTimerRef.current);
+      foundMsgTimerRef.current = setTimeout(() => {
+        setShowFoundMsg(false);
+      }, 3500);
+      return;
+    }
     setEggClicks((c) => {
       const next = c + 1;
       if (next >= eggThresholdRef.current) {
@@ -466,13 +477,31 @@ if (content.type === 'timeline') {
             ))}
           </ul>
            <div className="page-easter-egg-wrap">
+              {secretFound && showFoundMsg && (
+                <div
+                  key={foundPopKey}
+                  className="page-easter-egg-found-badge"
+                  onClick={() => onNavigate && onNavigate({ spreadIndex: 5, pageNumber: 10 })}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Secret already found. Click to open secret workshop"
+                  onPointerDown={(event) => event.stopPropagation()}
+                >
+                  <span className="page-easter-egg-found-text">you have already found it!!!</span>
+                  <svg className="page-easter-egg-found-arrow" viewBox="0 0 24 10" fill="none" aria-hidden="true">
+                    <path d="M2 5C8 3 14 7 21 5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                    <path d="M17 2L22 5L17 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              )}
               <svg
-                className={`page-easter-egg page-easter-egg-clickable page-easter-egg-level-${secretFound ? 4 : Math.min(eggClicks, 4)}`}
+                className={`page-easter-egg page-easter-egg-clickable page-easter-egg-level-${secretFound ? 4 : Math.min(eggClicks, 4)} ${secretFound ? 'page-easter-egg-unlocked' : ''}`}
                 viewBox="0 0 40 40"
                 fill="none"
                 aria-hidden="true"
                 onPointerDown={(event) => event.stopPropagation()}
                 onClick={handleEasterEggClick}
+                title={secretFound ? "You have already found it!" : "Click to find secret!"}
               >
                 <g className="page-easter-egg-rays">
                   <line x1="20" y1="7" x2="20" y2="3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
@@ -483,15 +512,16 @@ if (content.type === 'timeline') {
                 </g>
                 <path className="page-easter-egg-bulb" d="M20 8C14 8 10 13 10 19C10 23 12 26 14 29V33H26V29C28 26 30 23 30 19C30 13 26 8 20 8Z" stroke="currentColor" strokeWidth="1.2" />
                 <path className="page-easter-egg-bulb" d="M14 35H26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                {!secretFound && (
+                {!secretFound ? (
                   <text className="page-easter-egg-count" x="20" y="19" textAnchor="middle" dominantBaseline="middle">
                     {eggClicks}
                   </text>
+                ) : (
+                  <g className="page-easter-egg-sparkle-center">
+                    <path d="M20 14.5L21.2 18L24.5 19L21.2 20L20 23.5L18.8 20L15.5 19L18.8 18Z" fill="currentColor" />
+                  </g>
                 )}
               </svg>
-              {secretFound && (
-                <span className="page-easter-egg-found-label">You found it ✦</span>
-              )}
             </div>
           {pageNumberEl}
         </div>

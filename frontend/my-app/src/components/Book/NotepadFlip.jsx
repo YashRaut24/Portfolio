@@ -23,6 +23,7 @@ const NotepadFlip = forwardRef(function NotepadFlip(
     onExplore,
     onNavigate,
     onUnlock,
+    secretFound,
   },
   ref
 ) {
@@ -306,6 +307,7 @@ const NotepadFlip = forwardRef(function NotepadFlip(
           onExplore={onExplore}
           onNavigate={onNavigate}
           onUnlock={onUnlock}
+          secretFound={secretFound}
         />
         <motion.div
           className="curl-shadow-overlay"

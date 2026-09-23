@@ -4,7 +4,7 @@ import Page from './Page';
 import './PageFlip.css';
 import { prefersReducedMotion, getFlipTransition, getSnapBackTransition } from '../../utils/motionPrefs';
 
-const PageFlip = forwardRef(({ side, frontContent, backContent, onPreview, onPreviewCancel, onComplete, disabled, onExplore, onNavigate, onUnlock, onFlipStart, isClosingFlip }, ref) => {
+const PageFlip = forwardRef(({ side, frontContent, backContent, onPreview, onPreviewCancel, onComplete, disabled, onExplore, onNavigate, onUnlock, onFlipStart, isClosingFlip, secretFound }, ref) => {
   const isRight = side === 'right';
   const dragX = useMotionValue(0);
   const rotateY = useTransform(dragX, isRight ? [-300, 0] : [0, 300], isRight ? [-180, 0] : [0, 180]);
@@ -114,10 +114,10 @@ const PageFlip = forwardRef(({ side, frontContent, backContent, onPreview, onPre
       onDragEnd={handleDragEnd}
     >
       <div className="page-leaf-face page-leaf-front">
-        <Page content={frontContent} pageSide={side} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
+        <Page content={frontContent} pageSide={side} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} secretFound={secretFound} />
       </div>
       <div className="page-leaf-face page-leaf-back">
-        <Page content={backContent} pageSide={isRight ? 'left' : 'right'} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} />
+        <Page content={backContent} pageSide={isRight ? 'left' : 'right'} onExplore={onExplore} onNavigate={onNavigate} onUnlock={onUnlock} secretFound={secretFound} />
       </div>
     </motion.div>
   );

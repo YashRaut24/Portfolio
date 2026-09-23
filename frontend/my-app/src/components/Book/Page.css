@@ -20,11 +20,11 @@
 }
 .page-easter-egg-wrap {
     position: absolute;
-    top: 0.5rem;
-    right: 1rem;
+    top: 0.6rem;
+    right: 1.1rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     z-index: 4;
 }
 
@@ -37,21 +37,96 @@
     opacity: 0.6;
 }
 
-.page-easter-egg-found-label {
+.page-easter-egg-found-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     font-family: 'Kalam', cursive;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
+    font-weight: 700;
     color: var(--book-accent, #C4823D);
-    opacity: 0;
+    background: rgba(245, 180, 0, 0.09);
+    border: 1.5px dashed rgba(196, 130, 61, 0.45);
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    padding: 0.22rem 0.65rem;
     white-space: nowrap;
-    transform: translateX(-6px) rotate(-2deg);
-    animation: egg-found-fade 0.6s ease forwards;
-    animation-delay: 0.15s;
+    cursor: pointer;
+    user-select: none;
+    transform: rotate(-2deg);
+    animation: egg-found-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: all 0.2s ease;
+}
+
+.page-easter-egg-found-badge:hover {
+    background: rgba(245, 180, 0, 0.18);
+    border-color: rgba(196, 130, 61, 0.85);
+    transform: rotate(-1deg) scale(1.05);
+    box-shadow: 0 2px 8px rgba(245, 180, 0, 0.2);
+}
+
+.page-easter-egg-found-text {
+    letter-spacing: 0.02em;
+}
+
+.page-easter-egg-found-arrow {
+    width: 18px;
+    height: 9px;
+    color: currentColor;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.page-easter-egg-found-badge:hover .page-easter-egg-found-arrow {
+    transform: translateX(2px);
 }
 
 @keyframes egg-found-fade {
-    to {
-        opacity: 0.9;
-        transform: translateX(0) rotate(-2deg);
+    0% {
+        opacity: 0;
+        transform: translateX(10px) translateY(2px) scale(0.85) rotate(-6deg);
+    }
+    60% {
+        opacity: 1;
+        transform: translateX(-2px) translateY(-1px) scale(1.04) rotate(-1deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) translateY(0) scale(1) rotate(-2deg);
+    }
+}
+
+.page-easter-egg-unlocked {
+    cursor: pointer;
+    animation: egg-pulse-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes egg-pulse-glow {
+    0% {
+        filter: drop-shadow(0 0 6px rgba(245, 180, 0, 0.6));
+    }
+    100% {
+        filter: drop-shadow(0 0 14px rgba(245, 180, 0, 0.95)) drop-shadow(0 0 22px rgba(245, 180, 0, 0.45));
+    }
+}
+
+.page-easter-egg-unlocked:hover {
+    transform: scale(1.08) rotate(4deg);
+}
+
+.page-easter-egg-sparkle-center {
+    animation: egg-sparkle-spin 7s linear infinite;
+    transform-origin: 20px 19px;
+}
+
+@keyframes egg-sparkle-spin {
+    0% {
+        transform: rotate(0deg) scale(0.95);
+    }
+    50% {
+        transform: rotate(180deg) scale(1.15);
+    }
+    100% {
+        transform: rotate(360deg) scale(0.95);
     }
 }
 .page-easter-egg {

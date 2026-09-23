@@ -110,12 +110,13 @@
 
 .doodle-history-item {
     position: relative;
-    flex: 0 0 52px;
-    height: 52px;
+    flex: 0 0 56px;
+    height: 56px;
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
+    border-radius: 5px;
     background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .doodle-history-item .doodle-history-thumb {
@@ -129,19 +130,63 @@
     top: 2px;
     right: 2px;
     display: flex;
-    gap: 2px;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 3px;
+    padding: 1px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
-.doodle-history-actions button,
-.doodle-preview-actions button {
-    width: 20px;
-    height: 20px;
-    padding: 3px;
+.doodle-history-actions button {
+    width: 15px;
+    height: 15px;
+    padding: 1.5px;
     border: 0;
-    border-radius: 3px;
+    border-radius: 2px;
+    background: transparent;
+    color: #2b2b2b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.doodle-history-actions button:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #000;
+}
+
+.doodle-history-actions button.doodle-btn-delete:hover {
+    background: rgba(220, 38, 38, 0.12);
+    color: #dc2626;
+}
+
+.doodle-preview-actions button {
+    width: 26px;
+    height: 26px;
+    padding: 4px;
+    border: 0;
+    border-radius: 4px;
     background: rgba(255, 255, 255, 0.9);
     color: #202020;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.doodle-preview-actions button:hover {
+    background: #fff;
+    color: #000;
+}
+
+.doodle-preview-actions button.doodle-btn-delete:hover {
+    background: #fee2e2;
+    color: #dc2626;
 }
 
 .doodle-history-actions svg,
@@ -215,13 +260,24 @@
         padding: 0.5rem 0.5rem;
     }
     .doodle-history-item {
-        flex: 0 0 40px;
-        height: 40px;
+        flex: 0 0 46px;
+        height: 46px;
     }
-    .doodle-history-actions button,
+    .doodle-history-actions {
+        top: 1.5px;
+        right: 1.5px;
+        gap: 1px;
+        padding: 0.5px;
+    }
+    .doodle-history-actions button {
+        width: 13px;
+        height: 13px;
+        padding: 1px;
+    }
     .doodle-preview-actions button {
-        width: 15px;
-        height: 15px;
+        width: 24px;
+        height: 24px;
+        padding: 3px;
     }
     .doodle-rail {
         bottom: 4.25rem;
