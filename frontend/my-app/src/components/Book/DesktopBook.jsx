@@ -129,9 +129,9 @@ function DesktopBook() {
 
   useEffect(() => {
     if (secretUnlocked) {
-      setCurrentSpread(effectiveSpreads.length - 1);
       setRightPreview(false);
       setLeftPreview(false);
+      setTargetSpread(effectiveSpreads.length - 1);
     }
   }, [secretUnlocked, effectiveSpreads.length]);
 
@@ -206,7 +206,7 @@ function DesktopBook() {
           >
             {!isMobile && (
               <div className={`page-flip-wrapper ${!isOpen ? 'page-hidden' : ''} ${leftPreview ? 'turning-active' : ''}`}>
-                <Page content={leftBaseContent} pageSide="left" onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
+                <Page content={leftBaseContent} pageSide="left" onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} secretFound={secretUnlocked} />
                   {isOpen && (
                     <PageFlip
                       ref={leftFlipRef}
@@ -228,7 +228,7 @@ function DesktopBook() {
             )}
             {!isMobile && <div className="book-spine" />}
             <div className={`page-flip-wrapper ${rightPreview ? 'turning-active' : ''}`}>
-            <Page content={rightBaseContent} pageSide="right" onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} />
+            <Page content={rightBaseContent} pageSide="right" onExplore={handleExplore} onNavigate={handleJumpTo} onUnlock={handleUnlock} secretFound={secretUnlocked} />
               {isOpen && (
                 <PageFlip
                   ref={rightFlipRef}
