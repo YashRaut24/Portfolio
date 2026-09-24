@@ -187,8 +187,8 @@ const pools = {
     texts: ['open source', 'PRs merged', 'commits', 'contributions'],
   },
   lab: {
-    icons: [AtomIcon, FlaskIcon, BeakerIcon, DnaIcon, MicroscopeIcon, RobotHeadIcon, BrainIcon, ChipIcon, LightbulbIcon, SatelliteIcon, SensorIcon, NeuralNodesIcon, BatteryIcon, OrbitIcon, GraphIcon],
-    texts: ['experiments', 'AI/ML', 'research', 'prototype'],
+    icons: [AtomIcon, FlaskIcon, BeakerIcon, DnaIcon, MicroscopeIcon, RobotHeadIcon, BrainIcon, ChipIcon, LightbulbIcon, SatelliteIcon, SensorIcon, NeuralNodesIcon, BatteryIcon, OrbitIcon, GraphIcon, TerminalIcon],
+    texts: ['Mission Control', 'Telemetry', 'System Online', 'Diagnostics', 'T+00:00', 'Orbit Link'],
   },
 };
 
