@@ -1,0 +1,547 @@
+/* =========================================================
+   MISSION CONTROL // SCI-FI HUD & TERMINAL STYLES
+   Matches Explore page constellation & orbit aesthetic
+========================================================= */
+
+.mission-control-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    font-family: var(--font-hub);
+}
+
+/* =========================================================
+   1. TELEMETRY DIAGNOSTIC HUD PANEL
+========================================================= */
+
+.telemetry-hud-card {
+    background: rgba(15, 17, 23, 0.75);
+    border: 1px solid rgba(255, 213, 79, 0.25);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 213, 79, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.telemetry-hud-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ffd54f, #f59e0b, transparent);
+    opacity: 0.8;
+}
+
+/* Telemetry Status Bar */
+.telemetry-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.telemetry-status-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.telemetry-beacon {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    box-shadow: 0 0 10px #22c55e;
+    animation: beaconPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes beaconPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 10px #22c55e;
+    }
+    50% {
+        transform: scale(1.35);
+        opacity: 0.6;
+        box-shadow: 0 0 18px #22c55e;
+    }
+}
+
+.telemetry-status-text {
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #4ade80;
+    letter-spacing: 0.08em;
+}
+
+.telemetry-clock-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.82rem;
+}
+
+.telemetry-label {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.telemetry-clock-val {
+    color: #ffd54f;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+.telemetry-sector-badge {
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+}
+
+/* Diagnostic Metrics Grid */
+.diagnostic-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.85rem;
+}
+
+.diag-metric-box {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    padding: 0.75rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.diag-metric-box:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 213, 79, 0.35);
+}
+
+.diag-metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.diag-metric-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.diag-badge-online {
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #22c55e;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+}
+
+.diag-metric-value {
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+}
+
+.diag-metric-unit {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #ffd54f;
+    margin-left: 0.25rem;
+}
+
+/* Progress and indicator bars */
+.diag-progress-track {
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    display: flex;
+    overflow: hidden;
+    gap: 1px;
+}
+
+.diag-progress-bar {
+    height: 100%;
+    border-radius: 2px;
+}
+
+.bar-jsx { background: #60a5fa; }
+.bar-css { background: #ec4899; }
+.bar-cfg { background: #ffd54f; }
+.bar-gold { background: linear-gradient(90deg, #f59e0b, #ffd54f); }
+.bar-cyan { background: linear-gradient(90deg, #06b6d4, #38bdf8); }
+
+.diag-meter-pills {
+    display: flex;
+    gap: 3px;
+    height: 5px;
+}
+
+.diag-meter-node {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.diag-meter-node.active {
+    background: #8b5cf6;
+    box-shadow: 0 0 6px rgba(139, 92, 246, 0.6);
+}
+
+.diag-metric-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: #64748b;
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* =========================================================
+   2. LIVE MISSION CONTROL TERMINAL WINDOW
+========================================================= */
+
+.terminal-hud-window {
+    background: rgba(10, 12, 18, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 290px;
+    max-height: 380px;
+}
+
+/* Terminal Header */
+.terminal-header {
+    background: rgba(18, 20, 29, 0.95);
+    padding: 0.65rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.terminal-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.tdot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.tdot-red { background: #ef4444; }
+.tdot-amber { background: #f59e0b; }
+.tdot-green { background: #10b981; }
+
+.terminal-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    letter-spacing: 0.06em;
+}
+
+.terminal-sys-icon {
+    color: #ffd54f;
+}
+
+.terminal-id-chip {
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.terminal-id-chip:hover {
+    color: #ffd54f;
+    border-color: rgba(255, 213, 79, 0.4);
+    background: rgba(255, 213, 79, 0.1);
+}
+
+/* Terminal Output Stream */
+.terminal-screen {
+    flex: 1;
+    padding: 0.9rem 1.1rem;
+    overflow-y: auto;
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.84rem;
+    line-height: 1.55;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    background: radial-gradient(circle at 10% 20%, rgba(255, 213, 79, 0.02) 0%, transparent 60%);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.terminal-screen::-webkit-scrollbar {
+    width: 5px;
+    display: block !important;
+}
+
+.terminal-screen::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.terminal-log-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    word-break: break-word;
+}
+
+.log-badge {
+    font-weight: 700;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+}
+
+.log-ok .log-badge { color: #22c55e; }
+.log-ok .log-content { color: #cbd5e1; }
+
+.log-sys .log-badge { color: #ffd54f; }
+.log-sys .log-content { color: #fef08a; font-weight: 600; }
+
+.log-orbit .log-badge { color: #60a5fa; }
+.log-orbit .log-content { color: #93c5fd; }
+
+.log-warn .log-badge { color: #f87171; }
+.log-warn .log-content { color: #fca5a5; }
+
+.log-info .log-badge { color: #94a3b8; }
+.log-info .log-content { color: #94a3b8; }
+
+.log-cmd {
+    color: #c084fc;
+    font-weight: 700;
+    margin-top: 0.2rem;
+}
+
+.terminal-cursor-line {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #ffd54f;
+    margin-top: 0.2rem;
+}
+
+.terminal-prompt {
+    color: #c084fc;
+    font-weight: 700;
+}
+
+.terminal-active-input {
+    color: #ffffff;
+}
+
+.blinking-cursor {
+    font-weight: 700;
+    color: #ffd54f;
+    animation: blinkCursor 0.9s infinite step-end;
+}
+
+@keyframes blinkCursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Terminal Footer / Input Bar */
+.terminal-footer {
+    background: rgba(14, 16, 23, 0.96);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.65rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.terminal-input-form {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 0.35rem 0.65rem;
+    transition: border-color 0.2s ease;
+}
+
+.terminal-input-form:focus-within {
+    border-color: rgba(255, 213, 79, 0.5);
+    box-shadow: 0 0 10px rgba(255, 213, 79, 0.15);
+}
+
+.prompt-symbol {
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-weight: 700;
+    color: #22c55e;
+    font-size: 0.9rem;
+}
+
+.terminal-input-field {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.84rem;
+}
+
+.terminal-input-field::placeholder {
+    color: #64748b;
+    font-size: 0.78rem;
+}
+
+.terminal-send-btn {
+    background: rgba(255, 213, 79, 0.12);
+    border: 1px solid rgba(255, 213, 79, 0.3);
+    color: #ffd54f;
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.terminal-send-btn:hover {
+    background: #ffd54f;
+    color: #000000;
+    box-shadow: 0 0 12px rgba(255, 213, 79, 0.4);
+}
+
+/* Quick chips row */
+.terminal-chips-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+.chips-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.05em;
+}
+
+.telemetry-chip-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    font-family: ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.telemetry-chip-btn:hover {
+    background: rgba(255, 213, 79, 0.12);
+    border-color: rgba(255, 213, 79, 0.35);
+    color: #ffd54f;
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   RESPONSIVE LAYOUT
+========================================================= */
+
+@media (max-width: 1024px) {
+    .diagnostic-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .terminal-hud-window {
+        min-height: 260px;
+        max-height: 330px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mission-control-section {
+        gap: 0.9rem;
+    }
+
+    .telemetry-hud-card {
+        padding: 0.85rem 0.95rem;
+    }
+
+    .diagnostic-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+    }
+
+    .diag-metric-box {
+        padding: 0.6rem 0.7rem;
+    }
+
+    .diag-metric-value {
+        font-size: 1.05rem;
+    }
+
+    .terminal-hud-window {
+        min-height: 240px;
+        max-height: 290px;
+    }
+
+    .terminal-screen {
+        font-size: 0.78rem;
+        padding: 0.7rem 0.85rem;
+    }
+
+    .terminal-send-btn {
+        display: none;
+    }
+}
