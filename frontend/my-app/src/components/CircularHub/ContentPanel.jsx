@@ -6,6 +6,7 @@ import Experience from '../Experience/Experience';
 import './ContentPanel.css';
 import Contact from '../Contact/Contact';
 import Stats from '../Stats/Stats';
+import MissionControl from '../MissionControl/MissionControl';
 
 function AboutIcon() {
   return (
@@ -68,12 +69,11 @@ function StatsIcon() {
   );
 }
 
-function LabIcon() {
+function MissionControlIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 3C10.3 3 9 4.3 9 6V12.5C9 13.3 8.3 14 7.5 14H6C4.7 14 3.5 15.2 3.5 16.5V19H20.5V16.5C20.5 15.2 19.3 14 18 14H16.5C15.7 14 15 13.3 15 12.5V6C15 4.3 13.7 3 12 3Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M8 19V17H16V19" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M12 10V12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <polyline points="4 17 10 11 4 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <line x1="12" y1="19" x2="20" y2="19" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -86,7 +86,7 @@ const iconMap = {
   experience: ExperienceIcon,
   contact: ContactIcon,
   stats: StatsIcon,
-  lab: LabIcon,
+  lab: MissionControlIcon,
 };
 
 function ContentPanel({ activeNode }) {
@@ -108,19 +108,7 @@ function ContentPanel({ activeNode }) {
       case 'stats':
         return <Stats />;
       case 'lab':
-        return (
-          <div className="content-panel-secret">
-            <h3>Secret Lab</h3>
-            <p>
-              You found the hidden hub node! This lab is a special unlock
-              reserved for players who discover the secret pattern.
-            </p>
-            <p>
-              Try exploring the rest of the site, then come back to enjoy the
-              hidden content.
-            </p>
-          </div>
-        );
+        return <MissionControl />;
       default:
         return (
           <p className="content-panel-placeholder">
