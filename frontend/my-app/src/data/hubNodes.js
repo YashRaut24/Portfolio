@@ -5,7 +5,7 @@ import {
   Trophy,
   Briefcase,
   Mail,
-  FlaskConical,
+  Terminal,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 
@@ -61,8 +61,8 @@ export const hubNodesData = [
   },
   {
     id: "lab",
-    label: "Lab",
-    icon: FlaskConical,
+    label: "Mission Control",
+    icon: Terminal,
     accent: "#FFD54F",
     planet: "sun",
     hidden: true,
