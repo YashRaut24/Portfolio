@@ -89,7 +89,7 @@ const iconMap = {
   lab: MissionControlIcon,
 };
 
-function ContentPanel({ activeNode }) {
+function ContentPanel({ activeNode, starFieldRef }) {
   const TitleIcon = iconMap[activeNode.id];
   const renderContent = () => {
     switch (activeNode.id) {
@@ -108,7 +108,7 @@ function ContentPanel({ activeNode }) {
       case 'stats':
         return <Stats />;
       case 'lab':
-        return <MissionControl />;
+        return <MissionControl starFieldRef={starFieldRef} />;
       default:
         return (
           <p className="content-panel-placeholder">
