@@ -441,6 +441,7 @@ function CircularHub({ starFieldRef }) {
             <ContentPanel
               activeNode={activeNode}
               history={history}
+              starFieldRef={starFieldRef}
             />
           </motion.div>
         </AnimatePresence>
